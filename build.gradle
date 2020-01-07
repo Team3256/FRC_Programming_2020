@@ -59,7 +59,8 @@ dependencies {
     // upon debugging
     simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
 
-    implementation 'com.github.Team3256:warriorlib:v1.0.0'
+    compile 'com.github.Team3256:warriorlib:9ab7513bd803e5b7507aec6e2f9c8a83a3ab7836'
+
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
@@ -72,6 +73,11 @@ jar {
 
 allprojects {
     repositories {
+        jcenter()
         maven { url 'https://jitpack.io' }
     }
+}
+
+wrapper {
+    gradleVersion = '5.0'
 }
