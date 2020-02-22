@@ -214,7 +214,7 @@ public class Limelight implements Loop {
             lastTheta = thetaSign+tx;
             SmartDashboard.putNumber("Last Theta", lastTheta);
             lastDistance = getDistanceToTarget();
-            SmartDashboard.putNumber("moving correction", calculateMovingAngle(10.6, 48));
+            SmartDashboard.putNumber("moving correction", calculateMovingAngle(velToTarget, angleToTarget));
 
         } else {
             double thetaSign = calculateTopTheta()*Math.signum(getTopSkew());

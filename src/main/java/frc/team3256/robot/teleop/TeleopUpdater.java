@@ -25,7 +25,7 @@ public class TeleopUpdater {
     private Turret mTurret = Turret.getInstance();
     private Hood mHood = Hood.getInstance();
 //    private IRSensor irSensor = new IRSensor(IDConstants.feederIRID);
-//    private Limelight limelight = Limelight.getInstance();
+    private Limelight limelight = Limelight.getInstance();
     private boolean overrideFeeder = false;
     public int ballCounter = 0;
     private boolean prevFeeding = false;
@@ -63,13 +63,9 @@ public class TeleopUpdater {
         boolean manualHoodDown = controls.manualHoodDown();
 
         boolean autoAlign = controls.autoAlignTurret();
-
-        boolean setposHood = controls.autoAlignHood();
+        boolean autoAlignHood = controls.autoAlignHood();
 
         boolean getShoot = controls.getShoot();
-
-        boolean autoAlignHood = controls.autoAlignHood();
-        boolean autoAlignTurret = controls.autoAlignTurret();
 
         //Drivetrain Subsystem
 //        DrivePower drivePower = mDrivetrain.cheesyishDrive(throttle, turn, quickTurn);
@@ -153,6 +149,12 @@ public class TeleopUpdater {
         }
         prevFeeding = feeding;
 
+//        if(setposHood) {
+//            double hoodPos = SmartDashboard.getNumber("hood pos", 0);
+//            mHood.setPosSetpoint(hoodPos);
+//            mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
+//        }
+
         if(getShoot) {
             overrideFeeder = true;
             double vel = SmartDashboard.getNumber("wanted vel", 0);
@@ -167,20 +169,29 @@ public class TeleopUpdater {
             mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
         }
 
-        if(setposHood) {
-            double hoodPos = SmartDashboard.getNumber("hood pos", 0);
-            mHood.setPosSetpoint(hoodPos);
-            mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
+        if (autoAlign) {
+            double angle = limelight.calculateTau();
+            mTurret.setTurretAutoAlignAngle(angle);
+            mTurret.setWantedState(Turret.WantedState.WANTS_TO_AUTO_ALIGN);
+        }
+        if (autoAlignHood) {
+            limelight.calculateKinematics();
+            mHood.setPosSetpoint(angleToHoodPos(limelight.getAngleToTarget()));
+            mFlywheel.setVelocitySetpoint(velToFlywheelVel(limelight.getVelToTarget()));
         }
 
-//        if (autoAlign) {
-//            double angle = limelight.calculateTau();
-//            mTurret.setTurretAutoAlignAngle(angle);
-//            mTurret.setWantedState(Turret.WantedState.WANTS_TO_AUTO_ALIGN);
+//        if(rev) {
+//            mFlywheel.setVelocitySetpoint(6000);
 //        }
     }
 
+    private double angleToHoodPos(double angle) {   //todo
+        return angle;
+    }
 
+    private double velToFlywheelVel(double vel) {   //todo
+        return vel;
+    }
 
     public int getBallCounter() {
         return ballCounter;
