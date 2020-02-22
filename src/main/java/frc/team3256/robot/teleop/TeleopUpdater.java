@@ -8,22 +8,18 @@ import frc.team3256.robot.subsystems.*;
 import frc.team3256.robot.teleop.configs.ControlsInterface;
 import frc.team3256.robot.teleop.configs.XboxControllerConfig;
 import frc.team3256.warriorlib.control.DrivePower;
-
-<<<<<<< HEAD
-=======
 import static frc.team3256.robot.constants.TurretConstants.turretHeight;
 
 
 //----------EVERYTHING IN THIS CLASS IS FOR THE PURPOSES OF MANUAL TESTING----------
 
->>>>>>> 85e845a3b14fd815af5cb1336c3e75983f43c59b
 public class TeleopUpdater {
     private ControlsInterface controls = new XboxControllerConfig();
 
     private Drivetrain mDrivetrain = Drivetrain.getInstance();
 
     private Intake mIntake = Intake.getInstance();
-    private FeederStateMachineTest mFeeder = FeederStateMachineTest.getInstance();
+    private Feeder mFeeder = Feeder.getInstance();
     private Flywheel mFlywheel = Flywheel.getInstance();
     private Turret mTurret = Turret.getInstance();
     private Hood mHood = Hood.getInstance();
