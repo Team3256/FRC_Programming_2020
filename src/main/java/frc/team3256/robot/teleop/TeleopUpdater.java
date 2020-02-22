@@ -9,6 +9,14 @@ import frc.team3256.robot.teleop.configs.ControlsInterface;
 import frc.team3256.robot.teleop.configs.XboxControllerConfig;
 import frc.team3256.warriorlib.control.DrivePower;
 
+<<<<<<< HEAD
+=======
+import static frc.team3256.robot.constants.TurretConstants.turretHeight;
+
+
+//----------EVERYTHING IN THIS CLASS IS FOR THE PURPOSES OF MANUAL TESTING----------
+
+>>>>>>> 85e845a3b14fd815af5cb1336c3e75983f43c59b
 public class TeleopUpdater {
     private ControlsInterface controls = new XboxControllerConfig();
 
@@ -16,9 +24,9 @@ public class TeleopUpdater {
 
     private Intake mIntake = Intake.getInstance();
     private FeederStateMachineTest mFeeder = FeederStateMachineTest.getInstance();
-    private FlywheelStateMachineTest mFlywheel = FlywheelStateMachineTest.getInstance();
-    private TurretStateMachineTest mTurret = TurretStateMachineTest.getInstance();
-    private HoodStateMachineTest mHood = HoodStateMachineTest.getInstance();
+    private Flywheel mFlywheel = Flywheel.getInstance();
+    private Turret mTurret = Turret.getInstance();
+    private Hood mHood = Hood.getInstance();
     private IRSensor irSensor = new IRSensor(FeederConstants.kFeederIRID);
     private boolean overrideFeeder = false;
     public int ballCounter = 0;
@@ -67,21 +75,21 @@ public class TeleopUpdater {
         if(unjam) {
             mIntake.setWantedState(Intake.WantedState.WANTS_TO_UNJAM);
             mFeeder.setWantedState(FeederStateMachineTest.WantedState.WANTS_TO_RUN_FORWARD);
-            mFlywheel.setWantedState(FlywheelStateMachineTest.WantedState.WANTS_TO_IDLE);
+            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
         }
         else if(intake) {
             mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
-            mFlywheel.setWantedState(FlywheelStateMachineTest.WantedState.WANTS_TO_IDLE);
+            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
         }
         else if(exhaust) {
             overrideFeeder = true;
             mIntake.setWantedState(Intake.WantedState.WANTS_TO_EXHAUST);
             mFeeder.setWantedState(FeederStateMachineTest.WantedState.WANTS_TO_RUN_BACKWARD);
-            mFlywheel.setWantedState(FlywheelStateMachineTest.WantedState.WANTS_TO_IDLE);
+            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
         }
         else if(getShoot) {
             overrideFeeder = true;
-            mFlywheel.setWantedState(FlywheelStateMachineTest.WantedState.WANTS_TO_RUN);
+            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
             if(mFlywheel.getVelocity() >= 6000) {
                 mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
                 mFeeder.setWantedState(FeederStateMachineTest.WantedState.WANTS_TO_SHOOT);
@@ -90,7 +98,7 @@ public class TeleopUpdater {
         else {
             mIntake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
             overrideFeeder = false;
-            mFlywheel.setWantedState(FlywheelStateMachineTest.WantedState.WANTS_TO_IDLE);
+            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
         }
 
         //Feeder Indexing Logic
@@ -121,24 +129,24 @@ public class TeleopUpdater {
 
         //Turret Subsystem
         if(manualTurretLeft) {
-            mTurret.setWantedState(TurretStateMachineTest.WantedState.WANTS_TO_MANUAL_LEFT);
+            mTurret.setWantedState(Turret.WantedState.WANTS_TO_MANUAL_LEFT);
         }
         else if(manualTurretRight) {
-            mTurret.setWantedState(TurretStateMachineTest.WantedState.WANTS_TO_MANUAL_RIGHT);
+            mTurret.setWantedState(Turret.WantedState.WANTS_TO_MANUAL_RIGHT);
         }
         else {
-            mTurret.setWantedState(TurretStateMachineTest.WantedState.WANTS_TO_IDLE);
+            mTurret.setWantedState(Turret.WantedState.WANTS_TO_IDLE);
         }
 
         //Hood Subsystem
         if(manualHoodUp) {
-            mHood.setWantedState(HoodStateMachineTest.WantedState.WANTS_TO_MANUAL_UP);
+            mHood.setWantedState(Hood.WantedState.WANTS_TO_MANUAL_UP);
         }
         else if (manualHoodDown) {
-            mHood.setWantedState(HoodStateMachineTest.WantedState.WANTS_TO_MANUAL_DOWN);
+            mHood.setWantedState(Hood.WantedState.WANTS_TO_MANUAL_DOWN);
         }
         else {
-            mHood.setWantedState(HoodStateMachineTest.WantedState.WANTS_TO_IDLE);
+            mHood.setWantedState(Hood.WantedState.WANTS_TO_IDLE);
         }
         SmartDashboard.putNumber("Hood Encoder", mHood.getHoodEncoder());
         SmartDashboard.putNumber("turret encoder", mTurret.getPosition());
