@@ -1,11 +1,7 @@
-package frc.team3256.robot;
+package frc.team3256.robot.subsystems;
 
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.SparkMax;
-import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.hardware.TalonSRXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
 

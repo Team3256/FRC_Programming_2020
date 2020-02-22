@@ -1,4 +1,4 @@
-package frc.team3256.robot;
+package frc.team3256.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;

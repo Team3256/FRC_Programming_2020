@@ -1,11 +1,16 @@
-package frc.team3256.robot;
+package frc.team3256.robot.subsystems;
 
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3256.robot.constants.FlywheelConstants;
+import frc.team3256.robot.constants.IDConstants;
 import frc.team3256.warriorlib.hardware.TalonFXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
+
+import static frc.team3256.robot.constants.IDConstants.leftFlywheelID;
+import static frc.team3256.robot.constants.IDConstants.rightFlywheelID;
 
 public class Flywheel extends SubsystemBase { //A test for the flywheel state machine, only runs. does not adjust velocity.
     private WPI_TalonFX mLeftFlywheel, mRightFlywheel;
@@ -32,11 +37,11 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     public static Flywheel getInstance() { return instance == null ? instance = new Flywheel() : instance; }
 
     private Flywheel() {
-        mLeftFlywheel = TalonFXUtil.generateGenericTalon(_); //TBD
-        mRightFlywheel = TalonFXUtil.generateSlaveTalon(_, _);
+        mLeftFlywheel = TalonFXUtil.generateGenericTalon(leftFlywheelID); //TBD
+        mRightFlywheel = TalonFXUtil.generateSlaveTalon(rightFlywheelID, leftFlywheelID);
         TalonFXUtil.setCoastMode(mLeftFlywheel, mRightFlywheel);
-        TalonFXUtil.setPIDGains(mLeftFlywheel, 0, FlywheelConstants.falconKP, FlywheelConstants.falconKI, FlywheelConstants.falconKD, FlywheelConstants.falconKF);
-        TalonFXUtil.setPIDGains(mRightFlywheel, 0, FlywheelConstants.falconKP, FlywheelConstants.falconKI, FlywheelConstants.falconKD, FlywheelConstants.falconKF);
+        TalonFXUtil.setPIDGains(mLeftFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
+        TalonFXUtil.setPIDGains(mRightFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
 
         mLeftFlywheel.setInverted(true);
         mRightFlywheel.setInverted(false);
@@ -71,7 +76,6 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
 
     private FlywheelState handleRun() {
         setFlywheelVelocity(6000);
-        SmartDashboard.putNumber("Flywheel Speed", sensorUnitsToRPM(mLeftFlywheel.getSelectedSensorVelocity()));
         return defaultStateTransfer();
     }
 
@@ -90,7 +94,7 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
         }
     }
 
-    private void runFlywheel(double speed) { //Sets flywheel speed
+    private void setFlywheelVoltage(double speed) { //Sets flywheel speed
         mLeftFlywheel.set(speed);
         mRightFlywheel.set(speed);
     }
@@ -115,7 +119,9 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     }
 
     @Override
-    public void outputToDashboard() { }
+    public void outputToDashboard() {
+        SmartDashboard.putNumber("Flywheel Speed", sensorUnitsToRPM(mLeftFlywheel.getSelectedSensorVelocity()));
+    }
 
     @Override
     public void zeroSensors() { }
