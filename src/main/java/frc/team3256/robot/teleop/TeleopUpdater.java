@@ -143,8 +143,6 @@ public class TeleopUpdater {
         else {
             mHood.setWantedState(Hood.WantedState.WANTS_TO_IDLE);
         }
-        SmartDashboard.putNumber("Hood Encoder", mHood.getHoodEncoder());
-        SmartDashboard.putNumber("turret encoder", mTurret.getPosition());
         prevFeeding = feeding;
     }
 
