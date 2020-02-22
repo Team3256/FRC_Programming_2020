@@ -16,7 +16,6 @@ import static frc.team3256.robot.constants.TurretConstants.turretHeight;
 
 public class TeleopUpdater {
     private ControlsInterface controls = new XboxControllerConfig();
-
     private Drivetrain mDrivetrain = Drivetrain.getInstance();
 
     private Intake mIntake = Intake.getInstance();
