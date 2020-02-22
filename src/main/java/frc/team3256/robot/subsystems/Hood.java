@@ -102,7 +102,7 @@ public class Hood extends SubsystemBase {
     }
 
     private HoodState handleZeroing() {
-        
+
         return defaultStateTransfer();
     }
 
