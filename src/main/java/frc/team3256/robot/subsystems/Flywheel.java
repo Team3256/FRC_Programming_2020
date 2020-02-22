@@ -109,9 +109,10 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     }
 
     private void setFlywheelVelocity(double speed) { //Run flywheel at set velocity in RPM
-
         mLeftFlywheel.set(ControlMode.Velocity, rpmToSensorUnits(speed));
         mRightFlywheel.set(ControlMode.Velocity, rpmToSensorUnits(speed));
+//        mLeftFlywheel.set(1.0);
+//        mRightFlywheel.set(1.0);
     }
 
     private double rpmToSensorUnits(double rpm) {
@@ -125,6 +126,7 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     @Override
     public void outputToDashboard() {
         SmartDashboard.putNumber("Flywheel Speed", sensorUnitsToRPM(mLeftFlywheel.getSelectedSensorVelocity()));
+//        SmartDashboard.putNumber("Flywheel encoder", mLeftFlywheel.getSelectedSensorVelocity());
     }
 
     @Override
