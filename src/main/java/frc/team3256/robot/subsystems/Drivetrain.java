@@ -5,6 +5,7 @@ import com.revrobotics.*;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.geometry.Twist2d;
 import frc.team3256.robot.constants.DriveConstants;
+import frc.team3256.robot.constants.IDConstants;
 import frc.team3256.warriorlib.control.DrivePower;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.loop.Loop;
@@ -29,14 +30,14 @@ public class Drivetrain extends DriveTrainBase implements Loop {
     }
 
     public Drivetrain() {
-        gyro = new PigeonIMU(DriveConstants.pigeonIMUID);
+        gyro = new PigeonIMU(IDConstants.pigeonID);
         gyro.setAccumZAngle(0, 0);
         gyro.setYaw(0, 0);
 
-        leftMaster = SparkMAXUtil.generateGenericSparkMAX(DriveConstants.leftMasterID, CANSparkMaxLowLevel.MotorType.kBrushless);
-        leftSlave = SparkMAXUtil.generateSlaveSparkMAX(DriveConstants.leftSlaveID, CANSparkMaxLowLevel.MotorType.kBrushless, leftMaster);
-        rightMaster = SparkMAXUtil.generateGenericSparkMAX(DriveConstants.rightMasterID, CANSparkMaxLowLevel.MotorType.kBrushless);
-        rightSlave = SparkMAXUtil.generateSlaveSparkMAX(DriveConstants.rightSlaveID, CANSparkMaxLowLevel.MotorType.kBrushless, rightMaster);
+        leftMaster = SparkMAXUtil.generateGenericSparkMAX(IDConstants.leftMasterID, CANSparkMaxLowLevel.MotorType.kBrushless);
+        leftSlave = SparkMAXUtil.generateSlaveSparkMAX(IDConstants.leftSlaveID, CANSparkMaxLowLevel.MotorType.kBrushless, leftMaster);
+        rightMaster = SparkMAXUtil.generateGenericSparkMAX(IDConstants.rightMasterID, CANSparkMaxLowLevel.MotorType.kBrushless);
+        rightSlave = SparkMAXUtil.generateSlaveSparkMAX(IDConstants.rightSlaveID, CANSparkMaxLowLevel.MotorType.kBrushless, rightMaster);
         leftMaster.setSmartCurrentLimit(60);
         leftSlave.setSmartCurrentLimit(60);
         rightMaster.setSmartCurrentLimit(60);
@@ -67,7 +68,7 @@ public class Drivetrain extends DriveTrainBase implements Loop {
         Util.setGearRatio(DriveConstants.kGearRatio);
         Util.setWheelDiameter(DriveConstants.kWheelDiameter);
 
-        shifter = new DoubleSolenoid(0,4,3);
+        shifter = new DoubleSolenoid(IDConstants.moduleNumber,IDConstants.forwardChannel,IDConstants.reverseChannel);
     }
 
     public void setPowerOpenLoop(double leftPower, double rightPower) {
@@ -122,69 +123,6 @@ public class Drivetrain extends DriveTrainBase implements Loop {
     public void runZeroPower() {
         leftMaster.set(0);
         rightMaster.set(0);
-    }
-
-    public static DrivePower curvatureDrive(double throttle, double turn, boolean quickTurn, boolean highGear) {
-        //boolean highGear = true;
-        if (Math.abs(turn) <= 0.15) { //deadband
-            turn = 0;
-        }
-        if (Math.abs(throttle) <= 0.15) {
-            throttle = 0;
-        }
-        double angularPower, overPower;
-
-        if (quickTurn) {
-            highGear = false;
-            if (Math.abs(throttle) < 0.2) {
-                DriveConstants.quickStopAccumulator = (1 - DriveConstants.kQuickStopAlpha) * DriveConstants.quickStopAccumulator + DriveConstants.kQuickStopAlpha * clamp(turn) * DriveConstants.kQuickStopScalar;
-            }
-            overPower = 1.0;
-            angularPower = turn/DriveConstants.kAngularPowerScalar;
-            if (Math.abs(turn - prevTurn) > DriveConstants.kQuickTurnDeltaLimit) {
-                //System.out.println("TURN: " + turn);
-                //System.out.println("PREVIOUS TURN: " + prevTurn);
-                if (turn > 0) {
-                    angularPower = prevTurn + DriveConstants.kQuickTurnDeltaLimit;
-                    //System.out.println("ANGULAR POWER: " + angularPower);
-                } else
-                    angularPower = prevTurn - DriveConstants.kQuickTurnDeltaLimit;
-            }
-        } else {
-            overPower = 0.0;
-            angularPower = (Math.abs(throttle) * turn - DriveConstants.quickStopAccumulator)/DriveConstants.kAngularPowerScalar;
-            if (DriveConstants.quickStopAccumulator > 1) {
-                DriveConstants.quickStopAccumulator -= 1;
-            } else if (DriveConstants.quickStopAccumulator < -1) {
-                DriveConstants.quickStopAccumulator += 1;
-            } else {
-                DriveConstants.quickStopAccumulator = 0.0;
-            }
-        }
-        prevTurn = turn;
-        double left, right;
-
-        left = throttle + angularPower;
-        right = throttle - angularPower;
-
-        if (left > 1.0) {
-            right -= overPower * (left - 1.0);
-            left = 1.0;
-        } else if (right > 1.0) {
-            left -= overPower * (right - 1.0);
-            right = 1.0;
-        } else if (left < -1.0) {
-            right += overPower * (-1.0 - left);
-            left = -1.0;
-        } else if (right < -1.0) {
-            left += overPower * (-1.0 - right);
-            right = -1.0;
-        }
-        if (!quickTurn) { //we only want cubic drive if we aren't quickturning
-            left *= left * left;
-            right *= right * right;
-        }
-        return new DrivePower(left, right, highGear);
     }
 
     @Override

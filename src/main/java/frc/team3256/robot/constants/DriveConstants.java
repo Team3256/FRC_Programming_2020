@@ -1,20 +1,12 @@
 package frc.team3256.robot.constants;
 
 public class DriveConstants {
+
     //General Information
     public static final double kWheelDiameter = 6;
     public static final double kRobotTrackWidth = 21.735; //inches
     public static final double kTrackScrubFactor = 1.0469745223;
     public static final double kGearRatio = 19.2 / 60 * 27;
-    public static final int pigeonIMUID = 13;
-
-    //Curvature Drive
-
-    public static double quickStopAccumulator = 0.0;
-    public static final double kQuickStopAlpha = 0.1;
-    public static final double kQuickStopScalar = 2.0;
-    public static final double kQuickTurnDeltaLimit = 2.0 / 1000.0 / 12.0 * 20.0;
-    public static final double kAngularPowerScalar = 1.7;
 
     //Low Gear
     public static final int kVelocityLowGearSlot = 0;
