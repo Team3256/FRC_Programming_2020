@@ -2,7 +2,9 @@ package frc.team3256.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
@@ -18,17 +20,20 @@ public class Hood extends SubsystemBase {
     WantedState mPrevWantedState;
     boolean mStateChanged;
     boolean mWantedStateChanged;
+    double posSetpoint;
 
     public enum HoodState {
         MANUAL_UP,
         MANUAL_DOWN,
         IDLE,
+        CLOSED_LOOP
     }
 
     public enum WantedState {
         WANTS_TO_MANUAL_UP,
         WANTS_TO_MANUAL_DOWN,
         WANTS_TO_IDLE,
+        WANTS_TO_POS
     }
 
     private HoodState mCurrentState = HoodState.IDLE;
@@ -57,6 +62,9 @@ public class Hood extends SubsystemBase {
             case MANUAL_DOWN:
                 newState = handleManualDown();
                 break;
+            case CLOSED_LOOP:
+                newState = handleClosedLoop();
+                break;
             case IDLE:
             default:
                 newState = handleIdle();
@@ -77,7 +85,7 @@ public class Hood extends SubsystemBase {
             mHood.stopMotor();
         }
         else {
-            mHood.set(-0.15);
+            mHood.set(-kHoodSpeed);
         }
         return defaultStateTransfer();
     }
@@ -88,18 +96,18 @@ public class Hood extends SubsystemBase {
             mHood.getEncoder().setPosition(0);
         }
         else {
-            mHood.set(0.15);
+            mHood.set(kHoodSpeed);
         }
+        return defaultStateTransfer();
+    }
+
+    private HoodState handleClosedLoop() {
+        mHood.getPIDController().setReference(posSetpoint, ControlType.kPosition);
         return defaultStateTransfer();
     }
 
     private HoodState handleIdle() { //Stops turret motor
         mHood.stopMotor();
-        return defaultStateTransfer();
-    }
-
-    private HoodState handleZeroing() {
-
         return defaultStateTransfer();
     }
 
@@ -109,6 +117,8 @@ public class Hood extends SubsystemBase {
                 return HoodState.MANUAL_UP;
             case WANTS_TO_MANUAL_DOWN:
                 return HoodState.MANUAL_DOWN;
+            case WANTS_TO_POS:
+                return HoodState.CLOSED_LOOP;
             case WANTS_TO_IDLE:
             default:
                 return HoodState.IDLE;
@@ -121,6 +131,10 @@ public class Hood extends SubsystemBase {
 
     public double getHoodEncoder() {
         return mHood.getEncoder().getPosition();
+    }
+
+    public void setPosSetpoint(double pos) {
+        posSetpoint = pos;
     }
 
     private double encoderToAngle(double encoder) {
