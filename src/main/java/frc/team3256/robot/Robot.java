@@ -7,6 +7,22 @@
 
 package frc.team3256.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3256.robot.auto.modes.DoNothingAutoMode;
+import frc.team3256.robot.auto.modes.RightDriveShootAutoMode;
+import frc.team3256.robot.auto.modes.RightDriveTrenchShootAutoMode;
+import frc.team3256.robot.auto.modes.RightDriveTrenchTenBallAutoMode;
+import frc.team3256.robot.auto.paths.Paths;
+import frc.team3256.robot.subsystems.Drivetrain;
+import frc.team3256.robot.subsystems.Intake;
+import frc.team3256.robot.teleop.TeleopUpdater;
+import frc.team3256.warriorlib.auto.AutoModeBase;
+import frc.team3256.warriorlib.auto.AutoModeExecuter;
+import frc.team3256.warriorlib.auto.purepursuit.PoseEstimator;
+import frc.team3256.warriorlib.auto.purepursuit.PurePursuitTracker;
+import frc.team3256.warriorlib.loop.Looper;
+import frc.team3256.warriorlib.subsystem.DriveTrainBase;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -17,24 +33,107 @@ import edu.wpi.first.wpilibj.TimedRobot;
  */
 public class Robot extends TimedRobot {
 
+  TeleopUpdater teleopUpdater;
+  private Drivetrain drivetrain;
+  private Intake intake;
+  private PoseEstimator poseEstimator;
+  private PurePursuitTracker purePursuitTracker;
+
+  private AutoModeExecuter autoModeExecuter;
+  private boolean maintainAutoExecution = true;
+
+  private Looper enabledLooper, poseEstimatorLooper, limelightLooper;
+  SendableChooser<AutoModeBase> autoChooser = new SendableChooser<>();
+
   @Override
   public void robotInit() {
+    teleopUpdater = new TeleopUpdater();
+    drivetrain = Drivetrain.getInstance();
+    intake = Intake.getInstance();
+    DriveTrainBase.setDriveTrain(drivetrain);
+    purePursuitTracker = PurePursuitTracker.getInstance();
+
+    Paths.initialize();
+    enabledLooper = new Looper(1 / 200D);
+
+    // Reset sensors
+    drivetrain.resetEncoders();
+    drivetrain.resetGyro();
+
+    enabledLooper.addLoops(drivetrain);
+
+    poseEstimatorLooper = new Looper(1 / 50D);
+    poseEstimator = PoseEstimator.getInstance();
+    poseEstimatorLooper.addLoops(poseEstimator);
+    poseEstimatorLooper.start();
+
+    limelightLooper = new Looper(1 / 100D);
+
+    autoChooser.setDefaultOption("Do Nothing", new DoNothingAutoMode());
+    autoChooser.addOption("Right Shoot Auto", new RightDriveShootAutoMode());
+    autoChooser.addOption("Right Trench Shoot Auto", new RightDriveTrenchShootAutoMode());
+    autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
+
+    SmartDashboard.putData(autoChooser);
   }
 
   @Override
   public void autonomousInit() {
+    drivetrain.resetEncoders();
+    drivetrain.resetGyro();
+    drivetrain.setBrakeMode();
+
+    poseEstimator.reset();
+    purePursuitTracker.reset();
+
+    enabledLooper.start();
+
+    if (SmartDashboard.getBoolean("autoEnabled", true)) {
+      maintainAutoExecution = true;
+
+      autoModeExecuter = new AutoModeExecuter();
+      autoModeExecuter.setAutoMode(autoChooser.getSelected());
+      autoModeExecuter.start();
+    }
+    else {
+      maintainAutoExecution = false;
+    }
   }
 
   @Override
   public void autonomousPeriodic() {
+    SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
+    SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
+    SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
+    intake.update(0);
+
+    if (!maintainAutoExecution) {
+      teleopUpdater.update();
+    }
+
+    else if (autoModeExecuter.isFinished()) {
+      maintainAutoExecution = false;
+      drivetrain.runZeroPower();
+      drivetrain.setCoastMode();
+    }
   }
 
   @Override
   public void teleopInit() {
+    enabledLooper.start();
+    limelightLooper.start();
+    drivetrain.resetGyro();
+    drivetrain.resetEncoders();
+    drivetrain.setBrakeMode();
+    poseEstimator.reset();
   }
 
   @Override
   public void teleopPeriodic() {
+    SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
+    SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
+    SmartDashboard.putNumber("Gyro Angle", drivetrain.getAngle());
+    teleopUpdater.update();
   }
 
   @Override
