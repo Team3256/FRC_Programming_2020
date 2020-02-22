@@ -14,6 +14,7 @@ import frc.team3256.robot.auto.modes.RightDriveShootAutoMode;
 import frc.team3256.robot.auto.modes.RightDriveTrenchShootAutoMode;
 import frc.team3256.robot.auto.modes.RightDriveTrenchTenBallAutoMode;
 import frc.team3256.robot.auto.paths.Paths;
+import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.robot.subsystems.Drivetrain;
 import frc.team3256.robot.subsystems.Intake;
 import frc.team3256.robot.teleop.TeleopUpdater;
@@ -38,6 +39,7 @@ public class Robot extends TimedRobot {
   private Intake intake;
   private PoseEstimator poseEstimator;
   private PurePursuitTracker purePursuitTracker;
+  private Limelight limelight = Limelight.getInstance();
 
   private AutoModeExecuter autoModeExecuter;
   private boolean maintainAutoExecution = true;
@@ -52,6 +54,7 @@ public class Robot extends TimedRobot {
     intake = Intake.getInstance();
     DriveTrainBase.setDriveTrain(drivetrain);
     purePursuitTracker = PurePursuitTracker.getInstance();
+    limelight.init();
 
     Paths.initialize();
     enabledLooper = new Looper(1 / 200D);
@@ -75,6 +78,9 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
 
     SmartDashboard.putData(autoChooser);
+
+    SmartDashboard.putNumber("wanted vel", 1000);
+    SmartDashboard.putNumber("hood pos", 0);
   }
 
   @Override

@@ -44,6 +44,18 @@ public class Hood extends SubsystemBase {
     public static Hood getInstance() { return instance == null ? instance = new Hood() : instance; }
 
     private Hood() {
+
+        mHood = SparkMAXUtil.generateGenericSparkMAX(hoodID, CANSparkMaxLowLevel.MotorType.kBrushless); //TBD
+        mHood.setInverted(false);
+        bottomLimit = new DigitalInput(limitSwitchPort);
+        SparkMAXUtil.setPIDGains(mHood.getPIDController(),
+                kHoodAdjustSlot,
+                kHoodAdjustP,
+                kHoodAdjustI,
+                kHoodAdjustD,
+                kHoodAdjustF,
+                kHoodAdjustIZone
+        );
     }
 
     public void setWantedState(WantedState wantedState) { this.mWantedState = wantedState; }
@@ -81,7 +93,7 @@ public class Hood extends SubsystemBase {
     }
 
     private HoodState handleManualUp() { //Runs Hood Up until encoder position of -8.8
-        if(mHood.getEncoder().getPosition() <= -8.8) {
+        if(mHood.getEncoder().getPosition() <= kHoodMaxPos) {
             mHood.stopMotor();
         }
         else {
@@ -102,6 +114,11 @@ public class Hood extends SubsystemBase {
     }
 
     private HoodState handleClosedLoop() {
+        if(posSetpoint <= kHoodMaxPos) {
+            posSetpoint = kHoodMaxPos;
+        } else if (posSetpoint > 0) {
+            posSetpoint = 0;
+        }
         mHood.getPIDController().setReference(posSetpoint, ControlType.kPosition);
         return defaultStateTransfer();
     }
@@ -148,6 +165,7 @@ public class Hood extends SubsystemBase {
     @Override
     public void outputToDashboard() {
         SmartDashboard.putNumber("encoder", getHoodEncoder());
+        SmartDashboard.putBoolean("limit", isLimitSwitchPressed());
     }
 
     @Override
@@ -157,17 +175,6 @@ public class Hood extends SubsystemBase {
 
     @Override
     public void init(double timestamp) {
-        mHood = SparkMAXUtil.generateGenericSparkMAX(hoodID, CANSparkMaxLowLevel.MotorType.kBrushless); //TBD
-        mHood.setInverted(false);
-        bottomLimit = new DigitalInput(limitSwitchPort);
-        SparkMAXUtil.setPIDGains(mHood.getPIDController(),
-                kHoodAdjustSlot,
-                kHoodAdjustP,
-                kHoodAdjustI,
-                kHoodAdjustD,
-                kHoodAdjustF,
-                kHoodAdjustIZone
-                );
     }
 
     @Override

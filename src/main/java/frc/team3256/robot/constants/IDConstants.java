@@ -38,7 +38,7 @@ public class IDConstants {
     public static final int reverseChannel = 3;
 
     //Ports:
-    public static final int limitSwitchPort = 0;
+    public static final int limitSwitchPort = 1;
     public static final int feederIRID = 0;
 
 }

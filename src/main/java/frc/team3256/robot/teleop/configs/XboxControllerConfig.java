@@ -67,11 +67,11 @@ public class XboxControllerConfig implements ControlsInterface {
     //Manipulator: Left Analog Stick | Vertical Axis | Up
     @Override
     public boolean manualHoodUp() {
-        return manipulator.getRawAxis(1) > 0.5; } //***NEED TO CONFIRM DIRECTION***
+        return manipulator.getRawAxis(1) < -.5; } //***NEED TO CONFIRM DIRECTION***
 
     //Manipulator: Left Analog Stick | Vertical Axis | Down
     @Override
-    public boolean manualHoodDown() { return manipulator.getRawAxis(1) < -0.5; } //***NEED TO CONFIRM DIRECTION***
+    public boolean manualHoodDown() { return manipulator.getRawAxis(1) > .5; } //***NEED TO CONFIRM DIRECTION***
 
     //Manipulator: Right Bumper
     @Override

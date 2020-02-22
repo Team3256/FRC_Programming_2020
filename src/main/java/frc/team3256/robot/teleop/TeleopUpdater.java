@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.constants.IDConstants;
 import frc.team3256.robot.constants.LimelightConstants;
 import frc.team3256.robot.hardware.IRSensor;
+import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.robot.subsystems.*;
 import frc.team3256.robot.teleop.configs.ControlsInterface;
 import frc.team3256.robot.teleop.configs.XboxControllerConfig;
@@ -18,12 +19,13 @@ public class TeleopUpdater {
     private ControlsInterface controls = new XboxControllerConfig();
     private Drivetrain mDrivetrain = Drivetrain.getInstance();
 
-    private Intake mIntake = Intake.getInstance();
+//    private Intake mIntake = Intake.getInstance();
     private Feeder mFeeder = Feeder.getInstance();
     private Flywheel mFlywheel = Flywheel.getInstance();
     private Turret mTurret = Turret.getInstance();
     private Hood mHood = Hood.getInstance();
-    private IRSensor irSensor = new IRSensor(IDConstants.feederIRID);
+//    private IRSensor irSensor = new IRSensor(IDConstants.feederIRID);
+//    private Limelight limelight = Limelight.getInstance();
     private boolean overrideFeeder = false;
     public int ballCounter = 0;
     private boolean prevFeeding = false;
@@ -36,7 +38,7 @@ public class TeleopUpdater {
 
     public void update() {
         mDrivetrain.update(0);
-        mIntake.update(0);
+//        mIntake.update(0);
         mFeeder.update(0);
         mFlywheel.update(0);
         mTurret.update(0);
@@ -60,69 +62,73 @@ public class TeleopUpdater {
         boolean manualHoodUp = controls.manualHoodUp();
         boolean manualHoodDown = controls.manualHoodDown();
 
+        boolean autoAlign = controls.autoAlignTurret();
+
+        boolean setposHood = controls.autoAlignHood();
+
         boolean getShoot = controls.getShoot();
 
         boolean autoAlignHood = controls.autoAlignHood();
         boolean autoAlignTurret = controls.autoAlignTurret();
 
         //Drivetrain Subsystem
-        DrivePower drivePower = mDrivetrain.cheesyishDrive(throttle, turn, quickTurn);
-        mDrivetrain.setPowerOpenLoop(drivePower.getLeft(), drivePower.getRight());
-        mDrivetrain.setHighGear(drivePower.getHighGear());
+//        DrivePower drivePower = mDrivetrain.cheesyishDrive(throttle, turn, quickTurn);
+//        mDrivetrain.setPowerOpenLoop(drivePower.getLeft(), drivePower.getRight());
+//        mDrivetrain.setHighGear(drivePower.getHighGear());
 
         //Intake - Feeder - Flywheel Subsystem
-        if(unjam) {
-            mIntake.setWantedState(Intake.WantedState.WANTS_TO_UNJAM);
-            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_FORWARD);
-            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
-        }
-        else if(intake) {
-            mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
-            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
-        }
-        else if(exhaust) {
-            overrideFeeder = true;
-            mIntake.setWantedState(Intake.WantedState.WANTS_TO_EXHAUST);
-            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
-            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
-        }
-        else if(getShoot) {
-            overrideFeeder = true;
-            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
-            if(mFlywheel.getVelocity() >= 6000) {
-                mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
-                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
-            }
-        }
-        else {
-            mIntake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
-            overrideFeeder = false;
-            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
-        }
+//        if(unjam) {
+//            mIntake.setWantedState(Intake.WantedState.WANTS_TO_UNJAM);
+//            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_FORWARD);
+//            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
+//        }
+//        else if(intake) {
+//            mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
+//            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
+//        }
+//        else if(exhaust) {
+//            overrideFeeder = true;
+//            mIntake.setWantedState(Intake.WantedState.WANTS_TO_EXHAUST);
+//            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
+//            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
+//        }
+//        else if(getShoot) {
+//            overrideFeeder = true;
+//            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
+//            if(mFlywheel.getVelocity() >= 6000) {
+////                mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
+////                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
+//            }
+//        }
+//        else {
+//            mIntake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
+//            overrideFeeder = false;
+//            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
+//        }
 
         //Feeder Indexing Logic
 
-        feeding = !irSensor.isIntact();
-        if (feeding && !overrideFeeder) {
-            if(!prevFeeding) {
-                ballCounter++;
-            }
-            if (ballCounter != 5) {
-                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_FORWARD);
-            }
-        }
-        else if (!feeding && !overrideFeeder) {
-            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
-        }
-
-        if(feederForward) {
-            System.out.println("D-PAD UP");
-            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_FORWARD);
-        }
-        else if(feederBackward) {
-            System.out.println("D-PAD DOWN");
-            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
-        }
+//        feeding = !irSensor.isIntact();
+//        if (feeding && !overrideFeeder) {
+//            if(!prevFeeding) {
+//                ballCounter++;
+//            }
+//            if (ballCounter != 5) {
+//                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_FORWARD);
+//            }
+//        }
+//        else if (!feeding && !overrideFeeder) {
+//            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
+//        }
+//
+//        if(feederForward) {
+//            System.out.println("D-PAD UP");
+//            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_FORWARD);
+//        }
+//        else if(feederBackward) {
+//            System.out.println("D-PAD DOWN");
+//            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
+//        }
 
         //Turret Subsystem
         if(manualTurretLeft) {
@@ -146,7 +152,35 @@ public class TeleopUpdater {
             mHood.setWantedState(Hood.WantedState.WANTS_TO_IDLE);
         }
         prevFeeding = feeding;
+
+        if(getShoot) {
+            overrideFeeder = true;
+            double vel = SmartDashboard.getNumber("wanted vel", 0);
+            mFlywheel.setVelocitySetpoint(vel);
+            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
+//            if(autoAlign) {
+//                mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
+//                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
+//            }
+        } else {
+            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
+            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
+        }
+
+        if(setposHood) {
+            double hoodPos = SmartDashboard.getNumber("hood pos", 0);
+            mHood.setPosSetpoint(hoodPos);
+            mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
+        }
+
+//        if (autoAlign) {
+//            double angle = limelight.calculateTau();
+//            mTurret.setTurretAutoAlignAngle(angle);
+//            mTurret.setWantedState(Turret.WantedState.WANTS_TO_AUTO_ALIGN);
+//        }
     }
+
+
 
     public int getBallCounter() {
         return ballCounter;
