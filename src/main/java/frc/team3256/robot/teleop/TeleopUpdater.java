@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.constants.LimelightConstants;
 import frc.team3256.robot.hardware.IRSensor;
 import frc.team3256.robot.subsystems.*;
+import frc.team3256.robot.teleop.configs.ControlsInterface;
+import frc.team3256.robot.teleop.configs.XboxControllerConfig;
 import frc.team3256.warriorlib.control.DrivePower;
 
 import static frc.team3256.robot.constants.TurretConstants.turretHeight;
@@ -16,7 +18,7 @@ public class TeleopUpdater {
 
     private Drivetrain mDrivetrain = Drivetrain.getInstance();
 
-    private IntakeStateMachineTest mIntake = IntakeStateMachineTest.getInstance();
+    private Intake mIntake = Intake.getInstance();
     private FeederStateMachineTest mFeeder = FeederStateMachineTest.getInstance();
     private FlywheelStateMachineTest mFlywheel = FlywheelStateMachineTest.getInstance();
     private TurretStateMachineTest mTurret = TurretStateMachineTest.getInstance();
@@ -29,8 +31,8 @@ public class TeleopUpdater {
 
     private double gravAcc = 32.174;
 
-    private static TeleopUpdaterStateMachine instance;
-    public static TeleopUpdaterStateMachine getInstance() { return instance == null ? instance = new TeleopUpdaterStateMachine() : instance; }
+    private static TeleopUpdater instance;
+    public static TeleopUpdater getInstance() { return instance == null ? instance = new TeleopUpdater() : instance; }
 
     public void update() {
         mDrivetrain.update(0);
@@ -67,17 +69,17 @@ public class TeleopUpdater {
 
         //Intake - Feeder - Flywheel Subsystem
         if(unjam) {
-            mIntake.setWantedState(IntakeStateMachineTest.WantedState.WANTS_TO_UNJAM);
+            mIntake.setWantedState(Intake.WantedState.WANTS_TO_UNJAM);
             mFeeder.setWantedState(FeederStateMachineTest.WantedState.WANTS_TO_RUN_FORWARD);
             mFlywheel.setWantedState(FlywheelStateMachineTest.WantedState.WANTS_TO_IDLE);
         }
         else if(intake) {
-            mIntake.setWantedState(IntakeStateMachineTest.WantedState.WANTS_TO_INTAKE);
+            mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
             mFlywheel.setWantedState(FlywheelStateMachineTest.WantedState.WANTS_TO_IDLE);
         }
         else if(exhaust) {
             overrideFeeder = true;
-            mIntake.setWantedState(IntakeStateMachineTest.WantedState.WANTS_TO_EXHAUST);
+            mIntake.setWantedState(Intake.WantedState.WANTS_TO_EXHAUST);
             mFeeder.setWantedState(FeederStateMachineTest.WantedState.WANTS_TO_RUN_BACKWARD);
             mFlywheel.setWantedState(FlywheelStateMachineTest.WantedState.WANTS_TO_IDLE);
         }
@@ -85,12 +87,12 @@ public class TeleopUpdater {
             overrideFeeder = true;
             mFlywheel.setWantedState(FlywheelStateMachineTest.WantedState.WANTS_TO_RUN);
             if(mFlywheel.getVelocity() >= 6000) {
-                mIntake.setWantedState(IntakeStateMachineTest.WantedState.WANTS_TO_INTAKE);
+                mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
                 mFeeder.setWantedState(FeederStateMachineTest.WantedState.WANTS_TO_SHOOT);
             }
         }
         else {
-            mIntake.setWantedState(IntakeStateMachineTest.WantedState.WANTS_TO_STOP);
+            mIntake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
             overrideFeeder = false;
             mFlywheel.setWantedState(FlywheelStateMachineTest.WantedState.WANTS_TO_IDLE);
         }
