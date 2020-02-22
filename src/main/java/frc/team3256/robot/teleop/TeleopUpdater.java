@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.constants.LimelightConstants;
 import frc.team3256.robot.hardware.IRSensor;
 import frc.team3256.robot.subsystems.*;
+import frc.team3256.robot.teleop.configs.ControlsInterface;
+import frc.team3256.robot.teleop.configs.XboxControllerConfig;
 import frc.team3256.warriorlib.control.DrivePower;
 
 import static frc.team3256.robot.constants.TurretConstants.turretHeight;
