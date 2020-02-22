@@ -9,10 +9,6 @@ import frc.team3256.robot.teleop.configs.ControlsInterface;
 import frc.team3256.robot.teleop.configs.XboxControllerConfig;
 import frc.team3256.warriorlib.control.DrivePower;
 
-import static frc.team3256.robot.constants.TurretConstants.turretHeight;
-
-//----------EVERYTHING IN THIS CLASS IS FOR THE PURPOSES OF MANUAL TESTING----------
-
 public class TeleopUpdater {
     private ControlsInterface controls = new XboxControllerConfig();
 
