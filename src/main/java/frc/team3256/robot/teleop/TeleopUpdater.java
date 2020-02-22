@@ -99,8 +99,6 @@ public class TeleopUpdater {
 
         //Feeder Indexing Logic
 
-        System.out.println(irSensor.isIntact());
-
         feeding = !irSensor.isIntact();
         if (feeding && !overrideFeeder) {
             if(!prevFeeding) {
