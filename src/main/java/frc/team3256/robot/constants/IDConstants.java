@@ -31,9 +31,13 @@ public class IDConstants {
     //PCM
     public static final int pcmID = 14;
 
+    //Pneumatics:
     //Shifter IDs
     public static final int moduleNumber = 0;
     public static final int forwardChannel = 4;
     public static final int reverseChannel = 3;
+
+    //Ports:
+    public static final int limitSwitchPort = 0;
 
 }

@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.constants.FlywheelConstants;
-import frc.team3256.robot.constants.IDConstants;
 import frc.team3256.warriorlib.hardware.TalonFXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
 

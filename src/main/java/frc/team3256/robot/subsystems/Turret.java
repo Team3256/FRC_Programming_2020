@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.team3256.warriorlib.hardware.TalonSRXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
 
+import static frc.team3256.robot.constants.IDConstants.turretID;
+
 public class Turret extends SubsystemBase {
     private WPI_TalonSRX mTurret;
 
@@ -32,7 +34,7 @@ public class Turret extends SubsystemBase {
     public static Turret getInstance() { return instance == null ? instance = new Turret() : instance; }
 
     private Turret() {
-        mTurret = TalonSRXUtil.generateGenericTalon(_);
+        mTurret = TalonSRXUtil.generateGenericTalon(turretID);
         TalonSRXUtil.configMagEncoder(mTurret);
         TalonSRXUtil.setBrakeMode(mTurret);
         mTurret.setInverted(false);

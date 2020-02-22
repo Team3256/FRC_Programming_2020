@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
 
+import static frc.team3256.robot.constants.IDConstants.hoodID;
+import static frc.team3256.robot.constants.IDConstants.limitSwitchPort;
+
 public class Hood extends SubsystemBase {
     private CANSparkMax mHood;
     private DigitalInput bottomLimit;
@@ -99,6 +102,7 @@ public class Hood extends SubsystemBase {
     }
 
     private HoodState handleZeroing() {
+        
         return defaultStateTransfer();
     }
 
@@ -142,11 +146,9 @@ public class Hood extends SubsystemBase {
 
     @Override
     public void init(double timestamp) {
-
-        mHood = SparkMAXUtil.generateGenericSparkMAX(_, CANSparkMaxLowLevel.MotorType.kBrushless); //TBD
+        mHood = SparkMAXUtil.generateGenericSparkMAX(hoodID, CANSparkMaxLowLevel.MotorType.kBrushless); //TBD
         mHood.setInverted(false);
-        mHood.burnFlash();
-        bottomLimit = new DigitalInput(_); //TBD
+        bottomLimit = new DigitalInput(limitSwitchPort);
     }
 
     @Override
