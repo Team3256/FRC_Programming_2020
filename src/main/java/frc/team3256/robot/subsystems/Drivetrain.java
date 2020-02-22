@@ -21,7 +21,6 @@ public class Drivetrain extends DriveTrainBase implements Loop {
     private CANPIDController leftPIDController, rightPIDController;
     private PigeonIMU gyro;
     private double gyroOffset = 0;
-    private static double prevTurn = 0.0;
 
     private DoubleSolenoid shifter;
 
