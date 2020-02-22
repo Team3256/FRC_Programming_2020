@@ -59,7 +59,7 @@ dependencies {
     // upon debugging
     simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
 
-    compile 'com.github.Team3256:warriorlib:9ab7513bd803e5b7507aec6e2f9c8a83a3ab7836'
+    compile 'com.github.Team3256:warriorlib:64f89f9'
 
 }
 
