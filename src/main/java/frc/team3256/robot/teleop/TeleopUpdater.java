@@ -62,6 +62,9 @@ public class TeleopUpdater {
 
         boolean getShoot = controls.getShoot();
 
+        boolean autoAlignHood = controls.autoAlignHood();
+        boolean autoAlignTurret = controls.autoAlignTurret();
+
         //Drivetrain Subsystem
         DrivePower drivePower = mDrivetrain.cheesyishDrive(throttle, turn, quickTurn);
         mDrivetrain.setPowerOpenLoop(drivePower.getLeft(), drivePower.getRight());
@@ -149,16 +152,5 @@ public class TeleopUpdater {
         return ballCounter;
     }
 
-    public double calcAngle(double distance, double wantedEndAngle) {
-        double heightDif = LimelightConstants.targetMidHeight - turretHeight;
-        double t = Math.sqrt(2/gravAcc*(heightDif + Math.tan(wantedEndAngle) * distance));
-        double angle = Math.tan((heightDif - .5 * gravAcc * t * t)/(12));
-        return angle;
-    }
-
-    public double calcVel(double distance, double time, double startAngle) {
-        double vel = distance/time/Math.cos(startAngle);
-        return vel;
-    }
 
 }

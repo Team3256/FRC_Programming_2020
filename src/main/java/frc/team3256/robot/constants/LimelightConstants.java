@@ -9,6 +9,7 @@ public class LimelightConstants {
     public static final double mountingAngle = 48.21; //15.
     public static final double toInnerTarget = 28.5;
     public static final double refreshTime = 0.01;
+    public static final double gravAcceleration = 32.174;
 
     //Drive Control
     public static final double kPLimelight = -0.04;

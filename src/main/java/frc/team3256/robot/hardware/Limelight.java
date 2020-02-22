@@ -4,8 +4,10 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3256.robot.constants.LimelightConstants;
 import frc.team3256.warriorlib.loop.Loop;
 import static frc.team3256.robot.constants.LimelightConstants.*;
+import static frc.team3256.robot.constants.TurretConstants.turretHeight;
 
 public class Limelight implements Loop {
     private static Limelight instance;
@@ -27,6 +29,12 @@ public class Limelight implements Loop {
 
     double lastTimestamp = 0;
 
+    //kinematics
+    double heightDif = targetMidHeight - turretHeight;
+    double wantedEndAngle = 0;
+    double timeToTarget = 0;
+    double angleToTarget = 0;
+    double velToTarget = 0;
 
     public void init() {
         //Setting up NetworkTables
@@ -54,7 +62,6 @@ public class Limelight implements Loop {
 
     public double getTx() { return tx; }
     public double getTy() { return ty; }
-    public double getTa() { return ta; }
 
     public double getTopSkew() {
         SmartDashboard.putNumber("before skew", ts);
@@ -98,6 +105,8 @@ public class Limelight implements Loop {
     }
 
     public double getDistanceToTarget() { return (targetMidHeight-mountingHeight) / Math.tan((mountingAngle + ty) * Math.PI/180); }
+
+    public double getDistanceToInner() { return getDistanceToTarget() + toInnerTarget / Math.cos(tx);}
 
     public double getAbsoluteHorizontalOffset(double targetHeight, double skew) {
         double skewAngle = skew * Math.PI / 180;
@@ -221,5 +230,23 @@ public class Limelight implements Loop {
     @Override
     public void end(double timestamp) {
 
+    }
+
+    public void calculateKinematics() {   // inches
+        timeToTarget = Math.sqrt(2/gravAcceleration*(heightDif - Math.tan(wantedEndAngle) * getDistanceToInner()));
+        angleToTarget = Math.atan((heightDif + .5 * gravAcceleration * timeToTarget * timeToTarget)/getDistanceToInner());
+        velToTarget = getDistanceToInner()/timeToTarget/Math.cos(angleToTarget);
+    }
+
+    public void setWantedEndAngle(double wantedEndAngle) {  // radians
+        this.wantedEndAngle = wantedEndAngle;
+    }
+
+    public double getAngleToTarget() {
+        return angleToTarget;
+    }
+
+    public double getVelToTarget() {
+        return velToTarget;
     }
 }
