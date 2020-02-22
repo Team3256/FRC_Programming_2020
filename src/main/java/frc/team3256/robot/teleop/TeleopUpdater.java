@@ -12,9 +12,6 @@ import frc.team3256.robot.teleop.configs.XboxControllerConfig;
 import frc.team3256.warriorlib.control.DrivePower;
 import static frc.team3256.robot.constants.TurretConstants.turretHeight;
 
-
-//----------EVERYTHING IN THIS CLASS IS FOR THE PURPOSES OF MANUAL TESTING----------
-
 public class TeleopUpdater {
     private ControlsInterface controls = new XboxControllerConfig();
     private Drivetrain mDrivetrain = Drivetrain.getInstance();
@@ -43,6 +40,7 @@ public class TeleopUpdater {
         mFlywheel.update(0);
         mTurret.update(0);
         mHood.update(0);
+        limelight.update();
 
         double throttle = controls.getThrottle();
         double turn = controls.getTurn();
@@ -157,8 +155,8 @@ public class TeleopUpdater {
 
         if(getShoot) {
             overrideFeeder = true;
-            double vel = SmartDashboard.getNumber("wanted vel", 0);
-            mFlywheel.setVelocitySetpoint(vel);
+//            double vel = SmartDashboard.getNumber("wanted vel", 0);
+//            mFlywheel.setVelocitySetpoint(vel);
             mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
 //            if(autoAlign) {
 //                mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
@@ -178,19 +176,17 @@ public class TeleopUpdater {
             limelight.calculateKinematics();
             mHood.setPosSetpoint(angleToHoodPos(limelight.getAngleToTarget()));
             mFlywheel.setVelocitySetpoint(velToFlywheelVel(limelight.getVelToTarget()));
+            mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
+            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
         }
-
-//        if(rev) {
-//            mFlywheel.setVelocitySetpoint(6000);
-//        }
     }
 
     private double angleToHoodPos(double angle) {   //todo
-        return angle;
+        return 0.3342*angle - 18.302;
     }
 
-    private double velToFlywheelVel(double vel) {   //todo
-        return vel;
+    private double velToFlywheelVel(double outputVel) {   //todo
+        return 9.839*outputVel + 742.37;
     }
 
     public int getBallCounter() {
