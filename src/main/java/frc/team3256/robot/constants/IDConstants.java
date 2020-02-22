@@ -39,5 +39,6 @@ public class IDConstants {
 
     //Ports:
     public static final int limitSwitchPort = 0;
+    public static final int feederIRID = 0;
 
 }
