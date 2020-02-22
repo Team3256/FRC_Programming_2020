@@ -17,6 +17,7 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     WantedState mPrevWantedState;
     boolean mStateChanged;
     boolean mWantedStateChanged;
+    double velocitySetpoint;
 
     public enum FlywheelState {
         RUN,
@@ -74,7 +75,7 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     }
 
     private FlywheelState handleRun() {
-        setFlywheelVelocity(6000);
+        setFlywheelVelocity(velocitySetpoint);
         return defaultStateTransfer();
     }
 
@@ -91,6 +92,10 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
             default:
                 return FlywheelState.IDLE;
         }
+    }
+
+    public void setVelocitySetpoint(double velocity) {
+        velocitySetpoint = velocity;
     }
 
     private void setFlywheelVoltage(double speed) { //Sets flywheel speed
@@ -126,7 +131,9 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     public void zeroSensors() { }
 
     @Override
-    public void init(double timestamp) { }
+    public void init(double timestamp) {
+        velocitySetpoint = 0;
+    }
 
     @Override
     public void end(double timestamp) { }

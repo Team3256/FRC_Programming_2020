@@ -42,11 +42,6 @@ public class Drivetrain extends DriveTrainBase implements Loop {
         rightMaster.setSmartCurrentLimit(60);
         rightSlave.setSmartCurrentLimit(60);
 
-        leftMaster.burnFlash();
-        leftSlave.burnFlash();
-        rightMaster.burnFlash();
-        rightSlave.burnFlash();
-
         leftEncoder = leftMaster.getEncoder();
         rightEncoder = rightMaster.getEncoder();
 
@@ -96,12 +91,7 @@ public class Drivetrain extends DriveTrainBase implements Loop {
 
         turn *= kWheelGain;
         DrivePower signal = Kinematics.inverseKinematics(new Twist2d(throttle, 0.0, turn), DriveConstants.kRobotTrackWidth, DriveConstants.kTrackScrubFactor);
-        double scaling_factor = Math.max(1.0, Math.max(Math.abs(signal.getLeft()), Math.abs(signal.getRight())));
         return new DrivePower(signal.getLeft(), signal.getRight(), quickTurn);
-    }
-
-    public static double clamp(double val) {
-        return Math.max(Math.min(val, 1.0), -1.0);
     }
 
     public void setHighGear(boolean highGear) {
@@ -149,12 +139,6 @@ public class Drivetrain extends DriveTrainBase implements Loop {
         return Util.rpmToVelocity(rightEncoder.getVelocity());
     }
 
-    public CANSparkMax getLeftMotor(){
-        return leftMaster;
-    }
-    public CANSparkMax getRightMotor(){
-        return rightMaster;
-    }
 
     @Override
     public void setVelocityClosedLoop(double left, double right) {

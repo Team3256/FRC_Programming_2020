@@ -160,20 +160,6 @@ public class Limelight implements Loop {
         return newOffsetAngle;
     }
 
-    public double calculateOutputVelocity () {
-        double distance = getDistanceToTarget();
-        //round to nearest 10
-        int roundedDistance = (int) Math.round(distance/10);
-        switch (roundedDistance) {
-            case 0:
-                return 0;
-            case 10:
-                return 0;
-            default:
-                return 0;
-        }
-    }
-
     public void outputToDashboard() {
         SmartDashboard.putNumber("Horizontal Degree", tx);
         SmartDashboard.putNumber("Vertical Degree", ty);
@@ -197,7 +183,6 @@ public class Limelight implements Loop {
         tcornx = limeLightTcornx.getDoubleArray(new double[4]);
         tcorny = limeLightTcorny.getDoubleArray(new double[4]);
         getBottomSkew();
-        //SmartDashboard.putNumber("Calculated Skew Angle", skew);
         getTopSkew();
 
         SmartDashboard.putNumber("tau", calculateTau());

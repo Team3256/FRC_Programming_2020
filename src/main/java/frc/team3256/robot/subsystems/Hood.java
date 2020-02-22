@@ -3,9 +3,11 @@ package frc.team3256.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
 
+import static frc.team3256.robot.constants.HoodConstants.*;
 import static frc.team3256.robot.constants.IDConstants.hoodID;
 import static frc.team3256.robot.constants.IDConstants.limitSwitchPort;
 
@@ -21,14 +23,12 @@ public class Hood extends SubsystemBase {
         MANUAL_UP,
         MANUAL_DOWN,
         IDLE,
-        ZEROING
     }
 
     public enum WantedState {
         WANTS_TO_MANUAL_UP,
         WANTS_TO_MANUAL_DOWN,
         WANTS_TO_IDLE,
-        WANTS_TO_ZERO
     }
 
     private HoodState mCurrentState = HoodState.IDLE;
@@ -51,9 +51,6 @@ public class Hood extends SubsystemBase {
         } else mWantedStateChanged = false;
         HoodState newState;
         switch (mCurrentState) {
-            case ZEROING:
-                newState = handleZeroing();
-                break;
             case MANUAL_UP:
                 newState = handleManualUp();
                 break;
@@ -108,8 +105,6 @@ public class Hood extends SubsystemBase {
 
     private HoodState defaultStateTransfer() {
         switch (mWantedState) {
-            case WANTS_TO_ZERO:
-                return HoodState.ZEROING;
             case WANTS_TO_MANUAL_UP:
                 return HoodState.MANUAL_UP;
             case WANTS_TO_MANUAL_DOWN:
@@ -137,7 +132,9 @@ public class Hood extends SubsystemBase {
     }
 
     @Override
-    public void outputToDashboard() { }
+    public void outputToDashboard() {
+        SmartDashboard.putNumber("encoder", getHoodEncoder());
+    }
 
     @Override
     public void zeroSensors() {
@@ -149,6 +146,14 @@ public class Hood extends SubsystemBase {
         mHood = SparkMAXUtil.generateGenericSparkMAX(hoodID, CANSparkMaxLowLevel.MotorType.kBrushless); //TBD
         mHood.setInverted(false);
         bottomLimit = new DigitalInput(limitSwitchPort);
+        SparkMAXUtil.setPIDGains(mHood.getPIDController(),
+                kHoodAdjustSlot,
+                kHoodAdjustP,
+                kHoodAdjustI,
+                kHoodAdjustD,
+                kHoodAdjustF,
+                kHoodAdjustIZone
+                );
     }
 
     @Override
