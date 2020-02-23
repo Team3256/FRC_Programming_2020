@@ -8,7 +8,6 @@ import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.warriorlib.hardware.TalonSRXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
 
-import static frc.team3256.robot.constants.IDConstants.reverseChannel;
 import static frc.team3256.robot.constants.IDConstants.turretID;
 
 public class Turret extends SubsystemBase {
@@ -108,7 +107,6 @@ public class Turret extends SubsystemBase {
     }
 
     private TurretState handleAutoAlign() {
-        limelight.update();
         if (Math.abs(angleSetpoint) <= 0.1) {
             setTurretSpeed(0);
         }
@@ -124,7 +122,7 @@ public class Turret extends SubsystemBase {
             }
             double command = -getTo;
             double c = turretPIDController.calculate(0, command);
-            setTurretSpeed(-c);
+            setTurretSpeed(c);
         }
         return defaultStateTransfer();
     }

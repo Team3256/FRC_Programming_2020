@@ -57,9 +57,6 @@ public class Limelight implements Loop {
         inst.getTable("limelight").getEntry("snapshot").setNumber(0); //Takes no snapshots
     }
 
-    public void update() {
-    }
-
     public double getTx() { return tx; }
     public double getTy() { return ty; }
 
@@ -100,22 +97,23 @@ public class Limelight implements Loop {
         }
 
         double skewRad = Math.atan2(lowestY - secLowestY, tcornx[lowestIndex] - tcornx[secLowestIndex]);
-        skew = Math.abs(skewRad * (180/Math.PI));
+        skew = Math.abs(skewRad * (180.0/Math.PI));
         return skew;
     }
 
-    public double getDistanceToTarget() { return (targetMidHeight-mountingHeight) / Math.tan((mountingAngle + ty) * Math.PI/180); }
+    public double getDistanceToTarget() { return (targetMidHeight-mountingHeight) / Math.tan((mountingAngle + ty) * Math.PI/180.0); }
 
-    public double getDistanceToInner() { return getDistanceToTarget() + toInnerTarget / Math.cos(tx);}
+    public double getDistanceToInner() { return getDistanceToTarget() + toInnerTarget / Math.cos(calculateTopTheta()*Math.PI/180.0);}
 
     public double getAbsoluteHorizontalOffset(double targetHeight, double skew) {
-        double skewAngle = skew * Math.PI / 180;
+        SmartDashboard.putNumber("skew", skew);
+        double skewAngle = skew * Math.PI / 180.0;
         double cosSSquared = Math.pow(Math.cos(skewAngle),2);
         double height = targetHeight - mountingHeight;
         double distance = getDistanceToTarget();
         double numerator = (Math.pow(height, 2))*cosSSquared;
         double denominator = (Math.pow(distance, 2))-((Math.pow(distance, 2) * cosSSquared)) + Math.pow(height, 2);
-        return (180/Math.PI) * (Math.acos(Math.sqrt(numerator/denominator)));
+        return (180.0/Math.PI) * (Math.acos(Math.sqrt(numerator/denominator)));
     }
 
     public double calculateTopTheta() {
@@ -134,10 +132,10 @@ public class Limelight implements Loop {
         double f = toInnerTarget;
         double side = getTopSkew() > 0 ? 1 : -1;
         SmartDashboard.putNumber("side", side);
-        double hashtagOne = (calculateBottomTheta())/2 * side;
+        double hashtagOne = (calculateTopTheta())/2 * side; //calculateBottomTheta
 
-        double offset = Math.atan2(d*Math.sin((tx+hashtagOne)*Math.PI/180), f+d*Math.cos((tx+hashtagOne)*Math.PI/180))-(hashtagOne*Math.PI/180);
-        return (offset*180/Math.PI);
+        double offset = Math.atan2(d*Math.sin((tx+hashtagOne)*Math.PI/180.0), f+d*Math.cos((tx+hashtagOne)*Math.PI/180.0))-(hashtagOne*Math.PI/180.0);
+        return (offset*180.0/Math.PI);
     }
 
     public double calculateMovingAngle (double outputVelocity, double hoodAngle) {
@@ -145,10 +143,10 @@ public class Limelight implements Loop {
         double horizontalDistance = getDistanceToTarget()+toInnerTarget;
 
         //use angular velocity and distance to target (ground) to find the velocity perpendicular to the target
-        double perpendicularVelocity = (dTheta*Math.PI/180)*horizontalDistance;
+        double perpendicularVelocity = (dTheta*Math.PI/180.0)*horizontalDistance;
 
         //horizontal 2d output velocity
-        double horizontalOutputVelocity = outputVelocity*Math.cos(hoodAngle*Math.PI/180);
+        double horizontalOutputVelocity = outputVelocity*Math.cos(hoodAngle*Math.PI/180.0);
 
         //time it takes to reach the target
         double timeToTarget = horizontalDistance/horizontalOutputVelocity;
@@ -158,7 +156,7 @@ public class Limelight implements Loop {
 
         SmartDashboard.putNumber("offset distance", offsetDist);
 
-        double newOffsetAngle = Math.atan2(offsetDist, horizontalDistance) * (180/Math.PI);
+        double newOffsetAngle = Math.atan2(offsetDist, horizontalDistance) * (180.0/Math.PI);
 
         if (newOffsetAngle<0) {
             newOffsetAngle += 90;

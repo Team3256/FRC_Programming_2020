@@ -65,5 +65,8 @@ public interface ControlsInterface {
     //Hold: Runs spinner
     boolean getSpin();
 
+    //Toggle: Toggles Intake up and down
+    boolean getIntakeToggle();
+
 
 }

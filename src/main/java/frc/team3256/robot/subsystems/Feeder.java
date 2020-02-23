@@ -44,7 +44,7 @@ public class Feeder extends SubsystemBase {
         mFeeder.setInverted(true);
         mFeeder.burnFlash();
         mOmni = TalonSRXUtil.generateGenericTalon(turretBarID);
-        mOmni.setInverted(true);
+        mOmni.setInverted(false);
     }
 
     public void setWantedState(Feeder.WantedState wantedState) { this.mWantedState = wantedState; }

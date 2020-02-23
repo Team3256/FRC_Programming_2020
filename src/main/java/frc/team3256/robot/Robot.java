@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.team3256.robot;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -139,6 +140,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
     SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
     SmartDashboard.putNumber("Gyro Angle", drivetrain.getAngle());
+    SmartDashboard.putNumber("distance to target", limelight.getDistanceToTarget());
+    SmartDashboard.putNumber("distance to inner", limelight.getDistanceToInner());
     teleopUpdater.update();
   }
 

@@ -80,11 +80,11 @@ public class XboxControllerConfig implements ControlsInterface {
     //Manipulator: Right Analog Stick | Horizontal Axis | Left
     @Override
     public boolean manualTurretLeft() {
-        return manipulator.getRawAxis(4) > 0.5; } //***NEED TO CONFIRM DIRECTION***
+        return manipulator.getRawAxis(4) < -0.5; } //***NEED TO CONFIRM DIRECTION***
 
     //Manipulator: Right Analog Stick | Horizontal Axis | Right
     @Override
-    public boolean manualTurretRight() { return manipulator.getRawAxis(4) < -0.5; } //***NEED TO CONFIRM DIRECTION***
+    public boolean manualTurretRight() { return manipulator.getRawAxis(4) > 0.5; } //***NEED TO CONFIRM DIRECTION***
 
     //Manipulator: Y Button
     @Override
@@ -93,4 +93,9 @@ public class XboxControllerConfig implements ControlsInterface {
     //Manipulator: A Button
     @Override
     public boolean getSpin() { return manipulator.getRawButton(1); }
+
+    @Override
+    public boolean getIntakeToggle() {
+        return manipulator.getRawButton(2);
+    }
 }

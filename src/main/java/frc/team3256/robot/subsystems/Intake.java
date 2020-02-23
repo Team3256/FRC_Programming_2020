@@ -3,6 +3,7 @@ package frc.team3256.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import frc.team3256.robot.constants.IDConstants;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.hardware.TalonSRXUtil;
@@ -11,6 +12,7 @@ import frc.team3256.warriorlib.subsystem.SubsystemBase;
 public class Intake extends SubsystemBase {
     private CANSparkMax mIntake;
     private WPI_TalonSRX mCenterMech;
+    private DoubleSolenoid mRaiseMech;
 
     WantedState mPrevWantedState;
     boolean mStateChanged;
@@ -21,6 +23,8 @@ public class Intake extends SubsystemBase {
         INTAKING,
         INTAKING_AUTO_BACKWARDS,
         EXHAUSTING,
+        RAISING,
+        DROPPING,
         STOP
     }
 
@@ -29,6 +33,8 @@ public class Intake extends SubsystemBase {
         WANTS_TO_INTAKE,
         WANTS_TO_EXHAUST,
         WANTS_TO_AUTO_BACKWARDS_INTAKE,
+        WANTS_TO_RAISE,
+        WANTS_TO_DROP,
         WANTS_TO_STOP
     }
 
@@ -43,6 +49,8 @@ public class Intake extends SubsystemBase {
         mIntake = SparkMAXUtil.generateGenericSparkMAX(IDConstants.intakeID, CANSparkMaxLowLevel.MotorType.kBrushless);
         mIntake.burnFlash();
         mCenterMech = TalonSRXUtil.generateGenericTalon(IDConstants.centerMechID);
+
+        mRaiseMech = new DoubleSolenoid(IDConstants.pcmID,IDConstants.intakeRaiseForwardChannel,IDConstants.intakeRaiseReverseChannel);
 
         mIntake.burnFlash();
 
@@ -77,6 +85,12 @@ public class Intake extends SubsystemBase {
             case INTAKING_AUTO_BACKWARDS:
                 newState = handleAutoBackwardsIntake();
                 break;
+            case RAISING:
+                newState = handleRaising();
+                break;
+            case DROPPING:
+                newState = handleDropping();
+                break;
             case STOP:
             default:
                 newState = handleStop();
@@ -94,33 +108,48 @@ public class Intake extends SubsystemBase {
 
     public IntakeState handleIntake() {
         mIntake.set(-0.5); //0.5
-        mCenterMech.set(1);
+        mCenterMech.set(-0.75);
         return defaultStateTransfer();
     }
 
     public IntakeState handleAutoBackwardsIntake() {
         mIntake.set(-0.35);
-        mCenterMech.set(1);
+        mCenterMech.set(-0.75);
         return defaultStateTransfer();
     }
 
     private IntakeState handleExhaust() {
         mIntake.set(0.7); //-0.5
-        mCenterMech.set(-1);
+        mCenterMech.set(0.75);
         return defaultStateTransfer();
     }
 
     private IntakeState handleUnJam() {
         mIntake.set(-0.3);
-        mCenterMech.set(1);
+        mCenterMech.set(0.75);
         return defaultStateTransfer();
     }
 
-    public IntakeState handleStop() {
+    private IntakeState handleStop() {
         mIntake.set(0);
         mCenterMech.set(0);
         return defaultStateTransfer();
     }
+
+    private IntakeState handleRaising() {
+        setRaise(true);
+        return defaultStateTransfer();
+    }
+
+    private IntakeState handleDropping() {
+        setRaise(false);
+        return defaultStateTransfer();
+    }
+
+    private void setRaise(boolean raise) {
+        mRaiseMech.set(raise ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+    }
+
 
     private IntakeState defaultStateTransfer() {
         switch (mWantedState) {
@@ -134,6 +163,10 @@ public class Intake extends SubsystemBase {
                 return IntakeState.EXHAUSTING;
             case WANTS_TO_STOP:
                 return IntakeState.STOP;
+            case WANTS_TO_RAISE:
+                return IntakeState.RAISING;
+            case WANTS_TO_DROP:
+                return IntakeState.DROPPING;
             default:
                 return IntakeState.STOP;
         }

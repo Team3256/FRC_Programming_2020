@@ -62,7 +62,7 @@ public class Drivetrain extends DriveTrainBase implements Loop {
         Util.setGearRatio(DriveConstants.kGearRatio);
         Util.setWheelDiameter(DriveConstants.kWheelDiameter);
 
-        shifter = new DoubleSolenoid(IDConstants.pcmID,IDConstants.forwardChannel,IDConstants.reverseChannel);
+        shifter = new DoubleSolenoid(IDConstants.pcmID,IDConstants.shifterForwardChannel,IDConstants.shifterReverseChannel);
     }
 
     public void setPowerOpenLoop(double leftPower, double rightPower) {
