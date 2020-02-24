@@ -99,7 +99,7 @@ public class TeleopUpdater {
         else {
             mIntake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
             overrideFeeder = false;
-            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
+//            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
         }
 
 //        Feeder Indexing Logic
@@ -156,18 +156,27 @@ public class TeleopUpdater {
 //            mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
 //        }
 
-        if(getShoot) {
-            overrideFeeder = true;
+//        if(getShoot) {
+//            overrideFeeder = true;
 //            double vel = SmartDashboard.getNumber("wanted vel", 0);
 //            mFlywheel.setVelocitySetpoint(vel);
-            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
-            if(autoAlign) {
+//            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
+//            if(autoAlign) {
 //                mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
-                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
-            }
-        } else {
-            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
+//                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
+//            }
+//        } else {
+//            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
 //            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
+//        }
+
+        if (getShoot) {
+            mFlywheel.setVelocitySetpoint(velToFlywheelVel(limelight.getVelToTarget()));
+            SmartDashboard.putNumber("wanted vel", velToFlywheelVel(limelight.getVelToTarget()));
+            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
+        }
+        else {
+            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
         }
 
         if (autoAlign) {
@@ -177,14 +186,21 @@ public class TeleopUpdater {
         }
         if (autoAlignHood) {
             limelight.calculateKinematics();
-            mHood.setPosSetpoint(angleToHoodPos(limelight.getAngleToTarget()) + 5*Math.PI/180);
+            limelight.setWantedEndAngle(5*(Math.PI/180));
+            mHood.setPosSetpoint(angleToHoodPos(limelight.getAngleToTarget()) + 0*Math.PI/180);
             SmartDashboard.putNumber("wanted hood", limelight.getAngleToTarget());
-            mFlywheel.setVelocitySetpoint(velToFlywheelVel(limelight.getVelToTarget()));
             mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
-            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
 //            if(autoAlign) {
 //                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
 //            }
+        }
+
+        //BELOW IS FOR HOOD TESTING/TUNING PURPOSES...ACTUAL INTAKE TOGGLE LOGIC ADDED LATER
+
+        if (intakeToggle) {
+            double wantedHoodPos = SmartDashboard.getNumber("hood pos", 0);
+            mHood.setPosSetpoint(wantedHoodPos);
+            mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
         }
     }
 

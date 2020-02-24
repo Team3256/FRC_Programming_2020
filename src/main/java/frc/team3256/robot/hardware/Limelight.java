@@ -154,7 +154,7 @@ public class Limelight implements Loop {
         //how far the ball would go perpendicular to the target
         double offsetDist = perpendicularVelocity*timeToTarget;
 
-        SmartDashboard.putNumber("offset distance", offsetDist);
+//        SmartDashboard.putNumber("offset distance", offsetDist);
 
         double newOffsetAngle = Math.atan2(offsetDist, horizontalDistance) * (180.0/Math.PI);
 
@@ -168,9 +168,9 @@ public class Limelight implements Loop {
     }
 
     public void outputToDashboard() {
-        SmartDashboard.putNumber("Horizontal Degree", tx);
-        SmartDashboard.putNumber("Vertical Degree", ty);
-        SmartDashboard.putNumber("Target Area", ta);
+//        SmartDashboard.putNumber("Horizontal Degree", tx);
+//        SmartDashboard.putNumber("Vertical Degree", ty);
+//        SmartDashboard.putNumber("Target Area", ta);
     }
 
     @Override
@@ -181,7 +181,8 @@ public class Limelight implements Loop {
     @Override
     public void update(double timestamp) {
         double timeDif = timestamp-lastTimestamp;
-        SmartDashboard.putNumber("timestamp", timeDif);
+//        SmartDashboard.putNumber("timestamp", timeDif);
+        SmartDashboard.putNumber("TAU", calculateTau());
 
         tx = limeLightTx.getDouble(2.0);
         ty = limeLightTy.getDouble(2.0);
@@ -198,21 +199,21 @@ public class Limelight implements Loop {
             lastTimestamp = timestamp;
             double meanDiff = 0;
             meanDiff = dThetaMean;
-            SmartDashboard.putNumber("dtheta", meanDiff);
+//            SmartDashboard.putNumber("dtheta", meanDiff);
 
 
             if (lastTheta != 0 && lastDistance != 0) {
                 dTheta = meanDiff;
                 dDistance = (getDistanceToTarget()-lastDistance)/timeDif;
-                SmartDashboard.putNumber("Top Theta", calculateTopTheta());
-                SmartDashboard.putNumber("Last Theta", lastTheta);
+//                SmartDashboard.putNumber("Top Theta", calculateTopTheta());
+//                SmartDashboard.putNumber("Last Theta", lastTheta);
             }
             dTheta = meanDiff;
             double thetaSign = calculateTopTheta()*Math.signum(getTopSkew());
             lastTheta = thetaSign+tx;
-            SmartDashboard.putNumber("Last Theta", lastTheta);
+//            SmartDashboard.putNumber("Last Theta", lastTheta);
             lastDistance = getDistanceToTarget();
-            SmartDashboard.putNumber("moving correction", calculateMovingAngle(velToTarget, angleToTarget));
+//            SmartDashboard.putNumber("moving correction", calculateMovingAngle(velToTarget, angleToTarget));
 
         } else {
             double thetaSign = calculateTopTheta()*Math.signum(getTopSkew());
