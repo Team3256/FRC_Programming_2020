@@ -18,6 +18,7 @@ public class Feeder extends SubsystemBase {
     private enum FeederControlState {
         RUN_FORWARD,
         RUN_BACKWARD,
+        RUN_INDEX,
         SHOOTING,
         IDLE
     }
@@ -25,6 +26,7 @@ public class Feeder extends SubsystemBase {
     public enum WantedState {
         WANTS_TO_RUN_FORWARD,
         WANTS_TO_RUN_BACKWARD,
+        WANTS_TO_RUN_INDEX,
         WANTS_TO_SHOOT,
         WANTS_TO_IDLE
     }
@@ -68,6 +70,9 @@ public class Feeder extends SubsystemBase {
             case SHOOTING:
                 newState = handleShoot();
                 break;
+            case RUN_INDEX:
+                newState = handleIndex();
+                break;
             case IDLE:
                 newState = handleIdle();
                 break;
@@ -92,6 +97,12 @@ public class Feeder extends SubsystemBase {
         return defaultStateTransfer();
     }
 
+    private FeederControlState handleIndex() {
+        mFeeder.set(0.3);
+        mOmni.set(0.5);
+        return defaultStateTransfer();
+    }
+
     private FeederControlState handleShoot() {
         mFeeder.set(0.3);
         mOmni.set(0.5);
@@ -110,6 +121,8 @@ public class Feeder extends SubsystemBase {
                 return FeederControlState.RUN_FORWARD;
             case WANTS_TO_RUN_BACKWARD:
                 return FeederControlState.RUN_BACKWARD;
+            case WANTS_TO_RUN_INDEX:
+                return FeederControlState.RUN_INDEX;
             case WANTS_TO_SHOOT:
                 return FeederControlState.SHOOTING;
             case WANTS_TO_IDLE:

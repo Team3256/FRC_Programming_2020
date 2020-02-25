@@ -31,11 +31,11 @@ public class RightDriveTrenchShootAutoMode extends AutoModeBase {
         Drivetrain.getInstance().setHighGear(true);
         runAction(new WaitAction(1.5));
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction())));
-        runAction(new WaitAction(3.0));
-        runAction(new UnjamIntakeAction());
-        runAction(new WaitAction(5.0));
-        runAction(new StopIntakeAction());
-        runAction(new WaitAction(5.0));
+//        runAction(new WaitAction(3.0));
+//        runAction(new UnjamIntakeAction());
+//        runAction(new WaitAction(5.0));
+//        runAction(new StopIntakeAction());
+//        runAction(new WaitAction(5.0));
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(1), new BackwardsAutoIntakeAction())));
         runAction(new StopIntakeAction());
         SmartDashboard.putNumber("Total Auto Time: ", Timer.getFPGATimestamp() - startTime);

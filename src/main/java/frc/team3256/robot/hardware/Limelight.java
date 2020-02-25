@@ -30,7 +30,7 @@ public class Limelight implements Loop {
     double lastTimestamp = 0;
 
     //kinematics
-    double heightDif = targetMidHeight - turretHeight;
+    double heightDif = innerGoalTargetHeight - turretHeight;
     double wantedEndAngle = 0;
     double timeToTarget = 0;
     double angleToTarget = 0;
@@ -232,9 +232,9 @@ public class Limelight implements Loop {
     }
 
     public void calculateKinematics() {   // inches
-        timeToTarget = Math.sqrt(2/gravAcceleration*(heightDif - Math.tan(wantedEndAngle) * getDistanceToInner()));
-        angleToTarget = Math.atan((heightDif + .5 * gravAcceleration * timeToTarget * timeToTarget)/getDistanceToInner());
-        velToTarget = getDistanceToInner()/timeToTarget/Math.cos(angleToTarget);
+        timeToTarget = Math.sqrt(2/gravAcceleration*(heightDif - Math.tan(wantedEndAngle) * (getDistanceToInner()+3)));
+        angleToTarget = Math.atan((heightDif + .5 * gravAcceleration * timeToTarget * timeToTarget)/(getDistanceToInner()+3));
+        velToTarget = (getDistanceToInner()+3)/timeToTarget/Math.cos(angleToTarget);
     }
 
     public void setWantedEndAngle(double wantedEndAngle) {  // radians

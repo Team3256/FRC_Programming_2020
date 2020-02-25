@@ -82,6 +82,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("wanted vel", 1000);
     SmartDashboard.putNumber("hood pos", 0);
+    SmartDashboard.putNumber("Ball Count Reset", 0);
   }
 
   @Override
@@ -132,6 +133,7 @@ public class Robot extends TimedRobot {
     drivetrain.resetGyro();
     drivetrain.resetEncoders();
     drivetrain.setBrakeMode();
+//    drivetrain.setCoastMode();
     poseEstimator.reset();
   }
 
@@ -142,6 +144,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Gyro Angle", drivetrain.getAngle());
     SmartDashboard.putNumber("distance to target", limelight.getDistanceToTarget());
     SmartDashboard.putNumber("distance to inner", limelight.getDistanceToInner());
+    SmartDashboard.putNumber("Ball counter", teleopUpdater.getBallCounter());
+    SmartDashboard.putNumber("wanted hood", teleopUpdater.angleToHoodPos(limelight.getAngleToTarget()));
+    SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
+    SmartDashboard.putNumber("wanted vel", teleopUpdater.velToFlywheelVel(limelight.getVelToTarget()));
     teleopUpdater.update();
   }
 

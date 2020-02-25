@@ -11,7 +11,6 @@ import frc.team3256.robot.teleop.configs.XboxControllerConfig;
 import frc.team3256.warriorlib.control.DrivePower;
 
 import static frc.team3256.robot.constants.LimelightConstants.gravAcceleration;
-import static frc.team3256.robot.constants.TurretConstants.turretHeight;
 
 public class TeleopUpdater {
     private ControlsInterface controls = new XboxControllerConfig();
@@ -67,6 +66,10 @@ public class TeleopUpdater {
 
         boolean getShoot = controls.getShoot();
 
+        if (SmartDashboard.getNumber("Ball Count Reset", 0) == 1){
+            ballCounter = 0;
+        }
+
         //Drivetrain Subsystem
         DrivePower drivePower = mDrivetrain.cheesyishDrive(throttle, turn, quickTurn);
         mDrivetrain.setPowerOpenLoop(drivePower.getLeft(), drivePower.getRight());
@@ -110,8 +113,11 @@ public class TeleopUpdater {
                 ballCounter++;
             }
             if (ballCounter != 5) {
-                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_FORWARD);
+                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
                 mIntake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
+            }
+            else {
+                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
             }
         }
         else if (!feeding && !overrideFeeder) {
@@ -186,9 +192,8 @@ public class TeleopUpdater {
         }
         if (autoAlignHood) {
             limelight.calculateKinematics();
-            limelight.setWantedEndAngle(5*(Math.PI/180));
-            mHood.setPosSetpoint(angleToHoodPos(limelight.getAngleToTarget()) + 0*Math.PI/180);
-            SmartDashboard.putNumber("wanted hood", limelight.getAngleToTarget());
+            limelight.setWantedEndAngle(0*(Math.PI/180));
+            mHood.setPosSetpoint(angleToHoodPos(limelight.getAngleToTarget() - 0*Math.PI/180));
             mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
 //            if(autoAlign) {
 //                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
@@ -204,11 +209,11 @@ public class TeleopUpdater {
         }
     }
 
-    private double angleToHoodPos(double angle) {
+    public double angleToHoodPos(double angle) {
         return 0.3342*(angle*180/Math.PI) - 18.302;
     }
 
-    private double velToFlywheelVel(double outputVel) {
+    public double velToFlywheelVel(double outputVel) {
         return 9.839*outputVel + 742.37;
     }
 
