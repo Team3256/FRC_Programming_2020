@@ -40,7 +40,6 @@ public interface ControlsInterface {
     //Hold: Runs feeder backwards & omni backwards (manual state)
     boolean getFeederBackward();
 
-
     //Hold: Auto-aligns hood
     boolean autoAlignHood();
 
@@ -68,5 +67,14 @@ public interface ControlsInterface {
     //Toggle: Toggles Intake up and down
     boolean getIntakeToggle();
 
+//--------------For Final Implementation After Testing & Tuning--------------
 
+    //Hold: Auto-aligns both turret & hood
+    boolean autoAlign();
+
+    //Hold: Revs up the flywheel to the necessary velocity
+    boolean revUp();
+
+    //Hold: Runs the feeder to shoot the balls, only when the flywheel is at the right velocity
+    boolean feederShoot();
 }

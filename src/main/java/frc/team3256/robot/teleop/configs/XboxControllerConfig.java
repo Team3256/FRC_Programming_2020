@@ -79,8 +79,7 @@ public class XboxControllerConfig implements ControlsInterface {
 
     //Manipulator: Right Analog Stick | Horizontal Axis | Left
     @Override
-    public boolean manualTurretLeft() {
-        return manipulator.getRawAxis(4) < -0.5; } //***NEED TO CONFIRM DIRECTION***
+    public boolean manualTurretLeft() { return manipulator.getRawAxis(4) < -0.5; } //***NEED TO CONFIRM DIRECTION***
 
     //Manipulator: Right Analog Stick | Horizontal Axis | Right
     @Override
@@ -98,4 +97,18 @@ public class XboxControllerConfig implements ControlsInterface {
     public boolean getIntakeToggle() {
         return manipulator.getRawButton(2);
     }
+
+//--------------For Final Implementation After Testing & Tuning--------------
+
+    //Manipulator: Left Bumper
+    @Override
+    public boolean autoAlign() { return manipulator.getRawButton(5); }
+
+    //Manipulator: Right Bumper
+    @Override
+    public boolean revUp() { return manipulator.getRawButton(6); }
+
+    //Manipulator: Y Button
+    @Override
+    public boolean feederShoot() { return manipulator.getRawButton(4); }
 }
