@@ -84,6 +84,10 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
         return defaultStateTransfer();
     }
 
+    public boolean ballShot() {
+        return mLeftFlywheel.getBusVoltage() > FlywheelConstants.kFlywheelVoltageLimit;
+    }
+
     private FlywheelState defaultStateTransfer() {
         switch (mWantedState) {
             case WANTS_TO_RUN:

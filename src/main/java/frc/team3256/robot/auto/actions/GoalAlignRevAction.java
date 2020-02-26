@@ -1,6 +1,5 @@
 package frc.team3256.robot.auto.actions;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.robot.subsystems.Flywheel;
 import frc.team3256.robot.subsystems.Hood;
@@ -27,7 +26,7 @@ public class GoalAlignRevAction implements Action {
         mTurret.setTurretAutoAlignAngle(angle);
         mTurret.setWantedState(Turret.WantedState.WANTS_TO_AUTO_ALIGN);
         limelight.setWantedEndAngle(0*(Math.PI/180));
-        mHood.setPosSetpoint(angleToHoodPos(limelight.getAngleToTarget() - 0*Math.PI/180));
+        mHood.setPosSetpoint(angleToHoodPos(limelight.getAngleToTarget()));
         mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
         mFlywheel.setVelocitySetpoint(velToFlywheelVel(limelight.getVelToTarget()));
         mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
@@ -43,7 +42,6 @@ public class GoalAlignRevAction implements Action {
 
     }
 
-
     public double angleToHoodPos(double angle) {
         return 0.3342*(angle*180/Math.PI) - 18.302;
     }
@@ -51,4 +49,5 @@ public class GoalAlignRevAction implements Action {
     public double velToFlywheelVel(double outputVel) {
         return 9.839*outputVel + 742.37;
     }
+
 }
