@@ -54,7 +54,8 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     public void update(double timestamp) {
 //        TalonFXUtil.setPIDGains(mLeftFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
 //        TalonFXUtil.setPIDGains(mRightFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
-        flywheelPIDController = new PIDController(SmartDashboard.getNumber("Flywheel P", 0), SmartDashboard.getNumber("Flywheel I", 0),SmartDashboard.getNumber("Flywheel D", 0));
+        flywheelPIDController = new PIDController(0.00072,1.2*0.0012/0.305*0.8,(0.0012*3.0*0.305/40 * 0.2));
+        //Kc = 0.0012
 
         if (mPrevWantedState != mWantedState) {
             mWantedStateChanged = true;
@@ -80,8 +81,8 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     }
 
     private FlywheelState handleRun() {
-//        setFlywheelVelocity(velocitySetpoint);
-        bangBangFlywheel(velocitySetpoint);
+        setFlywheelVelocity(velocitySetpoint);
+//        bangBangFlywheel(velocitySetpoint);
         return defaultStateTransfer();
     }
 
@@ -120,7 +121,7 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
 
     private void bangBangFlywheel(double speed) {
         double output = flywheelPIDController.calculate(getVelocity(), speed);
-        output = Util.clip(output, 0, 1);
+        output = Util.clip(output, -1, 1);
         SmartDashboard.putNumber("FPID Output", output);
         mLeftFlywheel.set(output);
         mRightFlywheel.set(output);
