@@ -62,8 +62,7 @@ public class Intake extends SubsystemBase {
     }
 
 
-    public void setWantedState(WantedState wantedState) {
-        this.mWantedState = wantedState; }
+    public void setWantedState(WantedState wantedState) { this.mWantedState = wantedState; }
 
     @Override
     public void update(double timestamp) {
