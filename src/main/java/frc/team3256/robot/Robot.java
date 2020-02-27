@@ -17,6 +17,7 @@ import frc.team3256.robot.auto.modes.RightDriveTrenchTenBallAutoMode;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.robot.subsystems.Drivetrain;
+import frc.team3256.robot.subsystems.Flywheel;
 import frc.team3256.robot.subsystems.Intake;
 import frc.team3256.robot.teleop.TeleopUpdater;
 import frc.team3256.warriorlib.auto.AutoModeBase;
@@ -41,6 +42,7 @@ public class Robot extends TimedRobot {
   private PoseEstimator poseEstimator;
   private PurePursuitTracker purePursuitTracker;
   private Limelight limelight = Limelight.getInstance();
+  private Flywheel flywheel = Flywheel.getInstance();
 
   private AutoModeExecuter autoModeExecuter;
   private boolean maintainAutoExecution = true;
@@ -148,6 +150,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("wanted hood", teleopUpdater.angleToHoodPos(limelight.getAngleToTarget()));
     SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
     SmartDashboard.putNumber("wanted vel", teleopUpdater.velToFlywheelVel(limelight.getVelToTarget()));
+    SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
     teleopUpdater.update();
   }
 

@@ -107,6 +107,8 @@ public class TeleopUpdater {
 
 //        Feeder Indexing Logic
 
+        //UNCOMMENT BELOW FOR FEEDER AUTO-INDEXING
+
         feeding = !irSensor.isIntact();
         if (feeding && !overrideFeeder) {
             if(!prevFeeding) {
@@ -132,6 +134,10 @@ public class TeleopUpdater {
             System.out.println("D-PAD DOWN");
             mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
         }
+
+//        else {
+//            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
+//        }
 
         //Turret Subsystem
         if(manualTurretLeft) {

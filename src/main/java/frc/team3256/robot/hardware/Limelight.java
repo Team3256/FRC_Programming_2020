@@ -61,12 +61,12 @@ public class Limelight implements Loop {
     public double getTy() { return ty; }
 
     public double getTopSkew() {
-        SmartDashboard.putNumber("before skew", ts);
+//        SmartDashboard.putNumber("before skew", ts);
         double skewAngle = ts;
         if (skewAngle < -45) {
             skewAngle += 90;
         }
-        SmartDashboard.putNumber("after skew", skewAngle);
+//        SmartDashboard.putNumber("after skew", skewAngle);
         return skewAngle;
     }
 
@@ -117,12 +117,12 @@ public class Limelight implements Loop {
     }
 
     public double calculateTopTheta() {
-        SmartDashboard.putNumber("top theta", getAbsoluteHorizontalOffset(targetTopHeight, getTopSkew()));
+//        SmartDashboard.putNumber("top theta", getAbsoluteHorizontalOffset(targetTopHeight, getTopSkew()));
         return getAbsoluteHorizontalOffset(targetTopHeight, getTopSkew());
     }
 
     public double calculateBottomTheta() {
-        SmartDashboard.putNumber("bottom theta", getAbsoluteHorizontalOffset(targetBottomHeight, getBottomSkew()));
+//        SmartDashboard.putNumber("bottom theta", getAbsoluteHorizontalOffset(targetBottomHeight, getBottomSkew()));
         return getAbsoluteHorizontalOffset(targetBottomHeight, getBottomSkew());
     }
 
@@ -131,7 +131,7 @@ public class Limelight implements Loop {
         double d = getDistanceToTarget();
         double f = toInnerTarget;
         double side = getTopSkew() > 0 ? 1 : -1;
-        SmartDashboard.putNumber("side", side);
+//        SmartDashboard.putNumber("side", side);
         double hashtagOne = (calculateTopTheta())/2 * side; //calculateBottomTheta
 
         double offset = Math.atan2(d*Math.sin((tx+hashtagOne)*Math.PI/180.0), f+d*Math.cos((tx+hashtagOne)*Math.PI/180.0))-(hashtagOne*Math.PI/180.0);
@@ -182,7 +182,7 @@ public class Limelight implements Loop {
     public void update(double timestamp) {
         double timeDif = timestamp-lastTimestamp;
 //        SmartDashboard.putNumber("timestamp", timeDif);
-        SmartDashboard.putNumber("TAU", calculateTau());
+//        SmartDashboard.putNumber("TAU", calculateTau());
 
         tx = limeLightTx.getDouble(2.0);
         ty = limeLightTy.getDouble(2.0);
