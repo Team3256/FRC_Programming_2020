@@ -16,6 +16,8 @@ import frc.team3256.robot.auto.modes.RightDriveTrenchShootAutoMode;
 import frc.team3256.robot.auto.modes.RightDriveTrenchTenBallAutoMode;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.hardware.Limelight;
+import frc.team3256.robot.log.FalconAutoLogger;
+import frc.team3256.robot.log.Logger;
 import frc.team3256.robot.subsystems.Drivetrain;
 import frc.team3256.robot.subsystems.Flywheel;
 import frc.team3256.robot.subsystems.Intake;
@@ -84,7 +86,18 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("wanted vel", 1000);
     SmartDashboard.putNumber("hood pos", 0);
-    SmartDashboard.putNumber("Ball Count Reset", 0);
+//    SmartDashboard.putNumber("Ball Count Reset", 0);
+
+    SmartDashboard.putNumber("Flywheel P", 0);
+    SmartDashboard.putNumber("Flywheel I", 0);
+    SmartDashboard.putNumber("Flywheel D", 0);
+
+    Logger.startInitialization();
+
+    FalconAutoLogger.autoLog("Flywheel","Motor",flywheel.getMotor());
+
+    Logger.finishInitialization();
+
   }
 
   @Override
@@ -141,17 +154,20 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
-    SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
-    SmartDashboard.putNumber("Gyro Angle", drivetrain.getAngle());
-    SmartDashboard.putNumber("distance to target", limelight.getDistanceToTarget());
+//    SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
+//    SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
+//    SmartDashboard.putNumber("Gyro Angle", drivetrain.getAngle());
+
+//    SmartDashboard.putNumber("distance to target", limelight.getDistanceToTarget());
     SmartDashboard.putNumber("distance to inner", limelight.getDistanceToInner());
     SmartDashboard.putNumber("Ball counter", teleopUpdater.getBallCounter());
-    SmartDashboard.putNumber("wanted hood", teleopUpdater.angleToHoodPos(limelight.getAngleToTarget()));
+//    SmartDashboard.putNumber("wanted hood", teleopUpdater.angleToHoodPos(limelight.getAngleToTarget()));
     SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
     SmartDashboard.putNumber("wanted vel", teleopUpdater.velToFlywheelVel(limelight.getVelToTarget()));
     SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
+    SmartDashboard.putNumber("ACTUAL VEL NUM", flywheel.getVelocity());
     teleopUpdater.update();
+    Logger.update();
   }
 
   @Override

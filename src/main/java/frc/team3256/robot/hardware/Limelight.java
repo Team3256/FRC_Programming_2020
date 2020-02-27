@@ -193,7 +193,7 @@ public class Limelight implements Loop {
         getBottomSkew();
         getTopSkew();
 
-        SmartDashboard.putNumber("tau", calculateTau());
+//        SmartDashboard.putNumber("tau", calculateTau());
 
         if (timeDif > 0.05) {
             lastTimestamp = timestamp;

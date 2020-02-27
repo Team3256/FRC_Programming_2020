@@ -2,10 +2,13 @@ package frc.team3256.robot.subsystems;
 
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.constants.FlywheelConstants;
 import frc.team3256.warriorlib.hardware.TalonFXUtil;
+import frc.team3256.warriorlib.operations.Util;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
 
 import static frc.team3256.robot.constants.IDConstants.leftFlywheelID;
@@ -18,6 +21,7 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     boolean mStateChanged;
     boolean mWantedStateChanged;
     double velocitySetpoint;
+    private PIDController flywheelPIDController;
 
     public enum FlywheelState {
         RUN,
@@ -40,9 +44,6 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
         mLeftFlywheel = TalonFXUtil.generateGenericTalon(leftFlywheelID); //TBD
         mRightFlywheel = TalonFXUtil.generateSlaveTalon(rightFlywheelID, leftFlywheelID);
         TalonFXUtil.setCoastMode(mLeftFlywheel, mRightFlywheel);
-        TalonFXUtil.setPIDGains(mLeftFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
-        TalonFXUtil.setPIDGains(mRightFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
-
         mLeftFlywheel.setInverted(true);
         mRightFlywheel.setInverted(false);
     }
@@ -51,6 +52,10 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
 
     @Override
     public void update(double timestamp) {
+//        TalonFXUtil.setPIDGains(mLeftFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
+//        TalonFXUtil.setPIDGains(mRightFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
+        flywheelPIDController = new PIDController(SmartDashboard.getNumber("Flywheel P", 0), SmartDashboard.getNumber("Flywheel I", 0),SmartDashboard.getNumber("Flywheel D", 0));
+
         if (mPrevWantedState != mWantedState) {
             mWantedStateChanged = true;
             mPrevWantedState = mWantedState;
@@ -75,7 +80,8 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     }
 
     private FlywheelState handleRun() {
-        setFlywheelVelocity(velocitySetpoint);
+//        setFlywheelVelocity(velocitySetpoint);
+        bangBangFlywheel(velocitySetpoint);
         return defaultStateTransfer();
     }
 
@@ -112,6 +118,14 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
         mRightFlywheel.stopMotor();
     }
 
+    private void bangBangFlywheel(double speed) {
+        double output = flywheelPIDController.calculate(getVelocity(), speed);
+        output = Util.clip(output, 0, 1);
+        SmartDashboard.putNumber("FPID Output", output);
+        mLeftFlywheel.set(output);
+        mRightFlywheel.set(output);
+    }
+
     private void setFlywheelVelocity(double speed) { //Run flywheel at set velocity in RPM
         mLeftFlywheel.set(ControlMode.Velocity, rpmToSensorUnits(speed));
         mRightFlywheel.set(ControlMode.Velocity, rpmToSensorUnits(speed));
@@ -146,5 +160,8 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
 
     public double getVelocity() {
         return sensorUnitsToRPM(mLeftFlywheel.getSelectedSensorVelocity());
+    }
+    public TalonFX getMotor(){
+        return mLeftFlywheel;
     }
 }
