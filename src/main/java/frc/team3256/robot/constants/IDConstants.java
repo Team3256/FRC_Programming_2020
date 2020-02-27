@@ -31,6 +31,9 @@ public class IDConstants {
     //PCM
     public static final int pcmID = 14;
 
+    //Hanger
+    public static final int winchMotorID = 15;
+
     //Pneumatics:
 
     //Shifter IDs
@@ -40,6 +43,10 @@ public class IDConstants {
     //Intake Raise Mech IDs
     public static final int intakeRaiseForwardChannel = 2;
     public static final int intakeRaiseReverseChannel = 5;
+
+    //Hanger Pancakes
+    public static final int hangerPancakesForwardChannel = 1; //TBD
+    public static final int hangerPancakesReverseChannel = 6; //TBD
 
     //DIO Ports:
     public static final int limitSwitchPort = 1;
