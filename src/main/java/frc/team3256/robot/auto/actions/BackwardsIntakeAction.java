@@ -3,7 +3,7 @@ package frc.team3256.robot.auto.actions;
 import frc.team3256.robot.subsystems.Intake;
 import frc.team3256.warriorlib.auto.action.Action;
 
-public class BackwardsAutoIntakeAction implements Action {
+public class BackwardsIntakeAction implements Action {
     Intake intake = Intake.getInstance();
 
     @Override

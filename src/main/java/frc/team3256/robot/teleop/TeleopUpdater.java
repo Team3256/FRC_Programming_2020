@@ -34,13 +34,13 @@ public class TeleopUpdater {
     public static TeleopUpdater getInstance() { return instance == null ? instance = new TeleopUpdater() : instance; }
 
     public void update() {
-        mDrivetrain.update(0);
-        mIntake.update(0);
-        mFeeder.update(0);
-        mFlywheel.update(0);
-        mTurret.update(0);
-        mHood.update(0);
-        limelight.update(0);
+//        mDrivetrain.update(0);
+//        mIntake.update(0);
+//        mFeeder.update(0);
+//        mFlywheel.update(0);
+//        mTurret.update(0);
+//        mHood.update(0);
+//        limelight.update(0);
 
         double throttle = controls.getThrottle();
         double turn = controls.getTurn();
@@ -110,6 +110,7 @@ public class TeleopUpdater {
         //UNCOMMENT BELOW FOR FEEDER AUTO-INDEXING
 
         feeding = !irSensor.isIntact();
+        System.out.println(feeding);
         if (feeding && !overrideFeeder) {
             if(!prevFeeding) {
                 ballCounter++;
@@ -127,11 +128,9 @@ public class TeleopUpdater {
         }
 
         if(feederForward) {
-            System.out.println("D-PAD UP");
             mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_FORWARD);
         }
         else if(feederBackward) {
-            System.out.println("D-PAD DOWN");
             mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
         }
 
@@ -184,7 +183,6 @@ public class TeleopUpdater {
 
         if (getShoot) {
             mFlywheel.setVelocitySetpoint(velToFlywheelVel(limelight.getVelToTarget()));
-            SmartDashboard.putNumber("wanted vel", velToFlywheelVel(limelight.getVelToTarget()));
             mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
         }
         else {
@@ -201,17 +199,6 @@ public class TeleopUpdater {
             limelight.setWantedEndAngle(0*(Math.PI/180));
             mHood.setPosSetpoint(angleToHoodPos(limelight.getAngleToTarget() - 0*Math.PI/180));
             mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
-//            if(autoAlign) {
-//                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
-//            }
-        }
-
-        //BELOW IS FOR HOOD TESTING/TUNING PURPOSES...ACTUAL INTAKE TOGGLE LOGIC ADDED LATER
-
-        if (intakeToggle) {
-            double wantedHoodPos = SmartDashboard.getNumber("hood pos", 0);
-            mHood.setPosSetpoint(wantedHoodPos);
-            mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
         }
     }
 
@@ -225,17 +212,6 @@ public class TeleopUpdater {
 
     public int getBallCounter() {
         return ballCounter;
-    }
-
-    public static void main(String args[]) {
-        double heightDif = 80;
-        double wantedEndAngle = 0;
-        double getDistanceToInner = 250;
-        double timeToTarget = Math.sqrt(2/gravAcceleration*(heightDif - Math.tan(wantedEndAngle) * getDistanceToInner));
-        double angleToTarget = Math.atan((heightDif + .5 * gravAcceleration * timeToTarget * timeToTarget)/getDistanceToInner);
-        double velToTarget = getDistanceToInner/timeToTarget/Math.cos(angleToTarget);
-        System.out.println(angleToTarget*180/Math.PI);
-        System.out.println(velToTarget);
     }
 
 }

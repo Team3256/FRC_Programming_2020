@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.constants.FlywheelConstants;
 import frc.team3256.warriorlib.hardware.TalonFXUtil;
 import frc.team3256.warriorlib.operations.Util;
@@ -22,6 +21,10 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     boolean mWantedStateChanged;
     double velocitySetpoint;
     private PIDController flywheelPIDController;
+    private boolean atVelocity = false;
+    private double noLoadVoltage = 0;
+    private double atVelocityTolerance = 5.0;   //tbd
+    private double voltageDif = 2.0;            //tbd
 
     public enum FlywheelState {
         RUN,
@@ -54,7 +57,7 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     public void update(double timestamp) {
 //        TalonFXUtil.setPIDGains(mLeftFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
 //        TalonFXUtil.setPIDGains(mRightFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
-        flywheelPIDController = new PIDController(0.00072,1.2*0.0012/0.305*0.8,(0.0012*3.0*0.305/40 * 0.2));
+//        flywheelPIDController = new PIDController(0.00072,1.2*0.0012/0.305*0.8,(0.0012*3.0*0.305/40 * 0.2));
         //Kc = 0.0012
 
         if (mPrevWantedState != mWantedState) {
@@ -77,6 +80,14 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
         } else {
             mStateChanged = false;
         }
+
+        if(Math.abs(getVelocity() - velocitySetpoint) < atVelocityTolerance) {
+            atVelocity = true;
+            noLoadVoltage = mLeftFlywheel.getMotorOutputVoltage();
+        } else {
+            atVelocity = false;
+        }
+
         this.outputToDashboard();
     }
 
@@ -92,7 +103,10 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     }
 
     public boolean ballShot() {
-        return mLeftFlywheel.getBusVoltage() > FlywheelConstants.kFlywheelVoltageLimit;
+        if (atVelocity && mLeftFlywheel.getMotorOutputVoltage() > noLoadVoltage + voltageDif) {
+            return true;
+        }
+        return false;
     }
 
     private FlywheelState defaultStateTransfer() {
@@ -122,7 +136,6 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     private void bangBangFlywheel(double speed) {
         double output = flywheelPIDController.calculate(getVelocity(), speed);
         output = Util.clip(output, -1, 1);
-        SmartDashboard.putNumber("FPID Output", output);
         mLeftFlywheel.set(output);
         mRightFlywheel.set(output);
     }
@@ -144,8 +157,6 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
 
     @Override
     public void outputToDashboard() {
-        SmartDashboard.putNumber("Flywheel Speed", sensorUnitsToRPM(mLeftFlywheel.getSelectedSensorVelocity()));
-//        SmartDashboard.putNumber("Flywheel encoder", mLeftFlywheel.getSelectedSensorVelocity());
     }
 
     @Override

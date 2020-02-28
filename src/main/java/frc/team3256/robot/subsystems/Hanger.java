@@ -98,14 +98,14 @@ public class Hanger extends SubsystemBase {
         }
     }
 
-    @Override
     public void outputToDashboard() { }
 
     @Override
     public void zeroSensors() { }
 
     @Override
-    public void init(double timestamp) { }
+    public void init(double timestamp) {
+    }
 
     @Override
     public void end(double timestamp) { }

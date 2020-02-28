@@ -7,7 +7,6 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.team3256.warriorlib.hardware.TalonSRXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 import static frc.team3256.robot.constants.SpinnerConstants.*;
 
 public class Spinner extends SubsystemBase {
-    private final boolean mPraticeColors = true;
+    private final boolean mPracticeColors = true;
 
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private ColorSensorV3 mColorSensor;
@@ -123,7 +122,7 @@ public class Spinner extends SubsystemBase {
         colorOrder.add(WheelColor.GREEN);
         colorOrder.add(WheelColor.BLUE);
 
-        if(!mPraticeColors) {
+        if(!mPracticeColors) {
             kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
             kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
         }else {
@@ -149,19 +148,6 @@ public class Spinner extends SubsystemBase {
 
     @Override
     public void outputToDashboard() {
-        SmartDashboard.putNumber("Confidence", mCurrentConfidence);
-        SmartDashboard.putNumber("Proximity",mColorSensor.getProximity());
-
-        SmartDashboard.putString("DetectedColor", mCurrentColor.name());
-        SmartDashboard.putString("WantedColor",mWantedColor.name());
-        SmartDashboard.putString("LastColor",mLastColor.name());
-
-        SmartDashboard.putString("ControlPanelAction", mCurrentState.name());
-        SmartDashboard.putString("SpinDirection",mSpinDirection.name());
-
-        SmartDashboard.putNumber("Rotations",getRotations());
-        SmartDashboard.putNumber("Wheel RPM",mRPM);
-
     }
 
     public double getRotations(){

@@ -233,7 +233,7 @@ public class Logger {
          startTime = Timer.getFPGATimestamp();
 
       //Put RoboRIO's FPGA Time to Smart Dashboard for FRC Dashboard
-      SmartDashboard.putNumber("RelTime",Timer.getFPGATimestamp()- startTime);
+//      SmartDashboard.putNumber("RelTime",Timer.getFPGATimestamp()- startTime);
 
       return Timer.getFPGATimestamp() - startTime;
    }
