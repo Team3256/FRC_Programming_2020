@@ -61,6 +61,10 @@ public class TeleopUpdater {
 
         boolean getShoot = controls.getShoot();
 
+        boolean getAutoAlign = controls.getAutoAlign();
+        boolean getRevUp = controls.getRevUp();
+        boolean getFeederShoot = controls.getFeederShoot();
+
         if (SmartDashboard.getNumber("Ball Count Reset", 0) == 1){
            ballCounter.setCount(0);
         }
@@ -152,6 +156,30 @@ public class TeleopUpdater {
             mHood.setPosSetpoint(ShootingKinematics.angleToHoodPos(limelight.getAngleToTarget() - 0*Math.PI/180));
             mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
         }
+
+
+        //TO BE IMPLEMENTED FOR FINAL
+//        if(getAutoAlign) {
+//            //Auto Aligning Turret
+//            double angle = limelight.calculateTau();
+//            mTurret.setTurretAutoAlignAngle(angle);
+//            mTurret.setWantedState(Turret.WantedState.WANTS_TO_AUTO_ALIGN);
+//
+//            //Auto Aligning Hood
+//            limelight.calculateKinematics();
+//            limelight.setWantedEndAngle(0*(Math.PI/180));
+//            mHood.setPosSetpoint(ShootingKinematics.angleToHoodPos(limelight.getAngleToTarget() - 0*Math.PI/180));
+//            mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
+//        }
+//
+//        if(getRevUp) {
+//            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
+//        }
+//
+//        if(getFeederShoot) {
+//            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_FORWARD);
+//            mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
+//        }
     }
 
 }
