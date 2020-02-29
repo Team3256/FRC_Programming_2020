@@ -1,4 +1,4 @@
-package frc.team3256.robot.auto.helper;
+package frc.team3256.robot.helper;
 
 public class ShootingKinematics {
 

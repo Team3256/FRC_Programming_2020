@@ -1,6 +1,6 @@
 package frc.team3256.robot.auto.actions;
 
-import frc.team3256.robot.auto.helper.BallCounter;
+import frc.team3256.robot.helper.BallCounter;
 import frc.team3256.robot.subsystems.Feeder;
 import frc.team3256.robot.subsystems.Flywheel;
 import frc.team3256.robot.subsystems.Intake;

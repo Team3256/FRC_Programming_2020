@@ -2,8 +2,8 @@ package frc.team3256.robot.teleop;
 
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team3256.robot.auto.helper.BallCounter;
-import frc.team3256.robot.auto.helper.ShootingKinematics;
+import frc.team3256.robot.helper.BallCounter;
+import frc.team3256.robot.helper.ShootingKinematics;
 import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.robot.subsystems.*;
 import frc.team3256.robot.teleop.configs.ControlsInterface;

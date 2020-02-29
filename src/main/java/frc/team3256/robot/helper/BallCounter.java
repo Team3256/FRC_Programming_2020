@@ -1,4 +1,4 @@
-package frc.team3256.robot.auto.helper;
+package frc.team3256.robot.helper;
 
 import frc.team3256.robot.hardware.IRSensors;
 import frc.team3256.robot.subsystems.Flywheel;
