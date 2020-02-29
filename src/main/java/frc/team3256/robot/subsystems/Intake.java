@@ -38,6 +38,10 @@ public class Intake extends SubsystemBase {
         WANTS_TO_STOP
     }
 
+    public WantedState getWantedState() {
+        return mWantedState;
+    }
+
     private IntakeState mCurrentState = IntakeState.STOP;
     private WantedState mWantedState = WantedState.WANTS_TO_STOP;
 

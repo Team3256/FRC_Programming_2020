@@ -51,5 +51,6 @@ public class IDConstants {
     //DIO Ports:
     public static final int limitSwitchPort = 1;
     public static final int feederIRID = 8;
+    public static final int flywheelIRID = 7; //TBD
 
 }

@@ -152,7 +152,7 @@ public class Robot extends TimedRobot {
 
 //    SmartDashboard.putNumber("distance to target", limelight.getDistanceToTarget());
     SmartDashboard.putNumber("distance to inner", limelight.getDistanceToInner());
-    SmartDashboard.putNumber("Ball counter", teleopUpdater.getBallCounter());
+    SmartDashboard.putNumber("Ball counter", BallCounter.getInstance().getCount());
     SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
     SmartDashboard.putNumber("wanted vel", teleopUpdater.velToFlywheelVel(limelight.getVelToTarget()));
     SmartDashboard.putNumber("TAU", limelight.getTx());

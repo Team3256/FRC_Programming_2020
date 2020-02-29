@@ -2,16 +2,20 @@ package frc.team3256.robot.hardware;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.team3256.robot.constants.IDConstants;
-import frc.team3256.robot.subsystems.Drivetrain;
 
 public class IRSensor {
-    DigitalInput ir_sensor;
+    DigitalInput feederIRSensor;
+    DigitalInput flywheelIRSensor;
 
     public IRSensor () {
-        ir_sensor = new DigitalInput(IDConstants.feederIRID);
+        feederIRSensor = new DigitalInput(IDConstants.feederIRID);
+        flywheelIRSensor = new DigitalInput(IDConstants.flywheelIRID);
     }
 
-    public boolean isIntact() {
-        return ir_sensor.get();
+    public boolean isFeederIRIntact() {
+        return feederIRSensor.get();
+    }
+    public boolean isFlywheelIRIntact() {
+        return flywheelIRSensor.get();
     }
 }

@@ -42,6 +42,10 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
 
     private static Flywheel instance;
 
+    public WantedState getWantedState() {
+        return mWantedState;
+    }
+
     public static Flywheel getInstance() { return instance == null ? instance = new Flywheel() : instance; }
 
     private Flywheel() {
