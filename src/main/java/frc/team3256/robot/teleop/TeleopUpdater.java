@@ -2,6 +2,7 @@ package frc.team3256.robot.teleop;
 
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3256.robot.BallCounter;
 import frc.team3256.robot.constants.IDConstants;
 import frc.team3256.robot.hardware.IRSensor;
 import frc.team3256.robot.hardware.Limelight;
@@ -21,10 +22,9 @@ public class TeleopUpdater {
     private Flywheel mFlywheel = Flywheel.getInstance();
     private Turret mTurret = Turret.getInstance();
     private Hood mHood = Hood.getInstance();
-    private IRSensor irSensor = IRSensor.getInstance();
     private Limelight limelight = Limelight.getInstance();
+    private BallCounter ballCounter = BallCounter.getInstance();
     private boolean overrideFeeder = false;
-    public int ballCounter = 0;
     private boolean prevFeeding = false;
     private boolean feeding = false;
 
@@ -67,7 +67,7 @@ public class TeleopUpdater {
         boolean getShoot = controls.getShoot();
 
         if (SmartDashboard.getNumber("Ball Count Reset", 0) == 1){
-            ballCounter = 0;
+           ballCounter.setCount(0);
         }
 
         //Drivetrain Subsystem
@@ -108,23 +108,13 @@ public class TeleopUpdater {
 //        Feeder Indexing Logic
 
         //UNCOMMENT BELOW FOR FEEDER AUTO-INDEXING
-
-        feeding = !irSensor.isIntact();
-        System.out.println(feeding);
-        if (feeding && !overrideFeeder) {
-            if(!prevFeeding) {
-                ballCounter++;
-            }
-            if (ballCounter != 5) {
+        if(!overrideFeeder) {
+            if (ballCounter.shouldFeed()) {
+                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
+            } else {
                 mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
                 mIntake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
             }
-            else {
-                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
-            }
-        }
-        else if (!feeding && !overrideFeeder) {
-            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
         }
 
         if(feederForward) {
@@ -208,10 +198,6 @@ public class TeleopUpdater {
 
     public double velToFlywheelVel(double outputVel) {
         return 9.839*outputVel + 742.37;
-    }
-
-    public int getBallCounter() {
-        return ballCounter;
     }
 
 }

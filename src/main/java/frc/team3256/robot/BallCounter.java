@@ -3,20 +3,18 @@ package frc.team3256.robot;
 import frc.team3256.robot.hardware.IRSensor;
 import frc.team3256.robot.subsystems.Feeder;
 import frc.team3256.robot.subsystems.Intake;
+import frc.team3256.robot.subsystems.Turret;
 import frc.team3256.warriorlib.loop.Loop;
 
 public class BallCounter implements Loop {
+    private static BallCounter instance;
     private double count = 0;
-    private IRSensor irSensor = IRSensor.getInstance();
+    private IRSensor irSensor = new IRSensor();
     private boolean blocked = false;
     private boolean prevBlocked = false;
+    private boolean shouldFeed = false;
 
-    public enum SystemState {
-        FEEDING,
-        NOT_FEEDING
-    }
-
-    private SystemState state;
+    public static BallCounter getInstance() {return instance == null ? instance = new BallCounter() : instance; }
 
     @Override
     public void init(double timestamp) {
@@ -26,13 +24,10 @@ public class BallCounter implements Loop {
     public void update(double timestamp) {
 
         blocked = !irSensor.isIntact();
+        shouldFeed = false;
         if (blocked) {
             if (!prevBlocked) count++;
-            if (count != 5) state = SystemState.FEEDING;
-            else state = SystemState.NOT_FEEDING;
-        }
-        else {
-            state = SystemState.NOT_FEEDING;
+            if (!isFull()) shouldFeed = true;
         }
         prevBlocked = blocked;
     }
@@ -42,7 +37,15 @@ public class BallCounter implements Loop {
 
     }
 
-    public SystemState getState() {
-        return state;
+    public boolean shouldFeed() {
+        return shouldFeed;
+    }
+
+    public void setCount(double count) {
+        this.count = count;
+    }
+
+    public boolean isFull() {
+        return count >= 5;
     }
 }
