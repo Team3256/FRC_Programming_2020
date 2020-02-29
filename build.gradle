@@ -60,7 +60,7 @@ dependencies {
     simulation wpi.deps.sim.gui(wpi.platforms.desktop, false)
 
     compile 'com.github.Team3256:warriorlib:64f89f9'
-    compile 'com.github.dominikWin:badlog:v0.1.1'
+    compile 'com.github.dominikWin:badlog:4e7e28e'
 
 }
 
