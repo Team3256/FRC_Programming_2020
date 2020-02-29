@@ -11,6 +11,7 @@ public class ShootAction implements Action {
 
     Feeder mFeeder = Feeder.getInstance();
     Intake mIntake = Intake.getInstance();
+    Flywheel mFlywheel = Flywheel.getInstance();
     BallCounter ballCounter = BallCounter.getInstance();
     double shootTime;
     double startTime;
@@ -27,9 +28,9 @@ public class ShootAction implements Action {
 
     @Override
     public void update() {
-//        if (mFlywheel.ballShot()) {
-//            ballCount--;
-//        }
+        if (mFlywheel.ballShot()) {
+            ballCounter.decrement();
+        }
         elapsedTime = Timer.getFPGATimestamp()-startTime;
     }
 

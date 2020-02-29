@@ -25,6 +25,7 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     private double noLoadVoltage = 0;
     private double atVelocityTolerance = 20.0;   //tbd
     private double voltageDif = 2.0;            //tbd
+    private boolean prevBallShot = false;
 
     public enum FlywheelState {
         RUN,
@@ -106,9 +107,11 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     }
 
     public boolean ballShot() {
-        if (atVelocity && mLeftFlywheel.getMotorOutputVoltage() > noLoadVoltage + voltageDif) {
+        if (atVelocity && mLeftFlywheel.getMotorOutputVoltage() > noLoadVoltage + voltageDif && !prevBallShot) {
+            prevBallShot = true;
             return true;
         }
+        prevBallShot = false;
         return false;
     }
 

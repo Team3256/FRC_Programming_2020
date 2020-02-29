@@ -131,51 +131,26 @@ public class TeleopUpdater {
         //Turret Subsystem
         if(manualTurretLeft) {
             mTurret.setWantedState(Turret.WantedState.WANTS_TO_MANUAL_LEFT);
-        }
-        else if(manualTurretRight) {
+        } else if(manualTurretRight) {
             mTurret.setWantedState(Turret.WantedState.WANTS_TO_MANUAL_RIGHT);
-        }
-        else {
+        } else {
             mTurret.setWantedState(Turret.WantedState.WANTS_TO_IDLE);
         }
 
         //Hood Subsystem
         if(manualHoodUp) {
             mHood.setWantedState(Hood.WantedState.WANTS_TO_MANUAL_UP);
-        }
-        else if (manualHoodDown) {
+        } else if (manualHoodDown) {
             mHood.setWantedState(Hood.WantedState.WANTS_TO_MANUAL_DOWN);
-        }
-        else {
+        } else {
             mHood.setWantedState(Hood.WantedState.WANTS_TO_IDLE);
         }
         prevFeeding = feeding;
 
-//        if(setposHood) {
-//            double hoodPos = SmartDashboard.getNumber("hood pos", 0);
-//            mHood.setPosSetpoint(hoodPos);
-//            mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
-//        }
-
-//        if(getShoot) {
-//            overrideFeeder = true;
-//            double vel = SmartDashboard.getNumber("wanted vel", 0);
-//            mFlywheel.setVelocitySetpoint(vel);
-//            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
-//            if(autoAlign) {
-//                mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
-//                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
-//            }
-//        } else {
-//            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
-//            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
-//        }
-
         if (getShoot) {
             mFlywheel.setVelocitySetpoint(velToFlywheelVel(limelight.getVelToTarget()));
             mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
-        }
-        else {
+        } else {
             mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
         }
 
@@ -184,6 +159,7 @@ public class TeleopUpdater {
             mTurret.setTurretAutoAlignAngle(angle);
             mTurret.setWantedState(Turret.WantedState.WANTS_TO_AUTO_ALIGN);
         }
+
         if (autoAlignHood) {
             limelight.calculateKinematics();
             limelight.setWantedEndAngle(0*(Math.PI/180));

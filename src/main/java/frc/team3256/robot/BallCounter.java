@@ -45,6 +45,10 @@ public class BallCounter implements Loop {
         this.count = count;
     }
 
+    public void decrement() {
+        this.count--;
+    }
+
     public boolean isFull() {
         return count >= 5;
     }
