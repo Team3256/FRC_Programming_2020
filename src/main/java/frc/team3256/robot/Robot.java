@@ -6,6 +6,8 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.team3256.robot;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -18,12 +20,14 @@ import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.robot.log.FalconAutoLogger;
 import frc.team3256.robot.log.Logger;
+import frc.team3256.robot.log.LoggerUpdateLooper;
 import frc.team3256.robot.subsystems.*;
 import frc.team3256.robot.teleop.TeleopUpdater;
 import frc.team3256.warriorlib.auto.AutoModeBase;
 import frc.team3256.warriorlib.auto.AutoModeExecuter;
 import frc.team3256.warriorlib.auto.purepursuit.PoseEstimator;
 import frc.team3256.warriorlib.auto.purepursuit.PurePursuitTracker;
+import frc.team3256.warriorlib.loop.Loop;
 import frc.team3256.warriorlib.loop.Looper;
 import frc.team3256.warriorlib.subsystem.DriveTrainBase;
 
