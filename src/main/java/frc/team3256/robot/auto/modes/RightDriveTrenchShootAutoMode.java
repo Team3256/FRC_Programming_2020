@@ -3,6 +3,7 @@ package frc.team3256.robot.auto.modes;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.auto.actions.BackwardsIntakeAction;
+import frc.team3256.robot.auto.actions.FeederIndexAction;
 import frc.team3256.robot.auto.actions.StartIntakeAction;
 import frc.team3256.robot.auto.actions.StopIntakeAction;
 import frc.team3256.robot.auto.paths.Paths;
@@ -29,7 +30,7 @@ public class RightDriveTrenchShootAutoMode extends AutoModeBase {
         runAction(new ResetPursuitAction());
         Drivetrain.getInstance().setHighGear(true);
         runAction(new WaitAction(1.5));
-        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction())));
+        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(), new FeederIndexAction())));
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(1), new BackwardsIntakeAction())));
         runAction(new StopIntakeAction());
         SmartDashboard.putNumber("Total Auto Time: ", Timer.getFPGATimestamp() - startTime);

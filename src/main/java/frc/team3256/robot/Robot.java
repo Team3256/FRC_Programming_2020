@@ -16,8 +16,6 @@ import frc.team3256.robot.auto.modes.RightDriveTrenchShootAutoMode;
 import frc.team3256.robot.auto.modes.RightDriveTrenchTenBallAutoMode;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.hardware.Limelight;
-import frc.team3256.robot.log.FalconAutoLogger;
-import frc.team3256.robot.log.Logger;
 import frc.team3256.robot.subsystems.*;
 import frc.team3256.robot.teleop.TeleopUpdater;
 import frc.team3256.warriorlib.auto.AutoModeBase;
@@ -86,14 +84,6 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData(autoChooser);
 
-    SmartDashboard.putNumber("wanted vel", 1000);
-
-//    Logger.startInitialization();
-//
-//    FalconAutoLogger.autoLog("Flywheel","Motor",flywheel.getMotor());
-//
-//    Logger.finishInitialization();
-
   }
 
   @Override
@@ -125,6 +115,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
     SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
     intake.update(0);
+    feeder.update(0);
+    turret.update(0);
+    hood.update(0);
 
     if (!maintainAutoExecution) {
       teleopUpdater.update();
@@ -159,9 +152,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Ball counter", teleopUpdater.getBallCounter());
     SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
     SmartDashboard.putNumber("wanted vel", teleopUpdater.velToFlywheelVel(limelight.getVelToTarget()));
+    SmartDashboard.putNumber("TAU", limelight.getTx());
     SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
+    SmartDashboard.putNumber("ACTUAL VEL NUM", flywheel.getVelocity());
     teleopUpdater.update();
-//    Logger.update();
   }
 
   @Override

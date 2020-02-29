@@ -21,7 +21,7 @@ public class TeleopUpdater {
     private Flywheel mFlywheel = Flywheel.getInstance();
     private Turret mTurret = Turret.getInstance();
     private Hood mHood = Hood.getInstance();
-    private IRSensor irSensor = new IRSensor(IDConstants.feederIRID);
+    private IRSensor irSensor = IRSensor.getInstance();
     private Limelight limelight = Limelight.getInstance();
     private boolean overrideFeeder = false;
     public int ballCounter = 0;
@@ -34,13 +34,13 @@ public class TeleopUpdater {
     public static TeleopUpdater getInstance() { return instance == null ? instance = new TeleopUpdater() : instance; }
 
     public void update() {
-//        mDrivetrain.update(0);
-//        mIntake.update(0);
-//        mFeeder.update(0);
-//        mFlywheel.update(0);
-//        mTurret.update(0);
-//        mHood.update(0);
-//        limelight.update(0);
+        mDrivetrain.update(0);
+        mIntake.update(0);
+        mFeeder.update(0);
+        mFlywheel.update(0);
+        mTurret.update(0);
+        mHood.update(0);
+        limelight.update(0);
 
         double throttle = controls.getThrottle();
         double turn = controls.getTurn();

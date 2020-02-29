@@ -23,7 +23,7 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     private PIDController flywheelPIDController;
     private boolean atVelocity = false;
     private double noLoadVoltage = 0;
-    private double atVelocityTolerance = 5.0;   //tbd
+    private double atVelocityTolerance = 20.0;   //tbd
     private double voltageDif = 2.0;            //tbd
 
     public enum FlywheelState {
@@ -46,6 +46,9 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     private Flywheel() {
         mLeftFlywheel = TalonFXUtil.generateGenericTalon(leftFlywheelID); //TBD
         mRightFlywheel = TalonFXUtil.generateSlaveTalon(rightFlywheelID, leftFlywheelID);
+//        mRightFlywheel = TalonFXUtil.generateSlaveTalon(rightFlywheelID, leftFlywheelID);
+        TalonFXUtil.setPIDGains(mLeftFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
+        TalonFXUtil.setPIDGains(mRightFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
         TalonFXUtil.setCoastMode(mLeftFlywheel, mRightFlywheel);
         mLeftFlywheel.setInverted(true);
         mRightFlywheel.setInverted(false);
@@ -142,7 +145,8 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
 
     private void setFlywheelVelocity(double speed) { //Run flywheel at set velocity in RPM
         mLeftFlywheel.set(ControlMode.Velocity, rpmToSensorUnits(speed));
-        mRightFlywheel.set(ControlMode.Velocity, rpmToSensorUnits(speed));
+//        mRightFlywheel.set(ControlMode.Velocity, rpmToSensorUnits(speed));
+        mRightFlywheel.set(ControlMode.Follower, rpmToSensorUnits(speed));
 //        mLeftFlywheel.set(1.0);
 //        mRightFlywheel.set(1.0);
     }
