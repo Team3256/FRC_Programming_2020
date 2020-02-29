@@ -5,7 +5,6 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
 
@@ -164,8 +163,6 @@ public class Hood extends SubsystemBase {
 
     @Override
     public void outputToDashboard() {
-        SmartDashboard.putNumber("encoder", getHoodEncoder());
-        SmartDashboard.putBoolean("limit", isLimitSwitchPressed());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package frc.team3256.robot.auto.actions;
 
+import edu.wpi.first.wpilibj.Timer;
 import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.robot.subsystems.Feeder;
 import frc.team3256.robot.subsystems.Flywheel;
@@ -12,21 +13,26 @@ public class ShootAction implements Action {
     Feeder mFeeder = Feeder.getInstance();
     Intake mIntake = Intake.getInstance();
     double ballCount;
+    double shootTime;
+    double startTime;
+    double elapsedTime;
 
-    public ShootAction(double ballCount) {
-        this.ballCount = ballCount;
+    public ShootAction(double shootTime) {
+//        this.ballCount = ballCount;
+        this.shootTime = shootTime;
     }
 
     @Override
     public boolean isFinished() {
-        return ballCount <= 0;
+        return elapsedTime >= shootTime;
     }
 
     @Override
     public void update() {
-        if (mFlywheel.ballShot()) {
-            ballCount--;
-        }
+//        if (mFlywheel.ballShot()) {
+//            ballCount--;
+//        }
+        elapsedTime = Timer.getFPGATimestamp()-startTime;
     }
 
     @Override
@@ -39,5 +45,6 @@ public class ShootAction implements Action {
     public void start() {
         mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
         mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
+        startTime = Timer.getFPGATimestamp();
     }
 }

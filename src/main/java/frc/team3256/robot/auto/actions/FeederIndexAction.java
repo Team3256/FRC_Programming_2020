@@ -13,7 +13,7 @@ public class FeederIndexAction implements Action {
     public int ballCounter = 0;
     private boolean prevFeeding = false;
     private boolean feeding = false;
-    private IRSensor irSensor = new IRSensor(IDConstants.feederIRID);
+    private IRSensor irSensor = IRSensor.getInstance();
 
     @Override
     public boolean isFinished() {
@@ -51,6 +51,5 @@ public class FeederIndexAction implements Action {
 
     @Override
     public void start() {
-
     }
 }

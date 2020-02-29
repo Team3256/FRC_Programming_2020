@@ -1,5 +1,6 @@
 package frc.team3256.robot.auto.actions;
 
+import edu.wpi.first.wpilibj.Timer;
 import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.robot.subsystems.Flywheel;
 import frc.team3256.robot.subsystems.Hood;
@@ -12,10 +13,17 @@ public class GoalAlignRevAction implements Action {
     Turret mTurret = Turret.getInstance();
     Flywheel mFlywheel = Flywheel.getInstance();
     Limelight limelight = Limelight.getInstance();
+    double elapsedTime;
+    double revTime;
+    double startTime;
+
+    public GoalAlignRevAction(double revTime) {
+        this.revTime = revTime;
+    }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return elapsedTime >= revTime;
     }
 
     @Override
@@ -30,6 +38,8 @@ public class GoalAlignRevAction implements Action {
         mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
         mFlywheel.setVelocitySetpoint(velToFlywheelVel(limelight.getVelToTarget()));
         mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
+
+        elapsedTime = Timer.getFPGATimestamp() - startTime;
     }
 
     @Override
@@ -39,7 +49,7 @@ public class GoalAlignRevAction implements Action {
 
     @Override
     public void start() {
-
+        startTime = Timer.getFPGATimestamp();
     }
 
     public double angleToHoodPos(double angle) {

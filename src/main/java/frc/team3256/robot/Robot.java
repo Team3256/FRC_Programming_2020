@@ -6,6 +6,8 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.team3256.robot;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -16,16 +18,13 @@ import frc.team3256.robot.auto.modes.RightDriveTrenchShootAutoMode;
 import frc.team3256.robot.auto.modes.RightDriveTrenchTenBallAutoMode;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.hardware.Limelight;
-import frc.team3256.robot.log.FalconAutoLogger;
-import frc.team3256.robot.log.Logger;
-import frc.team3256.robot.subsystems.Drivetrain;
-import frc.team3256.robot.subsystems.Flywheel;
-import frc.team3256.robot.subsystems.Intake;
+import frc.team3256.robot.subsystems.*;
 import frc.team3256.robot.teleop.TeleopUpdater;
 import frc.team3256.warriorlib.auto.AutoModeBase;
 import frc.team3256.warriorlib.auto.AutoModeExecuter;
 import frc.team3256.warriorlib.auto.purepursuit.PoseEstimator;
 import frc.team3256.warriorlib.auto.purepursuit.PurePursuitTracker;
+import frc.team3256.warriorlib.loop.Loop;
 import frc.team3256.warriorlib.loop.Looper;
 import frc.team3256.warriorlib.subsystem.DriveTrainBase;
 
@@ -45,6 +44,9 @@ public class Robot extends TimedRobot {
   private PurePursuitTracker purePursuitTracker;
   private Limelight limelight = Limelight.getInstance();
   private Flywheel flywheel = Flywheel.getInstance();
+  private Feeder feeder = Feeder.getInstance();
+  private Hood hood = Hood.getInstance();
+  private Turret turret = Turret.getInstance();
 
   private AutoModeExecuter autoModeExecuter;
   private boolean maintainAutoExecution = true;
@@ -62,13 +64,14 @@ public class Robot extends TimedRobot {
     limelight.init();
 
     Paths.initialize();
-    enabledLooper = new Looper(1 / 200D);
 
     // Reset sensors
     drivetrain.resetEncoders();
     drivetrain.resetGyro();
 
-    enabledLooper.addLoops(drivetrain);
+    enabledLooper = new Looper(1 / 200D);
+    enabledLooper.addLoops(drivetrain, flywheel, intake, turret, hood, feeder);
+    enabledLooper.start();
 
     poseEstimatorLooper = new Looper(1 / 50D);
     poseEstimator = PoseEstimator.getInstance();
@@ -83,20 +86,6 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
 
     SmartDashboard.putData(autoChooser);
-
-    SmartDashboard.putNumber("wanted vel", 1000);
-    SmartDashboard.putNumber("hood pos", 0);
-//    SmartDashboard.putNumber("Ball Count Reset", 0);
-
-    SmartDashboard.putNumber("Flywheel P", 0);
-    SmartDashboard.putNumber("Flywheel I", 0);
-    SmartDashboard.putNumber("Flywheel D", 0);
-
-    Logger.startInitialization();
-
-    FalconAutoLogger.autoLog("Flywheel","Motor",flywheel.getMotor());
-
-    Logger.finishInitialization();
 
   }
 
@@ -129,6 +118,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
     SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
     intake.update(0);
+    feeder.update(0);
+    turret.update(0);
+    hood.update(0);
 
     if (!maintainAutoExecution) {
       teleopUpdater.update();
@@ -161,13 +153,12 @@ public class Robot extends TimedRobot {
 //    SmartDashboard.putNumber("distance to target", limelight.getDistanceToTarget());
     SmartDashboard.putNumber("distance to inner", limelight.getDistanceToInner());
     SmartDashboard.putNumber("Ball counter", teleopUpdater.getBallCounter());
-//    SmartDashboard.putNumber("wanted hood", teleopUpdater.angleToHoodPos(limelight.getAngleToTarget()));
     SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
     SmartDashboard.putNumber("wanted vel", teleopUpdater.velToFlywheelVel(limelight.getVelToTarget()));
+    SmartDashboard.putNumber("TAU", limelight.getTx());
     SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
     SmartDashboard.putNumber("ACTUAL VEL NUM", flywheel.getVelocity());
     teleopUpdater.update();
-    Logger.update();
   }
 
   @Override

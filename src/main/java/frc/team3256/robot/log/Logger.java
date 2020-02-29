@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.function.Supplier;
 
@@ -233,9 +235,16 @@ public class Logger {
          startTime = Timer.getFPGATimestamp();
 
       //Put RoboRIO's FPGA Time to Smart Dashboard for FRC Dashboard
-      SmartDashboard.putNumber("RelTime",Timer.getFPGATimestamp()- startTime);
+//      SmartDashboard.putNumber("RelTime",Timer.getFPGATimestamp()- startTime);
 
       return Timer.getFPGATimestamp() - startTime;
+   }
+
+   public static void deleteOldFiles(){
+      File directory = new File(logsFilePath);
+      File[] files = directory.listFiles();
+      Arrays.sort(files, Comparator.comparingLong(File::lastModified));
+      System.out.println(files);
    }
 
    //endregion
