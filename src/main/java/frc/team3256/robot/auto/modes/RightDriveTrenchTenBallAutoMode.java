@@ -6,7 +6,7 @@ import frc.team3256.robot.auto.actions.StartIntakeAction;
 import frc.team3256.robot.auto.actions.StopIntakeAction;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.constants.DriveConstants;
-import frc.team3256.robot.subsystems.Drivetrain;
+import frc.team3256.robot.subsystems.DriveTrain;
 import frc.team3256.warriorlib.auto.AutoModeBase;
 import frc.team3256.warriorlib.auto.AutoModeEndedException;
 import frc.team3256.warriorlib.auto.action.ParallelAction;
@@ -27,7 +27,7 @@ public class RightDriveTrenchTenBallAutoMode extends AutoModeBase {
         double startTime = Timer.getFPGATimestamp();
         runAction(new WaitAction(0.5));
         runAction(new ResetPursuitAction());
-        Drivetrain.getInstance().setHighGear(true);
+        DriveTrain.getInstance().setHighGear(true);
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction())));
         runAction(new WaitAction(10.0));
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(1), new StartIntakeAction())));

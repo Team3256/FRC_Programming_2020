@@ -2,20 +2,17 @@ package frc.team3256.robot.teleop;
 
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team3256.robot.BallCounter;
-import frc.team3256.robot.constants.IDConstants;
-import frc.team3256.robot.hardware.IRSensor;
+import frc.team3256.robot.auto.helper.BallCounter;
+import frc.team3256.robot.auto.helper.ShootingKinematics;
 import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.robot.subsystems.*;
 import frc.team3256.robot.teleop.configs.ControlsInterface;
 import frc.team3256.robot.teleop.configs.XboxControllerConfig;
 import frc.team3256.warriorlib.control.DrivePower;
 
-import static frc.team3256.robot.constants.LimelightConstants.gravAcceleration;
-
 public class TeleopUpdater {
     private ControlsInterface controls = new XboxControllerConfig();
-    private Drivetrain mDrivetrain = Drivetrain.getInstance();
+    private DriveTrain mDrivetrain = DriveTrain.getInstance();
 
     private Intake mIntake = Intake.getInstance();
     private Feeder mFeeder = Feeder.getInstance();
@@ -25,10 +22,8 @@ public class TeleopUpdater {
     private Limelight limelight = Limelight.getInstance();
     private BallCounter ballCounter = BallCounter.getInstance();
     private boolean overrideFeeder = false;
-    private boolean prevFeeding = false;
     private boolean feeding = false;
 
-    private double gravAcc = 32.174;
 
     private static TeleopUpdater instance;
     public static TeleopUpdater getInstance() { return instance == null ? instance = new TeleopUpdater() : instance; }
@@ -91,14 +86,6 @@ public class TeleopUpdater {
             mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
             mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
         }
-//        else if(getShoot) {
-//            overrideFeeder = true;
-//            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
-//            if(mFlywheel.getVelocity() >= 6000) {
-//                mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
-//                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
-//            }
-//        }
         else {
             mIntake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
             overrideFeeder = false;
@@ -145,10 +132,9 @@ public class TeleopUpdater {
         } else {
             mHood.setWantedState(Hood.WantedState.WANTS_TO_IDLE);
         }
-        prevFeeding = feeding;
 
         if (getShoot) {
-            mFlywheel.setVelocitySetpoint(velToFlywheelVel(limelight.getVelToTarget()));
+            mFlywheel.setVelocitySetpoint(ShootingKinematics.velToFlywheelVel(limelight.getVelToTarget()));
             mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
         } else {
             mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
@@ -163,17 +149,9 @@ public class TeleopUpdater {
         if (autoAlignHood) {
             limelight.calculateKinematics();
             limelight.setWantedEndAngle(0*(Math.PI/180));
-            mHood.setPosSetpoint(angleToHoodPos(limelight.getAngleToTarget() - 0*Math.PI/180));
+            mHood.setPosSetpoint(ShootingKinematics.angleToHoodPos(limelight.getAngleToTarget() - 0*Math.PI/180));
             mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
         }
-    }
-
-    public double angleToHoodPos(double angle) {
-        return 0.3342*(angle*180/Math.PI) - 18.302;
-    }
-
-    public double velToFlywheelVel(double outputVel) {
-        return 9.839*outputVel + 742.37;
     }
 
 }

@@ -20,6 +20,7 @@ public class Hood extends SubsystemBase {
     boolean mStateChanged;
     boolean mWantedStateChanged;
     double posSetpoint;
+    boolean isZeroed = false;
 
     public enum HoodState {
         MANUAL_UP,
@@ -105,6 +106,7 @@ public class Hood extends SubsystemBase {
         if(isLimitSwitchPressed()) {
             mHood.stopMotor();
             mHood.getEncoder().setPosition(0);
+            isZeroed = true;
         }
         else {
             mHood.set(kHoodSpeed);
@@ -159,6 +161,10 @@ public class Hood extends SubsystemBase {
 
     private double angleToEncoder(double angle) {
         return 0;
+    }
+
+    public boolean isZeroed() {
+        return isZeroed;
     }
 
     @Override

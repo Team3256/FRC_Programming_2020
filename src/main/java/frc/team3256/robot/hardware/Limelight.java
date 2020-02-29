@@ -13,28 +13,28 @@ public class Limelight implements Loop {
     private static Limelight instance;
     public static Limelight getInstance() { return instance == null ? instance = new Limelight() : instance; }
 
-    NetworkTableEntry limeLightTx, limeLightTy, limeLightTa, limeLightTs, limeLightTcornx, limeLightTcorny;
-    double tx, ty, ta, ts;
-    double [] tcornx, tcorny;
+    private NetworkTableEntry limeLightTx, limeLightTy, limeLightTa, limeLightTs, limeLightTcornx, limeLightTcorny;
+    private double tx, ty, ta, ts;
+    private double [] tcornx, tcorny;
 
     //change in theta and change in distance
-    double dThetaMean = 0;
-    int dThetaCount = 0;
-    double dTheta;
-    double dDistance;
+    private double dThetaMean = 0;
+    private int dThetaCount = 0;
+    private double dTheta;
+    private double dDistance;
 
-    double lastTheta;
-    double lastDistance;
-    double difference = 0;
+    private double lastTheta;
+    private double lastDistance;
+    private double difference = 0;
 
-    double lastTimestamp = 0;
+    private double lastTimestamp = 0;
 
     //kinematics
-    double heightDif = innerGoalTargetHeight - turretHeight;
-    double wantedEndAngle = 0;
-    double timeToTarget = 0;
-    double angleToTarget = 0;
-    double velToTarget = 0;
+    private double heightDif = innerGoalTargetHeight - turretHeight;
+    private double wantedEndAngle = 0;
+    private double timeToTarget = 0;
+    private double angleToTarget = 0;
+    private double velToTarget = 0;
 
     public void init() {
         //Setting up NetworkTables

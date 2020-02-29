@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import frc.team3256.robot.constants.HoodConstants;
 import frc.team3256.robot.constants.TurretConstants;
 import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
@@ -25,6 +26,7 @@ public class Turret extends SubsystemBase {
     private double initialLimelightAngle, headingError;
     private PIDController turretPIDController;
     private boolean firstRun;
+    private double autoAlignTolerance = TurretConstants.kAutoAlignTolerance;
 
     public enum TurretState {
         MANUAL_LEFT,
@@ -114,7 +116,7 @@ public class Turret extends SubsystemBase {
     }
 
     private TurretState handleAutoAlign() {
-        if (Math.abs(angleSetpoint) <= 0.1) {
+        if (Math.abs(angleSetpoint) <= autoAlignTolerance) {
             setTurretSpeed(0);
         }
         else {
@@ -135,6 +137,7 @@ public class Turret extends SubsystemBase {
     }
 
     private void setTurretSpeed(double speed) {
+        // if not past soft limits
         mTurret.set(speed);
     }
 

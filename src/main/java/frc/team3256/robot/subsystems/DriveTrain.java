@@ -14,11 +14,10 @@ import frc.team3256.warriorlib.loop.Loop;
 import frc.team3256.warriorlib.math.Kinematics;
 import frc.team3256.warriorlib.math.Rotation;
 import frc.team3256.warriorlib.operations.Util;
-import frc.team3256.warriorlib.subsystem.DriveTrainBase;
 
-public class Drivetrain extends DriveTrainBase implements Loop {
+public class DriveTrain extends DriveTrainBase implements Loop {
     private CANSparkMax leftMaster, rightMaster, leftSlave, rightSlave;
-    private static Drivetrain instance;
+    private static DriveTrain instance;
     private CANEncoder leftEncoder, rightEncoder;
     private CANPIDController leftPIDController, rightPIDController;
     private PigeonIMU gyro;
@@ -26,11 +25,11 @@ public class Drivetrain extends DriveTrainBase implements Loop {
 
     private DoubleSolenoid shifter;
 
-    public static Drivetrain getInstance() {
-        return instance == null ? instance = new Drivetrain() : instance;
+    public static DriveTrain getInstance() {
+        return instance == null ? instance = new DriveTrain() : instance;
     }
 
-    public Drivetrain() {
+    public DriveTrain() {
         gyro = new PigeonIMU(IDConstants.pigeonID);
         gyro.setAccumZAngle(0, 0);
         gyro.setYaw(0, 0);

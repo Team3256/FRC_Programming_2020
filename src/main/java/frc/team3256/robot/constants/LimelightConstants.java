@@ -9,10 +9,5 @@ public class LimelightConstants {
     public static final double mountingHeight = 24.5; //75
     public static final double mountingAngle = 28.5; //15.
     public static final double toInnerTarget = 29;
-    public static final double refreshTime = 0.01;
     public static final double gravAcceleration = 386;
-
-    //Drive Control
-    public static final double kPLimelight = -0.04;
-    public static final double minCommand = 0.0; //Minimum command, min amnt of pwr needed to move turret
 }

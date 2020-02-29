@@ -2,6 +2,8 @@ package frc.team3256.robot.constants;
 
 public class IDConstants {
 
+    //CAN IDs: ------------------------------------------------------------------------------------------------
+
     //PDP
     public static final int pdpID = 0;
 
@@ -34,7 +36,7 @@ public class IDConstants {
     //Hanger
     public static final int winchMotorID = 15;
 
-    //Pneumatics:
+    //Pneumatics:------------------------------------------------------------------------------------------------
 
     //Shifter IDs
     public static final int shifterForwardChannel = 4;
@@ -48,7 +50,7 @@ public class IDConstants {
     public static final int hangerPancakesForwardChannel = 1; //TBD
     public static final int hangerPancakesReverseChannel = 6; //TBD
 
-    //DIO Ports:
+    //DIO Ports:------------------------------------------------------------------------------------------------
     public static final int limitSwitchPort = 1;
     public static final int feederIRID = 8;
     public static final int flywheelIRID = 7; //TBD

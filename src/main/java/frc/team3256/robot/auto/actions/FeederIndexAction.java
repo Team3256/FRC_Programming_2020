@@ -1,8 +1,6 @@
 package frc.team3256.robot.auto.actions;
 
-import frc.team3256.robot.BallCounter;
-import frc.team3256.robot.constants.IDConstants;
-import frc.team3256.robot.hardware.IRSensor;
+import frc.team3256.robot.auto.helper.BallCounter;
 import frc.team3256.robot.subsystems.Feeder;
 import frc.team3256.robot.subsystems.Intake;
 import frc.team3256.warriorlib.auto.action.Action;

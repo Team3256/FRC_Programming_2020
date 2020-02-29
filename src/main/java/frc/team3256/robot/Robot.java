@@ -6,12 +6,11 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.team3256.robot;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3256.robot.auto.helper.BallCounter;
+import frc.team3256.robot.auto.helper.ShootingKinematics;
 import frc.team3256.robot.auto.modes.DoNothingAutoMode;
 import frc.team3256.robot.auto.modes.RightDriveShootAutoMode;
 import frc.team3256.robot.auto.modes.RightDriveTrenchShootAutoMode;
@@ -24,7 +23,6 @@ import frc.team3256.warriorlib.auto.AutoModeBase;
 import frc.team3256.warriorlib.auto.AutoModeExecuter;
 import frc.team3256.warriorlib.auto.purepursuit.PoseEstimator;
 import frc.team3256.warriorlib.auto.purepursuit.PurePursuitTracker;
-import frc.team3256.warriorlib.loop.Loop;
 import frc.team3256.warriorlib.loop.Looper;
 import frc.team3256.warriorlib.subsystem.DriveTrainBase;
 
@@ -36,9 +34,10 @@ import frc.team3256.warriorlib.subsystem.DriveTrainBase;
  * project.
  */
 public class Robot extends TimedRobot {
+  //TODO: add burnFlash() to generateSlave method on warriorlib
 
   TeleopUpdater teleopUpdater;
-  private Drivetrain drivetrain;
+  private DriveTrain drivetrain;
   private Intake intake;
   private PoseEstimator poseEstimator;
   private PurePursuitTracker purePursuitTracker;
@@ -57,7 +56,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     teleopUpdater = new TeleopUpdater();
-    drivetrain = Drivetrain.getInstance();
+    drivetrain = DriveTrain.getInstance();
     intake = Intake.getInstance();
     DriveTrainBase.setDriveTrain(drivetrain);
     purePursuitTracker = PurePursuitTracker.getInstance();
@@ -79,6 +78,8 @@ public class Robot extends TimedRobot {
     poseEstimatorLooper.start();
 
     limelightLooper = new Looper(1 / 100D);
+    limelightLooper.addLoops(limelight);
+    limelightLooper.start();
 
     autoChooser.setDefaultOption("Do Nothing", new DoNothingAutoMode());
     autoChooser.addOption("Right Shoot Auto", new RightDriveShootAutoMode());
@@ -140,25 +141,19 @@ public class Robot extends TimedRobot {
     drivetrain.resetGyro();
     drivetrain.resetEncoders();
     drivetrain.setBrakeMode();
-//    drivetrain.setCoastMode();
     poseEstimator.reset();
   }
 
   @Override
   public void teleopPeriodic() {
-//    SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
-//    SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
-//    SmartDashboard.putNumber("Gyro Angle", drivetrain.getAngle());
-
-//    SmartDashboard.putNumber("distance to target", limelight.getDistanceToTarget());
+    teleopUpdater.update();
     SmartDashboard.putNumber("distance to inner", limelight.getDistanceToInner());
     SmartDashboard.putNumber("Ball counter", BallCounter.getInstance().getCount());
     SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
-    SmartDashboard.putNumber("wanted vel", teleopUpdater.velToFlywheelVel(limelight.getVelToTarget()));
+    SmartDashboard.putNumber("wanted vel", ShootingKinematics.velToFlywheelVel(limelight.getVelToTarget()));
     SmartDashboard.putNumber("TAU", limelight.getTx());
     SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
     SmartDashboard.putNumber("ACTUAL VEL NUM", flywheel.getVelocity());
-    teleopUpdater.update();
   }
 
   @Override
