@@ -70,11 +70,11 @@ public interface ControlsInterface {
 //--------------For Final Implementation After Testing & Tuning--------------
 
     //Hold: Auto-aligns both turret & hood
-    boolean autoAlign();
+    boolean getAutoAlign();
 
     //Hold: Revs up the flywheel to the necessary velocity
-    boolean revUp();
+    boolean getRevUp();
 
     //Hold: Runs the feeder to shoot the balls, only when the flywheel is at the right velocity
-    boolean feederShoot();
+    boolean getFeederShoot();
 }

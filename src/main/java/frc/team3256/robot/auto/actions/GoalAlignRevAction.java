@@ -1,7 +1,7 @@
 package frc.team3256.robot.auto.actions;
 
 import edu.wpi.first.wpilibj.Timer;
-import frc.team3256.robot.auto.helper.ShootingKinematics;
+import frc.team3256.robot.helper.ShootingKinematics;
 import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.robot.subsystems.Flywheel;
 import frc.team3256.robot.subsystems.Hood;

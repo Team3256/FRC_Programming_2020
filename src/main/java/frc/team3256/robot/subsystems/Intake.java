@@ -164,12 +164,11 @@ public class Intake extends SubsystemBase {
                 return IntakeState.INTAKING_AUTO_BACKWARDS;
             case WANTS_TO_EXHAUST:
                 return IntakeState.EXHAUSTING;
-            case WANTS_TO_STOP:
-                return IntakeState.STOP;
             case WANTS_TO_RAISE:
                 return IntakeState.RAISING;
             case WANTS_TO_DROP:
                 return IntakeState.DROPPING;
+            case WANTS_TO_STOP:
             default:
                 return IntakeState.STOP;
         }
