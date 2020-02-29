@@ -154,7 +154,6 @@ public class Turret extends SubsystemBase {
             case WANTS_TO_AUTO_ALIGN:
                 return TurretState.AUTO_ALIGN;
             case WANTS_TO_IDLE:
-                return TurretState.IDLE;
             default:
                 return TurretState.IDLE;
         }
