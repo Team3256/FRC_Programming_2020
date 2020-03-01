@@ -15,4 +15,6 @@ public class HoodConstants {
     public static final double kHoodAdjustF = 0;
     public static final double kHoodAdjustIZone = 0;
 
+    public static final double kHoodSetpointTolerance = 0.2;
+
 }

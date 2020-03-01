@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
   private final boolean WANTS_TO_LOG = false;
 
   TeleopUpdater teleopUpdater;
-//  private DriveTrain drivetrain;
+  private DriveTrain drivetrain;
   private Intake intake;
   private PoseEstimator poseEstimator;
   private PurePursuitTracker purePursuitTracker;
@@ -67,21 +67,20 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     airCompressor.turnOnCompressor();
     teleopUpdater = new TeleopUpdater();
-//    drivetrain = DriveTrain.getInstance();
+    drivetrain = DriveTrain.getInstance();
     intake = Intake.getInstance();
-//    DriveTrainBase.setDriveTrain(drivetrain);
+    DriveTrainBase.setDriveTrain(drivetrain);
     purePursuitTracker = PurePursuitTracker.getInstance();
     limelight.init();
 
     Paths.initialize();
 
     // Reset sensors
-//    drivetrain.resetEncoders();
-//    drivetrain.resetGyro();
+    drivetrain.resetEncoders();
+    drivetrain.resetGyro();
 
     enabledLooper = new Looper(1 / 200D);
     enabledLooper.addLoops(intake, turret, hood, feeder);
-    enabledLooper.start();
 
     flywheelLooper = new Looper(1/500D);
     flywheelLooper.addLoops(flywheel);
@@ -89,11 +88,9 @@ public class Robot extends TimedRobot {
     poseEstimatorLooper = new Looper(1 / 50D);
     poseEstimator = PoseEstimator.getInstance();
     poseEstimatorLooper.addLoops(poseEstimator);
-    poseEstimatorLooper.start();
 
     limelightLooper = new Looper(1 / 100D);
     limelightLooper.addLoops(limelight);
-    limelightLooper.start();
 
 
     autoChooser.setDefaultOption("Do Nothing", new DoNothingAutoMode());
@@ -117,14 +114,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-//    drivetrain.resetEncoders();
-//    drivetrain.resetGyro();
-//    drivetrain.setBrakeMode();
+    drivetrain.resetEncoders();
+    drivetrain.resetGyro();
+    drivetrain.setBrakeMode();
 
     poseEstimator.reset();
     purePursuitTracker.reset();
 
     enabledLooper.start();
+    flywheelLooper.start();
+    poseEstimatorLooper.start();
+    limelightLooper.start();
 
     if (SmartDashboard.getBoolean("autoEnabled", true)) {
       maintainAutoExecution = true;
@@ -142,7 +142,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
     SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
-//    SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
+    SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
     intake.update(0);
     feeder.update(0);
     turret.update(0);
@@ -154,8 +154,8 @@ public class Robot extends TimedRobot {
 
     else if (autoModeExecuter.isFinished()) {
       maintainAutoExecution = false;
-//      drivetrain.runZeroPower();
-//      drivetrain.setCoastMode();
+      drivetrain.runZeroPower();
+      drivetrain.setCoastMode();
     }
   }
 
@@ -165,9 +165,9 @@ public class Robot extends TimedRobot {
     enabledLooper.start();
     flywheelLooper.start();
     limelightLooper.start();
-//    drivetrain.resetGyro();
-//    drivetrain.resetEncoders();
-//    drivetrain.setBrakeMode();
+    drivetrain.resetGyro();
+    drivetrain.resetEncoders();
+    drivetrain.setBrakeMode();
     poseEstimator.reset();
     if(WANTS_TO_LOG) loggerLooper.start();
   }
@@ -178,12 +178,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("distance to inner", limelight.getDistanceToInner());
     SmartDashboard.putNumber("Ball counter", BallCounter.getInstance().getCount());
     SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
-//    SmartDashboard.putNumber("wanted vel", ShootingKinematics.velToFlywheelVel(limelight.getVelToTarget()));
-    SmartDashboard.putNumber("wanted vel", 5500);
-    SmartDashboard.putNumber("TAU", limelight.getTx());
+    SmartDashboard.putNumber("wanted vel", ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
+    SmartDashboard.putNumber("TAU", limelight.calculateTau());
     SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
     SmartDashboard.putNumber("ACTUAL VEL NUM", flywheel.getVelocity());
-    SmartDashboard.putNumber("ACTUAL VEL SENSOR UNITS", flywheel.getSensorVelocity());
     if(WANTS_TO_LOG){
       Logger.update();
     }

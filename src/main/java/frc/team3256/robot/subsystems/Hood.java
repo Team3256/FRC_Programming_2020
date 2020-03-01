@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import frc.team3256.robot.constants.HoodConstants;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
 
@@ -17,10 +18,11 @@ public class Hood extends SubsystemBase {
     private DigitalInput bottomLimit;
 
     WantedState mPrevWantedState;
-    boolean mStateChanged;
-    boolean mWantedStateChanged;
-    double posSetpoint;
-    boolean isZeroed = false;
+    private boolean mStateChanged;
+    private boolean mWantedStateChanged;
+    private double posSetpoint;
+    private boolean isZeroed = false;
+    private boolean atSetpoint = false;
 
     public enum HoodState {
         MANUAL_UP,
@@ -44,7 +46,6 @@ public class Hood extends SubsystemBase {
     public static Hood getInstance() { return instance == null ? instance = new Hood() : instance; }
 
     private Hood() {
-
         mHood = SparkMAXUtil.generateGenericSparkMAX(hoodID, CANSparkMaxLowLevel.MotorType.kBrushless); //TBD
         mHood.setInverted(false);
         bottomLimit = new DigitalInput(limitSwitchPort);
@@ -121,7 +122,12 @@ public class Hood extends SubsystemBase {
             posSetpoint = 0;
         }
         mHood.getPIDController().setReference(posSetpoint, ControlType.kPosition);
+        atSetpoint = getHoodEncoder() > posSetpoint - kHoodSetpointTolerance && getHoodEncoder() < posSetpoint + kHoodSetpointTolerance;
         return defaultStateTransfer();
+    }
+
+    public boolean atHoodSetpoint() {
+        return atSetpoint;
     }
 
     private HoodState handleIdle() { //Stops turret motor

@@ -19,10 +19,10 @@ public class FeederIndexAction implements Action {
     @Override
     public void update() {
         if (ballCounter.shouldFeed()) {
-            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
-        } else {
             mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
             mIntake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
+        } else {
+            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
         }
     }
 

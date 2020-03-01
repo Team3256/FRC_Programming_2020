@@ -13,7 +13,7 @@ import frc.team3256.warriorlib.subsystem.SubsystemBase;
 import static frc.team3256.robot.constants.IDConstants.leftFlywheelID;
 import static frc.team3256.robot.constants.IDConstants.rightFlywheelID;
 
-public class Flywheel extends SubsystemBase { //A test for the flywheel state machine, only runs. does not adjust velocity.
+public class Flywheel extends SubsystemBase {
     private WPI_TalonFX mLeftFlywheel, mRightFlywheel;
 
     WantedState mPrevWantedState;
@@ -21,6 +21,8 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     boolean mWantedStateChanged;
     double velocitySetpoint;
     private PIDController flywheelPIDController;
+    private boolean atSetpoint;
+    private boolean readyToShoot;
 
     public enum FlywheelState {
         RUN,
@@ -50,6 +52,7 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
         TalonFXUtil.setCoastMode(mLeftFlywheel, mRightFlywheel);
         mLeftFlywheel.setInverted(true);
         mRightFlywheel.setInverted(false);
+        atSetpoint = false;
     }
 
     public void setWantedState(WantedState wantedState) { this.mWantedState = wantedState; }
@@ -78,7 +81,7 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
         } else {
             mStateChanged = false;
         }
-
+        atSetpoint = getVelocity() < (velocitySetpoint + FlywheelConstants.kAtSetpointTolerance) && getVelocity() > (velocitySetpoint - FlywheelConstants.kAtSetpointTolerance);
         this.outputToDashboard();
     }
 
@@ -139,12 +142,24 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
         mRightFlywheel.set(ControlMode.PercentOutput, output);
     }
 
+    public void setReadyToShoot(boolean readyToShoot) {
+        this.readyToShoot = readyToShoot;
+    }
+
+    public boolean getReadyToShoot() {
+        return readyToShoot;
+    }
+
     private double calculateFeedForward(double flywheelRPM) {
         return flywheelRPM/6521.5;
     }
 
     private double rpmToSensorUnits(double rpm) {
         return (rpm/600) * 2048;
+    }
+
+    public boolean atSetpointVelocity() {
+        return atSetpoint;
     }
 
     private double sensorUnitsToRPM(double sensorUnits) {

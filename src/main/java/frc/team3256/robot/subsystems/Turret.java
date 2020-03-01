@@ -23,6 +23,7 @@ public class Turret extends SubsystemBase {
     private PIDController turretPIDController;
     private boolean firstRun;
     private double autoAlignTolerance = TurretConstants.kAutoAlignTolerance;
+    private boolean atSetpoint;
 
     public enum TurretState {
         MANUAL_LEFT,
@@ -54,6 +55,7 @@ public class Turret extends SubsystemBase {
         mTurret = SparkMAXUtil.generateGenericSparkMAX(turretID, CANSparkMaxLowLevel.MotorType.kBrushless);
         SparkMAXUtil.setBrakeMode(mTurret);
         mTurret.setInverted(false);
+        atSetpoint = false;
     }
 
     public void setWantedState(WantedState wantedState) { this.mWantedState = wantedState; }
@@ -109,6 +111,7 @@ public class Turret extends SubsystemBase {
 
     private TurretState handleAutoAlign() {
         if (Math.abs(angleSetpoint) <= autoAlignTolerance) {
+            atSetpoint = true;
             setTurretSpeed(0);
         }
         else {
@@ -124,6 +127,7 @@ public class Turret extends SubsystemBase {
             double command = -getTo;
             double c = turretPIDController.calculate(0, command);
             setTurretSpeed(c);
+            atSetpoint = false;
         }
         return defaultStateTransfer();
     }
@@ -131,6 +135,10 @@ public class Turret extends SubsystemBase {
     private void setTurretSpeed(double speed) {
         // if not past soft limits
         mTurret.set(speed);
+    }
+
+    public boolean atAngleSetpoint() {
+        return atSetpoint;
     }
 
     public void setTurretAutoAlignAngle(double angle) {
