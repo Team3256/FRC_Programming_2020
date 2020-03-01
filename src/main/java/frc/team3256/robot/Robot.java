@@ -17,6 +17,7 @@ import frc.team3256.robot.auto.modes.RightDriveTrenchShootAutoMode;
 import frc.team3256.robot.auto.modes.RightDriveTrenchTenBallAutoMode;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.hardware.Limelight;
+import frc.team3256.robot.log.FalconAutoLogger;
 import frc.team3256.robot.log.Logger;
 import frc.team3256.robot.log.LoggerUpdateLooper;
 import frc.team3256.robot.subsystems.*;
@@ -93,6 +94,10 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData(autoChooser);
 
+    Logger.startInitialization();
+    FalconAutoLogger.autoLog("Flywheel","Motor",Flywheel.getInstance().getMotor());
+    Logger.finishInitialization();
+
   }
 
   @Override
@@ -162,6 +167,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
     SmartDashboard.putNumber("ACTUAL VEL NUM", flywheel.getVelocity());
     SmartDashboard.putNumber("ACTUAL VEL SENSOR UNITS", flywheel.getSensorVelocity());
+    Logger.update();
   }
 
   @Override

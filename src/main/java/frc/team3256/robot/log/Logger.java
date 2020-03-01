@@ -116,6 +116,7 @@ public class Logger {
     */
    public static void finishInitialization() {
       logger.finishInitialization();
+      flush();
    }
 
    /**
