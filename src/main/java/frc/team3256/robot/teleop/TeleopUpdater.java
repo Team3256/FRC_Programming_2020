@@ -156,7 +156,7 @@ public class TeleopUpdater {
         if (autoAlignHood) {
             limelight.calculateKinematics();
             limelight.setWantedEndAngle(0*(Math.PI/180));
-            mHood.setPosSetpoint(ShootingKinematics.angleToHoodPos(limelight.getAngleToTarget() - 0*Math.PI/180));
+            mHood.setPosSetpoint(ShootingKinematics.angleToHoodPos(limelight.getAngleToTarget()));
             mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
         }
 
@@ -171,7 +171,7 @@ public class TeleopUpdater {
             //Auto Aligning Hood
             limelight.calculateKinematics();
             limelight.setWantedEndAngle(0*(Math.PI/180));
-            mHood.setPosSetpoint(ShootingKinematics.angleToHoodPos(limelight.getAngleToTarget() - 0*Math.PI/180));
+            mHood.setPosSetpoint(ShootingKinematics.angleToHoodPos(limelight.getAngleToTarget()));
             mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
         }
 

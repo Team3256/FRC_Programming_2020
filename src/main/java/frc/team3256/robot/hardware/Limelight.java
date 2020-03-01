@@ -36,6 +36,9 @@ public class Limelight implements Loop {
     private double angleToTarget = 0;
     private double velToTarget = 0;
 
+    private boolean aimAtInner = false;
+
+
     public void init() {
         //Setting up NetworkTables
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -232,9 +235,10 @@ public class Limelight implements Loop {
     }
 
     public void calculateKinematics() {   // inches
-        timeToTarget = Math.sqrt(2/gravAcceleration*(heightDif - Math.tan(wantedEndAngle) * (getDistanceToInner()+3)));
-        angleToTarget = Math.atan((heightDif + .5 * gravAcceleration * timeToTarget * timeToTarget)/(getDistanceToInner()+3));
-        velToTarget = (getDistanceToInner()+3)/timeToTarget/Math.cos(angleToTarget);
+        double distance = aimAtInner ? getDistanceToInner() : getDistanceToTarget();
+        timeToTarget = Math.sqrt(2/gravAcceleration*(heightDif - Math.tan(wantedEndAngle) * distance));
+        angleToTarget = Math.atan((heightDif + .5 * gravAcceleration * timeToTarget * timeToTarget)/distance);
+        velToTarget = distance/timeToTarget/Math.cos(angleToTarget);
     }
 
     public void setWantedEndAngle(double wantedEndAngle) {  // radians

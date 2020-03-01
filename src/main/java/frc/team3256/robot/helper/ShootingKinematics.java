@@ -9,4 +9,6 @@ public class ShootingKinematics {
     public static double outputVelToFlywheelVel(double outputVel) {
         return 9.839*outputVel + 742.37;
     }
+
+//    public static double limitA
 }
