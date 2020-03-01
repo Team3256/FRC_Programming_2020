@@ -6,9 +6,11 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.team3256.robot;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3256.robot.hardware.AirCompressor;
 import frc.team3256.robot.helper.BallCounter;
 import frc.team3256.robot.helper.ShootingKinematics;
 import frc.team3256.robot.auto.modes.DoNothingAutoMode;
@@ -52,6 +54,8 @@ public class Robot extends TimedRobot {
   private Hood hood = Hood.getInstance();
   private Turret turret = Turret.getInstance();
 
+  private AirCompressor airCompressor = AirCompressor.getInstance();
+
   private AutoModeExecuter autoModeExecuter;
   private boolean maintainAutoExecution = true;
 
@@ -61,6 +65,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    airCompressor.turnOnCompressor();
     teleopUpdater = new TeleopUpdater();
 //    drivetrain = DriveTrain.getInstance();
     intake = Intake.getInstance();
@@ -156,6 +161,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    airCompressor.turnOnCompressor();
     enabledLooper.start();
     flywheelLooper.start();
     limelightLooper.start();
@@ -192,6 +198,7 @@ public class Robot extends TimedRobot {
 
   }
   public void disabledInit(){
+    airCompressor.turnOffCompressor();
     if(WANTS_TO_LOG) {
       loggerLooper.stop();
       Logger.flush();

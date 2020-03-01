@@ -83,9 +83,13 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     }
 
     private FlywheelState handleRun() {
+<<<<<<< HEAD
 //        setFlywheelVelocity(velocitySetpoint);
 //        bangBangFlywheel(velocitySetpoint);
         setFlywheelVelocityPID(toActualSetpoint(velocitySetpoint));
+=======
+        setFlywheelVelocityPID(velocitySetpoint);
+>>>>>>> dd39e465906bbb00092821dc3d63d53dfa2d956e
         return defaultStateTransfer();
     }
 

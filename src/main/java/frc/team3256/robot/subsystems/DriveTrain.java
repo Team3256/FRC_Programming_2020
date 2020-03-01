@@ -5,9 +5,8 @@ import com.revrobotics.*;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.geometry.Twist2d;
 import frc.team3256.warriorlib.subsystem.DriveTrainBase;
-
- import frc.team3256.robot.constants.DriveConstants;
- import frc.team3256.robot.constants.IDConstants;
+import frc.team3256.robot.constants.DriveConstants;
+import frc.team3256.robot.constants.IDConstants;
 import frc.team3256.warriorlib.control.DrivePower;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.loop.Loop;
@@ -174,27 +173,17 @@ public class DriveTrain extends DriveTrainBase implements Loop {
     }
 
     @Override
-    public void outputToDashboard() {
-
-    }
+    public void outputToDashboard() { }
 
     @Override
-    public void zeroSensors() {
-
-    }
+    public void zeroSensors() { }
 
     @Override
-    public void init(double timestamp) {
-
-    }
+    public void init(double timestamp) { }
 
     @Override
-    public void update(double timestamp) {
-
-    }
+    public void update(double timestamp) { }
 
     @Override
-    public void end(double timestamp) {
-
-    }
+    public void end(double timestamp) { }
 }
