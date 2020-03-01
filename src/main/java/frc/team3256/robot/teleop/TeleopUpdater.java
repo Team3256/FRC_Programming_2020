@@ -139,7 +139,7 @@ public class TeleopUpdater {
 
         if (getShoot) {
 //            mFlywheel.setVelocitySetpoint(ShootingKinematics.velToFlywheelVel(limelight.getVelToTarget()));
-            mFlywheel.setVelocitySetpoint(5000);
+            mFlywheel.setVelocitySetpoint(4000);
             mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
         } else {
             mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);

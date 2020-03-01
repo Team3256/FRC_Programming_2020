@@ -39,6 +39,8 @@ import frc.team3256.warriorlib.subsystem.DriveTrainBase;
 public class Robot extends TimedRobot {
   //TODO: add burnFlash() to generateSlave method on warriorlib
 
+  private final boolean WANTS_TO_LOG = false;
+
   TeleopUpdater teleopUpdater;
 //  private DriveTrain drivetrain;
   private Intake intake;
@@ -53,6 +55,7 @@ public class Robot extends TimedRobot {
   private AutoModeExecuter autoModeExecuter;
   private boolean maintainAutoExecution = true;
 
+  Looper loggerLooper;
   private Looper enabledLooper, poseEstimatorLooper, limelightLooper, flywheelLooper;
   SendableChooser<AutoModeBase> autoChooser = new SendableChooser<>();
 
@@ -87,6 +90,7 @@ public class Robot extends TimedRobot {
     limelightLooper.addLoops(limelight);
     limelightLooper.start();
 
+
     autoChooser.setDefaultOption("Do Nothing", new DoNothingAutoMode());
     autoChooser.addOption("Right Shoot Auto", new RightDriveShootAutoMode());
     autoChooser.addOption("Right Trench Shoot Auto", new RightDriveTrenchShootAutoMode());
@@ -94,9 +98,15 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData(autoChooser);
 
-    Logger.startInitialization();
-    FalconAutoLogger.autoLog("Flywheel","Motor",Flywheel.getInstance().getMotor());
-    Logger.finishInitialization();
+    if(WANTS_TO_LOG) {
+
+      loggerLooper  = new Looper(1/15D);
+      Logger.startInitialization();
+      FalconAutoLogger.autoLog("Flywheel", "Motor", Flywheel.getInstance().getMotor());
+      Logger.finishInitialization();
+
+      loggerLooper.addLoops(LoggerUpdateLooper.getInstance());
+    }
 
   }
 
@@ -153,6 +163,7 @@ public class Robot extends TimedRobot {
 //    drivetrain.resetEncoders();
 //    drivetrain.setBrakeMode();
     poseEstimator.reset();
+    if(WANTS_TO_LOG) loggerLooper.start();
   }
 
   @Override
@@ -162,12 +173,14 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Ball counter", BallCounter.getInstance().getCount());
     SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
 //    SmartDashboard.putNumber("wanted vel", ShootingKinematics.velToFlywheelVel(limelight.getVelToTarget()));
-    SmartDashboard.putNumber("wanted vel", 5000);
+    SmartDashboard.putNumber("wanted vel", 4000);
     SmartDashboard.putNumber("TAU", limelight.getTx());
     SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
     SmartDashboard.putNumber("ACTUAL VEL NUM", flywheel.getVelocity());
     SmartDashboard.putNumber("ACTUAL VEL SENSOR UNITS", flywheel.getSensorVelocity());
-    Logger.update();
+    if(WANTS_TO_LOG){
+      Logger.update();
+    }
   }
 
   @Override
@@ -179,7 +192,10 @@ public class Robot extends TimedRobot {
 
   }
   public void disabledInit(){
-    Logger.flush();
+    if(WANTS_TO_LOG) {
+      loggerLooper.stop();
+      Logger.flush();
+    }
   }
 
 }
