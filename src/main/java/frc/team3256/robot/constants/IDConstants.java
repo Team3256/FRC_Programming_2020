@@ -55,4 +55,7 @@ public class IDConstants {
     public static final int feederIRID = 8;
     public static final int flywheelIRID = 7; //TBD
 
+    //Analog Ports:---------------------------------------------------------------------------------------------
+    public static final int pressureSwitchID = 1;
+
 }
