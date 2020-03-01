@@ -38,6 +38,27 @@ public class XboxControllerConfig implements ControlsInterface {
 
 //--------------Manipulator--------------
 
+/* Buttons
+ *
+ * Left Trigger - Exhaust/Unjam
+ * Right Trigger - Intake/ Unjam
+ * Left Bumper - Auto Align Turret & Hood
+ * Right Bumper - Rev Up Flywheel
+ * Left Stick Y-Axis
+ * Right Stick X-Axis
+ * A Button
+ * B Button
+ * X Button
+ * Y Button - Feeder Shoot (Forward)
+ * D-Pad Up
+ * D-Pad Down - Feeder Manual Backward
+ * D-Pad Right
+ * D-Pad Left
+ * Back Button - Intake Raise
+ * Start Button - Intake Drop
+ *
+ */
+
 
 
     //Manipulator: BOTH Left and Right Trigger
@@ -60,6 +81,7 @@ public class XboxControllerConfig implements ControlsInterface {
     @Override
     public boolean getFeederBackward() { return manipulator.getPOV() == 180; }
 
+    //TODO: Delete this and replace with getAutoAlign
     //Manipulator: Left Bumper
     @Override
     public boolean autoAlignHood() { return manipulator.getRawButton(5); }
@@ -73,6 +95,7 @@ public class XboxControllerConfig implements ControlsInterface {
     @Override
     public boolean manualHoodDown() { return manipulator.getRawAxis(1) > .5; } //***NEED TO CONFIRM DIRECTION***
 
+    //TODO: Delete this and replace with getAutoAlign
     //Manipulator: Right Bumper
     @Override
     public boolean autoAlignTurret() { return manipulator.getRawButton(6); }
@@ -85,6 +108,7 @@ public class XboxControllerConfig implements ControlsInterface {
     @Override
     public boolean manualTurretRight() { return manipulator.getRawAxis(4) > 0.5; } //***NEED TO CONFIRM DIRECTION***
 
+    //TODO: Delete this and replace with getRevUp & getFeederShoot
     //Manipulator: Y Button
     @Override
     public boolean getShoot() { return manipulator.getRawButton(4); }
@@ -93,10 +117,9 @@ public class XboxControllerConfig implements ControlsInterface {
     @Override
     public boolean getSpin() { return manipulator.getRawButton(1); }
 
+    //Manipulator: Start Button
     @Override
-    public boolean getIntakeToggle() {
-        return manipulator.getRawButton(2);
-    }
+    public boolean toggleIntake() { return manipulator.getRawButton(8); }
 
 //--------------For Final Implementation After Testing & Tuning--------------
 

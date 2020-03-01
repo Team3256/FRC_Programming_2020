@@ -13,6 +13,7 @@ public class Intake extends SubsystemBase {
     private CANSparkMax mIntake;
     private WPI_TalonSRX mCenterMech;
     private DoubleSolenoid mRaiseMech;
+    private boolean wantsToToggle;
 
     WantedState mPrevWantedState;
     boolean mStateChanged;
@@ -33,8 +34,7 @@ public class Intake extends SubsystemBase {
         WANTS_TO_INTAKE,
         WANTS_TO_EXHAUST,
         WANTS_TO_AUTO_BACKWARDS_INTAKE,
-        WANTS_TO_RAISE,
-        WANTS_TO_DROP,
+        WANTS_TO_TOGGLE_INTAKE,
         WANTS_TO_STOP
     }
 
@@ -164,10 +164,14 @@ public class Intake extends SubsystemBase {
                 return IntakeState.INTAKING_AUTO_BACKWARDS;
             case WANTS_TO_EXHAUST:
                 return IntakeState.EXHAUSTING;
-            case WANTS_TO_RAISE:
-                return IntakeState.RAISING;
-            case WANTS_TO_DROP:
-                return IntakeState.DROPPING;
+            case WANTS_TO_TOGGLE_INTAKE:
+                wantsToToggle = true;
+                if(mCurrentState == IntakeState.RAISING) {
+                    return IntakeState.DROPPING;
+                }
+                else if (mCurrentState == IntakeState.DROPPING) {
+                    return IntakeState.RAISING;
+                }
             case WANTS_TO_STOP:
             default:
                 return IntakeState.STOP;

@@ -1,21 +1,17 @@
 package frc.team3256.robot.subsystems;
 
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.controller.PIDController;
-import frc.team3256.robot.constants.HoodConstants;
 import frc.team3256.robot.constants.TurretConstants;
 import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
-import frc.team3256.warriorlib.hardware.TalonSRXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
 
 import static frc.team3256.robot.constants.IDConstants.turretID;
 
 public class Turret extends SubsystemBase {
-//    private WPI_TalonSRX mTurret;
     private CANSparkMax mTurret;
 
     WantedState mPrevWantedState;
@@ -60,10 +56,6 @@ public class Turret extends SubsystemBase {
         SparkMAXUtil.setBrakeMode(mTurret);
         mTurret.setInverted(false);
         atSetpoint = false;
-//        mTurret = TalonSRXUtil.generateGenericTalon(turretID);
-//        TalonSRXUtil.configMagEncoder(mTurret);
-//        TalonSRXUtil.setBrakeMode(mTurret);
-//        mTurret.setInverted(false);
     }
 
     public void setWantedState(WantedState wantedState) { this.mWantedState = wantedState; }
@@ -171,8 +163,7 @@ public class Turret extends SubsystemBase {
     public void outputToDashboard() { }
 
     @Override
-    public void zeroSensors() {
-    }
+    public void zeroSensors() { }
 
     @Override
     public void init(double timestamp) { }
@@ -188,13 +179,4 @@ public class Turret extends SubsystemBase {
     public double getVelocity() {
         return mTurret.getEncoder().getVelocity();
     }
-
-//    public double getPosition() {
-//        return mTurret.getSelectedSensorPosition();
-//    }
-//
-//    public double getVelocity() {
-//        return mTurret.getSelectedSensorVelocity();
-//    }
-
 }

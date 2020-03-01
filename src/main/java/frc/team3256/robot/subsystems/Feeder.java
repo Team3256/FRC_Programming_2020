@@ -13,7 +13,7 @@ import static frc.team3256.robot.constants.IDConstants.turretBarID;
 public class Feeder extends SubsystemBase {
 
     private CANSparkMax mFeeder;
-    private WPI_TalonSRX mOmni;
+    private WPI_TalonSRX mBar;
 
     private enum FeederControlState {
         RUN_FORWARD,
@@ -46,8 +46,8 @@ public class Feeder extends SubsystemBase {
         mFeeder.setInverted(true);
         SparkMAXUtil.setBrakeMode(mFeeder);
 //        mFeeder.burnFlash();
-        mOmni = TalonSRXUtil.generateGenericTalon(turretBarID);
-        mOmni.setInverted(false);
+        mBar = TalonSRXUtil.generateGenericTalon(turretBarID);
+        mBar.setInverted(false);
     }
 
     public void setWantedState(Feeder.WantedState wantedState) { this.mWantedState = wantedState; }
@@ -88,31 +88,31 @@ public class Feeder extends SubsystemBase {
 
     private FeederControlState handleRunForward() {
         mFeeder.set(0.3);
-        mOmni.set(-0.5);
+        mBar.set(-0.5);
         return defaultStateTransfer();
     }
 
     private FeederControlState handleRunBackward() {
         mFeeder.set(-0.2);
-        mOmni.set(-0.5);
+        mBar.set(-0.5);
         return defaultStateTransfer();
     }
 
     private FeederControlState handleIndex() {
         mFeeder.set(0.3);
-        mOmni.set(0.5);
+        mBar.set(0.5);
         return defaultStateTransfer();
     }
 
     private FeederControlState handleShoot() {
         mFeeder.set(0.5);
-        mOmni.set(-0.5);
+        mBar.set(-0.5);
         return defaultStateTransfer();
     }
 
     private FeederControlState handleIdle() {
         mFeeder.stopMotor();
-        mOmni.stopMotor();
+        mBar.stopMotor();
         return defaultStateTransfer();
     }
 
