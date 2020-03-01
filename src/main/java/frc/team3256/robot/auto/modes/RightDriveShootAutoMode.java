@@ -4,7 +4,9 @@ import frc.team3256.robot.auto.actions.GoalAlignRevAction;
 import frc.team3256.robot.auto.actions.ShootAction;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.constants.DriveConstants;
+import frc.team3256.robot.helper.BallCounter;
 import frc.team3256.robot.subsystems.DriveTrain;
+import frc.team3256.robot.subsystems.Flywheel;
 import frc.team3256.warriorlib.auto.AutoModeBase;
 import frc.team3256.warriorlib.auto.AutoModeEndedException;
 import frc.team3256.warriorlib.auto.action.ParallelAction;
@@ -21,12 +23,15 @@ public class RightDriveShootAutoMode extends AutoModeBase {
         PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
         purePursuitTracker.setRobotTrack(DriveConstants.kRobotTrackWidth);
         purePursuitTracker.setPaths(Paths.getRightShootAutoPath(),  DriveConstants.lookaheadDistance);
+        BallCounter.getInstance().setCount(3);
+        Flywheel.getInstance().setReadyToShoot(false);
 
         runAction(new WaitAction(0.5));
         runAction(new ResetPursuitAction());
         DriveTrain.getInstance().setHighGear(true);
-        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new GoalAlignRevAction(2))));
+        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new ShootAction())));
         runAction(new WaitAction(0.5));
-        runAction(new ParallelAction(Arrays.asList(new GoalAlignRevAction(3), new ShootAction(3))));
+        Flywheel.getInstance().setReadyToShoot(true);
+        runAction(new ShootAction());
     }
 }

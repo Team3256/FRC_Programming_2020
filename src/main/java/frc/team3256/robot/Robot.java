@@ -73,7 +73,6 @@ public class Robot extends TimedRobot {
 
     enabledLooper = new Looper(1 / 200D);
     enabledLooper.addLoops(intake, turret, hood, feeder);
-    enabledLooper.start();
 
     flywheelLooper = new Looper(1/500D);
     flywheelLooper.addLoops(flywheel);
@@ -81,11 +80,9 @@ public class Robot extends TimedRobot {
     poseEstimatorLooper = new Looper(1 / 50D);
     poseEstimator = PoseEstimator.getInstance();
     poseEstimatorLooper.addLoops(poseEstimator);
-    poseEstimatorLooper.start();
 
     limelightLooper = new Looper(1 / 100D);
     limelightLooper.addLoops(limelight);
-    limelightLooper.start();
 
     autoChooser.setDefaultOption("Do Nothing", new DoNothingAutoMode());
     autoChooser.addOption("Right Shoot Auto", new RightDriveShootAutoMode());
@@ -110,6 +107,9 @@ public class Robot extends TimedRobot {
     purePursuitTracker.reset();
 
     enabledLooper.start();
+    flywheelLooper.start();
+    poseEstimatorLooper.start();
+    limelightLooper.start();
 
     if (SmartDashboard.getBoolean("autoEnabled", true)) {
       maintainAutoExecution = true;

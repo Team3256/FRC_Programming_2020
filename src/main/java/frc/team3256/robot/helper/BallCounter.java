@@ -13,7 +13,7 @@ public class BallCounter implements Loop {
     private boolean feederPrevBlocked = false;
     private boolean flywheelBlocked = false;
     private boolean flywheelPrevBlocked = false;
-    private boolean shouldFeed = false;
+    private boolean shouldIndex = false;
 
     public static BallCounter getInstance() {return instance == null ? instance = new BallCounter() : instance; }
 
@@ -25,11 +25,11 @@ public class BallCounter implements Loop {
     public void update(double timestamp) {
         feederBlocked = !irSensors.isFeederIRIntact();
         flywheelBlocked = !irSensors.isFlywheelIRIntact();
-        shouldFeed = false;
+        shouldIndex = false;
 
         if (feederBlocked) {
             if (!feederPrevBlocked && Intake.getInstance().getWantedState() == Intake.WantedState.WANTS_TO_INTAKE ) count++;
-            if (!isFull()) shouldFeed = true;
+            if (!isFull()) shouldIndex = true;
         }
 
         if (flywheelBlocked) {
@@ -45,7 +45,7 @@ public class BallCounter implements Loop {
     }
 
     public boolean shouldFeed() {
-        return shouldFeed;
+        return shouldIndex;
     }
 
     public void setCount(double count) {

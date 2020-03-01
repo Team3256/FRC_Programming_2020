@@ -36,6 +36,7 @@ public class TeleopUpdater {
         mTurret.update(0);
         mHood.update(0);
         limelight.update(0);
+        ballCounter.update(0);
 
         double throttle = controls.getThrottle();
         double turn = controls.getTurn();
@@ -101,10 +102,10 @@ public class TeleopUpdater {
         //UNCOMMENT BELOW FOR FEEDER AUTO-INDEXING
         if(!overrideFeeder) {
             if (ballCounter.shouldFeed()) {
-                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
-            } else {
                 mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
                 mIntake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
+            } else {
+                mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
             }
         }
 
