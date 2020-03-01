@@ -45,7 +45,8 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
 
     private Flywheel() {
         mLeftFlywheel = TalonFXUtil.generateGenericTalon(leftFlywheelID); //TBD
-        mRightFlywheel = TalonFXUtil.generateSlaveTalon(rightFlywheelID, leftFlywheelID);
+        mRightFlywheel = TalonFXUtil.generateGenericTalon(rightFlywheelID);
+        flywheelPIDController = new PIDController(0.0006*0.5,0.00000065,0.000073); //0.000063
         TalonFXUtil.setPIDGains(mLeftFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
         TalonFXUtil.setPIDGains(mRightFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
         TalonFXUtil.setCoastMode(mLeftFlywheel, mRightFlywheel);
@@ -57,11 +58,6 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
 
     @Override
     public void update(double timestamp) {
-//        TalonFXUtil.setPIDGains(mLeftFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
-//        TalonFXUtil.setPIDGains(mRightFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
-//        flywheelPIDController = new PIDController(0.00072,1.2*0.0012/0.305*0.8,(0.0012*3.0*0.305/40 * 0.2));
-        //Kc = 0.0012
-
         if (mPrevWantedState != mWantedState) {
             mWantedStateChanged = true;
             mPrevWantedState = mWantedState;
@@ -87,8 +83,9 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     }
 
     private FlywheelState handleRun() {
-        setFlywheelVelocity(velocitySetpoint);
+//        setFlywheelVelocity(velocitySetpoint);
 //        bangBangFlywheel(velocitySetpoint);
+        setFlywheelVelocityPID(velocitySetpoint);
         return defaultStateTransfer();
     }
 
@@ -129,11 +126,20 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     }
 
     private void setFlywheelVelocity(double speed) { //Run flywheel at set velocity in RPM
-        mLeftFlywheel.set(ControlMode.Velocity, rpmToSensorUnits(speed));
+//        mLeftFlywheel.set(ControlMode.Velocity, rpmToSensorUnits(speed));
 //        mRightFlywheel.set(ControlMode.Velocity, rpmToSensorUnits(speed));
-        mRightFlywheel.set(ControlMode.Follower, rpmToSensorUnits(speed));
-//        mLeftFlywheel.set(1.0);
-//        mRightFlywheel.set(1.0);
+        mLeftFlywheel.set(0.5);
+        mRightFlywheel.set(0.5);
+    }
+
+    private void setFlywheelVelocityPID(double speed) {
+        double output = flywheelPIDController.calculate(getVelocity(), speed) + calculateFeedForward(speed);
+        mLeftFlywheel.set(ControlMode.PercentOutput, output);
+        mRightFlywheel.set(ControlMode.PercentOutput, output);
+    }
+
+    private double calculateFeedForward(double flywheelRPM) {
+        return flywheelRPM/6521.5;
     }
 
     private double rpmToSensorUnits(double rpm) {
@@ -162,6 +168,11 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     public double getVelocity() {
         return sensorUnitsToRPM(mLeftFlywheel.getSelectedSensorVelocity());
     }
+
+    public double getSensorVelocity() {
+        return mLeftFlywheel.getSelectedSensorVelocity();
+    }
+
     public TalonFX getMotor(){
         return mLeftFlywheel;
     }

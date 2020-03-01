@@ -37,7 +37,7 @@ public class GoalAlignRevAction implements Action {
         limelight.setWantedEndAngle(0*(Math.PI/180));
         mHood.setPosSetpoint(ShootingKinematics.angleToHoodPos(limelight.getAngleToTarget()));
         mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
-        mFlywheel.setVelocitySetpoint(ShootingKinematics.velToFlywheelVel(limelight.getVelToTarget()));
+        mFlywheel.setVelocitySetpoint(ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
         mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
 
         elapsedTime = Timer.getFPGATimestamp() - startTime;

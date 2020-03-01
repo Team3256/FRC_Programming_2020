@@ -6,7 +6,7 @@ public class ShootingKinematics {
         return 0.3342*(angle*180/Math.PI) - 18.302;
     }
 
-    public static double velToFlywheelVel(double outputVel) {
+    public static double outputVelToFlywheelVel(double outputVel) {
         return 9.839*outputVel + 742.37;
     }
 }

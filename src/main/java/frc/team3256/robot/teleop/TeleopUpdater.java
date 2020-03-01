@@ -115,9 +115,9 @@ public class TeleopUpdater {
             mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
         }
 
-//        else {
-//            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
-//        }
+        else {
+            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
+        }
 
         //Turret Subsystem
         if(manualTurretLeft) {
@@ -138,7 +138,8 @@ public class TeleopUpdater {
         }
 
         if (getShoot) {
-            mFlywheel.setVelocitySetpoint(ShootingKinematics.velToFlywheelVel(limelight.getVelToTarget()));
+//            mFlywheel.setVelocitySetpoint(ShootingKinematics.velToFlywheelVel(limelight.getVelToTarget()));
+            mFlywheel.setVelocitySetpoint(5000);
             mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
         } else {
             mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);

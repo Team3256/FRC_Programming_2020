@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
   //TODO: add burnFlash() to generateSlave method on warriorlib
 
   TeleopUpdater teleopUpdater;
-  private DriveTrain drivetrain;
+//  private DriveTrain drivetrain;
   private Intake intake;
   private PoseEstimator poseEstimator;
   private PurePursuitTracker purePursuitTracker;
@@ -50,27 +50,30 @@ public class Robot extends TimedRobot {
   private AutoModeExecuter autoModeExecuter;
   private boolean maintainAutoExecution = true;
 
-  private Looper enabledLooper, poseEstimatorLooper, limelightLooper;
+  private Looper enabledLooper, poseEstimatorLooper, limelightLooper, flywheelLooper;
   SendableChooser<AutoModeBase> autoChooser = new SendableChooser<>();
 
   @Override
   public void robotInit() {
     teleopUpdater = new TeleopUpdater();
-    drivetrain = DriveTrain.getInstance();
+//    drivetrain = DriveTrain.getInstance();
     intake = Intake.getInstance();
-    DriveTrainBase.setDriveTrain(drivetrain);
+//    DriveTrainBase.setDriveTrain(drivetrain);
     purePursuitTracker = PurePursuitTracker.getInstance();
     limelight.init();
 
     Paths.initialize();
 
     // Reset sensors
-    drivetrain.resetEncoders();
-    drivetrain.resetGyro();
+//    drivetrain.resetEncoders();
+//    drivetrain.resetGyro();
 
     enabledLooper = new Looper(1 / 200D);
-    enabledLooper.addLoops(drivetrain, flywheel, intake, turret, hood, feeder);
+    enabledLooper.addLoops(intake, turret, hood, feeder);
     enabledLooper.start();
+
+    flywheelLooper = new Looper(1/500D);
+    flywheelLooper.addLoops(flywheel);
 
     poseEstimatorLooper = new Looper(1 / 50D);
     poseEstimator = PoseEstimator.getInstance();
@@ -92,9 +95,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    drivetrain.resetEncoders();
-    drivetrain.resetGyro();
-    drivetrain.setBrakeMode();
+//    drivetrain.resetEncoders();
+//    drivetrain.resetGyro();
+//    drivetrain.setBrakeMode();
 
     poseEstimator.reset();
     purePursuitTracker.reset();
@@ -117,7 +120,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
     SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
-    SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
+//    SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
     intake.update(0);
     feeder.update(0);
     turret.update(0);
@@ -129,18 +132,19 @@ public class Robot extends TimedRobot {
 
     else if (autoModeExecuter.isFinished()) {
       maintainAutoExecution = false;
-      drivetrain.runZeroPower();
-      drivetrain.setCoastMode();
+//      drivetrain.runZeroPower();
+//      drivetrain.setCoastMode();
     }
   }
 
   @Override
   public void teleopInit() {
     enabledLooper.start();
+    flywheelLooper.start();
     limelightLooper.start();
-    drivetrain.resetGyro();
-    drivetrain.resetEncoders();
-    drivetrain.setBrakeMode();
+//    drivetrain.resetGyro();
+//    drivetrain.resetEncoders();
+//    drivetrain.setBrakeMode();
     poseEstimator.reset();
   }
 
@@ -150,10 +154,12 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("distance to inner", limelight.getDistanceToInner());
     SmartDashboard.putNumber("Ball counter", BallCounter.getInstance().getCount());
     SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
-    SmartDashboard.putNumber("wanted vel", ShootingKinematics.velToFlywheelVel(limelight.getVelToTarget()));
+//    SmartDashboard.putNumber("wanted vel", ShootingKinematics.velToFlywheelVel(limelight.getVelToTarget()));
+    SmartDashboard.putNumber("wanted vel", 5000);
     SmartDashboard.putNumber("TAU", limelight.getTx());
     SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
     SmartDashboard.putNumber("ACTUAL VEL NUM", flywheel.getVelocity());
+    SmartDashboard.putNumber("ACTUAL VEL SENSOR UNITS", flywheel.getSensorVelocity());
   }
 
   @Override
