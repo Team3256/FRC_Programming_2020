@@ -24,6 +24,8 @@ public class TeleopUpdater {
     private boolean overrideFeeder = false;
     private boolean feeding = false;
 
+    private boolean prevIntakeToggle = false;
+
 
     private static TeleopUpdater instance;
     public static TeleopUpdater getInstance() { return instance == null ? instance = new TeleopUpdater() : instance; }
@@ -37,22 +39,26 @@ public class TeleopUpdater {
         mHood.update(0);
         limelight.update(0);
 
+        //Drivetrain
         double throttle = controls.getThrottle();
         double turn = controls.getTurn();
         boolean quickTurn = controls.getQuickTurn();
         boolean shiftDown = controls.getLowGear();
 
+        //Intake
         boolean unjam = controls.getUnjam();
         boolean intake = controls.getIntake();
         boolean exhaust = controls.getExhaust();
-        boolean intakeToggle = controls.getIntakeToggle();
 
+        //Feeder
         boolean feederForward = controls.getFeederForward();
         boolean feederBackward = controls.getFeederBackward();
 
+        //Turret
         boolean manualTurretLeft = controls.manualTurretLeft();
         boolean manualTurretRight = controls.manualTurretRight();
 
+        //Hood
         boolean manualHoodUp = controls.manualHoodUp();
         boolean manualHoodDown = controls.manualHoodDown();
 
@@ -61,10 +67,11 @@ public class TeleopUpdater {
 
         boolean getShoot = controls.getShoot();
 
-
+        //TODO: Implement these for final
         boolean getAutoAlign = controls.getAutoAlign();
         boolean getRevUp = controls.getRevUp();
         boolean getFeederShoot = controls.getFeederShoot();
+        boolean intakeToggle = controls.toggleIntake();
 
         if (SmartDashboard.getNumber("Ball Count Reset", 0) == 1){
            ballCounter.setCount(0);
@@ -75,26 +82,21 @@ public class TeleopUpdater {
         mDrivetrain.setPowerOpenLoop(drivePower.getLeft(), drivePower.getRight());
         mDrivetrain.setHighGear(drivePower.getHighGear());
 
-//        Intake - Feeder - Flywheel Subsystem
+        //Intake Subsystem | Some Feeder interactions
         if(unjam) {
             mIntake.setWantedState(Intake.WantedState.WANTS_TO_UNJAM);
-            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_FORWARD);
-            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
         }
         else if(intake) {
             mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
-            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
         }
         else if(exhaust) {
             overrideFeeder = true;
             mIntake.setWantedState(Intake.WantedState.WANTS_TO_EXHAUST);
             mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
-            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
         }
         else {
-            mIntake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
             overrideFeeder = false;
-//            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
+            mIntake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
         }
 
 //        Feeder Indexing Logic
@@ -115,7 +117,6 @@ public class TeleopUpdater {
         else if(feederBackward) {
             mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
         }
-
         else {
             mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
         }
@@ -160,28 +161,33 @@ public class TeleopUpdater {
         }
 
 
-        //TO BE IMPLEMENTED FOR FINAL
-//        if(getAutoAlign) {
-//            //Auto Aligning Turret
-//            double angle = limelight.calculateTau();
-//            mTurret.setTurretAutoAlignAngle(angle);
-//            mTurret.setWantedState(Turret.WantedState.WANTS_TO_AUTO_ALIGN);
-//
-//            //Auto Aligning Hood
-//            limelight.calculateKinematics();
-//            limelight.setWantedEndAngle(0*(Math.PI/180));
-//            mHood.setPosSetpoint(ShootingKinematics.angleToHoodPos(limelight.getAngleToTarget() - 0*Math.PI/180));
-//            mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
-//        }
-//
-//        if(getRevUp) {
-//            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
-//        }
-//
-//        if(getFeederShoot) {
-//            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_FORWARD);
-//            mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
-//        }
+        //TODO: TO BE IMPLEMENTED FOR FINAL
+        if(getAutoAlign) {
+            //Auto Aligning Turret
+            double angle = limelight.calculateTau();
+            mTurret.setTurretAutoAlignAngle(angle);
+            mTurret.setWantedState(Turret.WantedState.WANTS_TO_AUTO_ALIGN);
+
+            //Auto Aligning Hood
+            limelight.calculateKinematics();
+            limelight.setWantedEndAngle(0*(Math.PI/180));
+            mHood.setPosSetpoint(ShootingKinematics.angleToHoodPos(limelight.getAngleToTarget() - 0*Math.PI/180));
+            mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
+        }
+
+        if(getRevUp) {
+            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
+        }
+
+        if(getFeederShoot) {
+            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_FORWARD);
+            mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
+        }
+
+        if(intakeToggle && !prevIntakeToggle) {
+            mIntake.setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
+        }
+        prevIntakeToggle = intakeToggle;
     }
 
 }
