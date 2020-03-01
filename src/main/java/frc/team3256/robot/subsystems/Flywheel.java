@@ -46,9 +46,7 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     private Flywheel() {
         mLeftFlywheel = TalonFXUtil.generateGenericTalon(leftFlywheelID); //TBD
         mRightFlywheel = TalonFXUtil.generateGenericTalon(rightFlywheelID);
-        flywheelPIDController = new PIDController(0.0006*0.5,0.00000065,0.000073); //0.000063
-        TalonFXUtil.setPIDGains(mLeftFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
-        TalonFXUtil.setPIDGains(mRightFlywheel, 0, FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI, FlywheelConstants.kFlywheelD, FlywheelConstants.kFlywheelF);
+        flywheelPIDController = new PIDController(0.0006,0.00000065,0.000073); //0.000063
         TalonFXUtil.setCoastMode(mLeftFlywheel, mRightFlywheel);
         mLeftFlywheel.setInverted(true);
         mRightFlywheel.setInverted(false);
@@ -60,6 +58,8 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     public void update(double timestamp) {
         if (mPrevWantedState != mWantedState) {
             mWantedStateChanged = true;
+            if(mCurrentState == FlywheelState.RUN)
+                flywheelPIDController.reset();
             mPrevWantedState = mWantedState;
         } else mWantedStateChanged = false;
         FlywheelState newState;
@@ -85,8 +85,12 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
     private FlywheelState handleRun() {
 //        setFlywheelVelocity(velocitySetpoint);
 //        bangBangFlywheel(velocitySetpoint);
-        setFlywheelVelocityPID(velocitySetpoint);
+        setFlywheelVelocityPID(toActualSetpoint(velocitySetpoint));
         return defaultStateTransfer();
+    }
+
+    private double toActualSetpoint(double velocity) {
+        return velocity * 1.02 - 90;
     }
 
     private FlywheelState handleIdle() { //Stops all flywheel motors
@@ -123,13 +127,6 @@ public class Flywheel extends SubsystemBase { //A test for the flywheel state ma
         output = Util.clip(output, -1, 1);
         mLeftFlywheel.set(output);
         mRightFlywheel.set(output);
-    }
-
-    private void setFlywheelVelocity(double speed) { //Run flywheel at set velocity in RPM
-//        mLeftFlywheel.set(ControlMode.Velocity, rpmToSensorUnits(speed));
-//        mRightFlywheel.set(ControlMode.Velocity, rpmToSensorUnits(speed));
-        mLeftFlywheel.set(0.5);
-        mRightFlywheel.set(0.5);
     }
 
     private void setFlywheelVelocityPID(double speed) {

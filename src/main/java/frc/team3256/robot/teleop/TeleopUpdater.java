@@ -61,6 +61,7 @@ public class TeleopUpdater {
 
         boolean getShoot = controls.getShoot();
 
+
         boolean getAutoAlign = controls.getAutoAlign();
         boolean getRevUp = controls.getRevUp();
         boolean getFeederShoot = controls.getFeederShoot();
@@ -139,7 +140,7 @@ public class TeleopUpdater {
 
         if (getShoot) {
 //            mFlywheel.setVelocitySetpoint(ShootingKinematics.velToFlywheelVel(limelight.getVelToTarget()));
-            mFlywheel.setVelocitySetpoint(4000);
+            mFlywheel.setVelocitySetpoint(5863);
             mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
         } else {
             mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
