@@ -95,7 +95,7 @@ public class Logger {
          System.out.println(e.toString());
       }
 
-      logger = BadLog.init(String.format(logsDirectory + "/%s.badbag",timestamp));
+      logger = BadLog.init(String.format(logsDirectory + "/%s.badbag",timestamp),false,false);
 
       BadLog.createTopicSubscriber("Event Log", BadLog.UNITLESS, DataInferMode.DEFAULT, "log");
       BadLog.createTopicSubscriber("Error Log", BadLog.UNITLESS, DataInferMode.DEFAULT, "log");
@@ -145,6 +145,10 @@ public class Logger {
     */
    public static void createTopic(String subsystemName, String unit, String name, Supplier<Double> supplier){
       BadLog.createTopic(name,unit,supplier,"hide",String.format("join:/%s/%s",subsystemName,name));
+   }
+
+   public static void flush(){
+      logger.flush();
    }
 
    //endregion

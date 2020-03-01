@@ -17,6 +17,8 @@ import frc.team3256.robot.auto.modes.RightDriveTrenchShootAutoMode;
 import frc.team3256.robot.auto.modes.RightDriveTrenchTenBallAutoMode;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.hardware.Limelight;
+import frc.team3256.robot.log.Logger;
+import frc.team3256.robot.log.LoggerUpdateLooper;
 import frc.team3256.robot.subsystems.*;
 import frc.team3256.robot.teleop.TeleopUpdater;
 import frc.team3256.warriorlib.auto.AutoModeBase;
@@ -168,6 +170,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
+
+  }
+  public void disabledInit(){
+    Logger.flush();
   }
 
 }
