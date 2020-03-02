@@ -6,11 +6,13 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.team3256.robot;
-import edu.wpi.first.wpilibj.Compressor;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.hardware.AirCompressor;
+import frc.team3256.robot.hardware.IRSensors;
 import frc.team3256.robot.helper.BallCounter;
 import frc.team3256.robot.helper.ShootingKinematics;
 import frc.team3256.robot.auto.modes.DoNothingAutoMode;
@@ -28,6 +30,7 @@ import frc.team3256.warriorlib.auto.AutoModeBase;
 import frc.team3256.warriorlib.auto.AutoModeExecuter;
 import frc.team3256.warriorlib.auto.purepursuit.PoseEstimator;
 import frc.team3256.warriorlib.auto.purepursuit.PurePursuitTracker;
+import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.loop.Looper;
 import frc.team3256.warriorlib.subsystem.DriveTrainBase;
 
@@ -63,6 +66,8 @@ public class Robot extends TimedRobot {
   private Looper enabledLooper, poseEstimatorLooper, limelightLooper, flywheelLooper;
   SendableChooser<AutoModeBase> autoChooser = new SendableChooser<>();
 
+  CANSparkMax spark;
+
   @Override
   public void robotInit() {
     airCompressor.turnOnCompressor();
@@ -80,7 +85,7 @@ public class Robot extends TimedRobot {
     drivetrain.resetGyro();
 
     enabledLooper = new Looper(1 / 200D);
-    enabledLooper.addLoops(intake, turret, hood, feeder);
+    enabledLooper.addLoops(intake, hood, feeder);
 
     flywheelLooper = new Looper(1/500D);
     flywheelLooper.addLoops(flywheel);
@@ -110,6 +115,9 @@ public class Robot extends TimedRobot {
       loggerLooper.addLoops(LoggerUpdateLooper.getInstance());
     }
 
+//    spark = SparkMAXUtil.generateGenericSparkMAX(10, CANSparkMaxLowLevel.MotorType.kBrushless);
+//    SparkMAXUtil.setCoastMode(spark);
+//    spark.setInverted(false);
   }
 
   @Override
@@ -118,8 +126,11 @@ public class Robot extends TimedRobot {
     drivetrain.resetGyro();
     drivetrain.setBrakeMode();
 
+    limelight.turnOn();
+
     poseEstimator.reset();
     purePursuitTracker.reset();
+//    turret.reset();
 
     enabledLooper.start();
     flywheelLooper.start();
@@ -147,6 +158,7 @@ public class Robot extends TimedRobot {
     feeder.update(0);
     turret.update(0);
     hood.update(0);
+    flywheel.update(0);
 
     if (!maintainAutoExecution) {
       teleopUpdater.update();
@@ -161,6 +173,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    limelight.turnOn();
     airCompressor.turnOnCompressor();
     enabledLooper.start();
     flywheelLooper.start();
@@ -169,19 +182,23 @@ public class Robot extends TimedRobot {
     drivetrain.resetEncoders();
     drivetrain.setBrakeMode();
     poseEstimator.reset();
+//    turret.reset();
+    BallCounter.getInstance().setCount(0);
     if(WANTS_TO_LOG) loggerLooper.start();
   }
 
   @Override
   public void teleopPeriodic() {
     teleopUpdater.update();
-    SmartDashboard.putNumber("distance to inner", limelight.getDistanceToInner());
+    SmartDashboard.putNumber("distance to outer", limelight.getDistanceToTarget());
     SmartDashboard.putNumber("Ball counter", BallCounter.getInstance().getCount());
     SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
     SmartDashboard.putNumber("wanted vel", ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
     SmartDashboard.putNumber("TAU", limelight.calculateTau());
     SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
-    SmartDashboard.putNumber("ACTUAL VEL NUM", flywheel.getVelocity());
+    SmartDashboard.putBoolean("Hood Zeroed", Hood.getInstance().isZeroed());
+    SmartDashboard.putNumber("wantedEnd", limelight.optimalEndAngle());
+//    turret.outputToDashboard();
     if(WANTS_TO_LOG){
       Logger.update();
     }
@@ -189,13 +206,19 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
+
   }
 
   @Override
   public void testPeriodic() {
 
   }
+
+  @Override
   public void disabledInit(){
+    //TODO: Get rid of coast mode for final
+    limelight.turnOff();
+    drivetrain.setCoastMode();
     airCompressor.turnOffCompressor();
     if(WANTS_TO_LOG) {
       loggerLooper.stop();

@@ -15,10 +15,7 @@ public class IRSensors {
 
     public static IRSensors getInstance() {return instance == null ? instance = new IRSensors() : instance;}
 
-    public boolean isFeederIRIntact() {
-        return feederIRSensor.get();
-    }
-    public boolean isFlywheelIRIntact() {
-        return flywheelIRSensor.get();
-    }
+    public boolean isFeederIRIntact() { return feederIRSensor.get(); }
+
+    public boolean isFlywheelIRIntact() { return flywheelIRSensor.get(); }
 }

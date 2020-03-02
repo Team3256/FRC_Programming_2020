@@ -57,6 +57,7 @@ public class Hood extends SubsystemBase {
                 kHoodAdjustF,
                 kHoodAdjustIZone
         );
+        mHood.setSmartCurrentLimit(30);
     }
 
     public void setWantedState(WantedState wantedState) { this.mWantedState = wantedState; }

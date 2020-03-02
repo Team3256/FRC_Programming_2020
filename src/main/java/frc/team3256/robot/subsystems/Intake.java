@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.constants.IDConstants;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.hardware.TalonSRXUtil;
@@ -14,6 +15,7 @@ public class Intake extends SubsystemBase {
     private WPI_TalonSRX mCenterMech;
     private DoubleSolenoid mRaiseMech;
     private boolean wantsToToggle;
+    private boolean intakeRaise;
 
     WantedState mPrevWantedState;
     boolean mStateChanged;
@@ -24,8 +26,7 @@ public class Intake extends SubsystemBase {
         INTAKING,
         INTAKING_AUTO_BACKWARDS,
         EXHAUSTING,
-        RAISING,
-        DROPPING,
+        TOGGLING,
         STOP
     }
 
@@ -53,6 +54,8 @@ public class Intake extends SubsystemBase {
         mIntake = SparkMAXUtil.generateGenericSparkMAX(IDConstants.intakeID, CANSparkMaxLowLevel.MotorType.kBrushless);
         mIntake.burnFlash();
         mCenterMech = TalonSRXUtil.generateGenericTalon(IDConstants.centerMechID);
+        mCenterMech.enableCurrentLimit(true);
+        mCenterMech.configContinuousCurrentLimit(30);
 
         mRaiseMech = new DoubleSolenoid(IDConstants.pcmID,IDConstants.intakeRaiseForwardChannel,IDConstants.intakeRaiseReverseChannel);
 
@@ -88,11 +91,8 @@ public class Intake extends SubsystemBase {
             case INTAKING_AUTO_BACKWARDS:
                 newState = handleAutoBackwardsIntake();
                 break;
-            case RAISING:
-                newState = handleRaising();
-                break;
-            case DROPPING:
-                newState = handleDropping();
+            case TOGGLING:
+                newState = handleToggling();
                 break;
             case STOP:
             default:
@@ -127,6 +127,20 @@ public class Intake extends SubsystemBase {
         return defaultStateTransfer();
     }
 
+    private IntakeState handleToggling() {
+        if (intakeRaise) {
+            setRaise(true);
+            mIntake.set(-0.7);
+        }
+        else
+            setRaise(false);
+        return defaultStateTransfer();
+    }
+
+    public void setIntakeTogglingState(boolean raise) {
+        intakeRaise = raise;
+    }
+
     private IntakeState handleUnJam() {
         mIntake.set(-0.3);
         mCenterMech.set(0.75);
@@ -136,16 +150,6 @@ public class Intake extends SubsystemBase {
     private IntakeState handleStop() {
         mIntake.set(0);
         mCenterMech.set(0);
-        return defaultStateTransfer();
-    }
-
-    private IntakeState handleRaising() {
-        setRaise(true);
-        return defaultStateTransfer();
-    }
-
-    private IntakeState handleDropping() {
-        setRaise(false);
         return defaultStateTransfer();
     }
 
@@ -165,13 +169,7 @@ public class Intake extends SubsystemBase {
             case WANTS_TO_EXHAUST:
                 return IntakeState.EXHAUSTING;
             case WANTS_TO_TOGGLE_INTAKE:
-                wantsToToggle = true;
-                if(mCurrentState == IntakeState.RAISING) {
-                    return IntakeState.DROPPING;
-                }
-                else if (mCurrentState == IntakeState.DROPPING) {
-                    return IntakeState.RAISING;
-                }
+                return IntakeState.TOGGLING;
             case WANTS_TO_STOP:
             default:
                 return IntakeState.STOP;
@@ -183,7 +181,8 @@ public class Intake extends SubsystemBase {
     }
 
     @Override
-    public void outputToDashboard() { }
+    public void outputToDashboard() {
+    }
 
     @Override
     public void zeroSensors() { }

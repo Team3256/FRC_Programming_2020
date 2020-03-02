@@ -1,9 +1,13 @@
 package frc.team3256.robot.subsystems;
 
 
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.ControlType;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.constants.TurretConstants;
 import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
@@ -21,9 +25,11 @@ public class Turret extends SubsystemBase {
     private Limelight limelight = new Limelight();
     private double initialLimelightAngle, headingError;
     private PIDController turretPIDController;
+    private PIDController turretPositionPIDController;
     private boolean firstRun;
     private double autoAlignTolerance = TurretConstants.kAutoAlignTolerance;
     private boolean atSetpoint;
+    private double turrentWantedPosition;
 
     public enum TurretState {
         MANUAL_LEFT,
@@ -49,19 +55,23 @@ public class Turret extends SubsystemBase {
     private Turret() {
         limelight.init();
         initialLimelightAngle = 0;
+        turrentWantedPosition = 0;
         turretPIDController = new PIDController(TurretConstants.turretkP, TurretConstants.turretkI, TurretConstants.turretkD);
+        turretPositionPIDController = new PIDController(TurretConstants.turretPositionkP, TurretConstants.turretPositionkI, TurretConstants.turretPositionkD);
         firstRun = true;
         headingError = 0;
-        mTurret = SparkMAXUtil.generateGenericSparkMAX(turretID, CANSparkMaxLowLevel.MotorType.kBrushless);
-        SparkMAXUtil.setBrakeMode(mTurret);
+        mTurret = SparkMAXUtil.generateGenericSparkMAX(10, CANSparkMaxLowLevel.MotorType.kBrushless);
+        mTurret.setSmartCurrentLimit(30);
         mTurret.setInverted(false);
         atSetpoint = false;
+        SparkMAXUtil.setBrakeMode(mTurret);
     }
 
     public void setWantedState(WantedState wantedState) { this.mWantedState = wantedState; }
 
     @Override
     public void update(double timestamp) {
+
         if (mPrevWantedState != mWantedState) {
             mWantedStateChanged = true;
             mPrevWantedState = mWantedState;
@@ -95,12 +105,16 @@ public class Turret extends SubsystemBase {
     }
 
     private TurretState handleManualLeft() {
-        mTurret.set(0.5);
+//        if(isSafe()) mTurret.set(0.5);
+//        else mTurret.stopMotor();
+        mTurret.set(-0.5);
         return defaultStateTransfer();
     }
 
     private TurretState handleManualRight() {
-        mTurret.set(-0.5);
+//        if(isSafe()) mTurret.set(-0.5);
+//        else mTurret.stopMotor();
+        mTurret.set(0.5);
         return defaultStateTransfer();
     }
 
@@ -133,12 +147,26 @@ public class Turret extends SubsystemBase {
     }
 
     private void setTurretSpeed(double speed) {
-        // if not past soft limits
-        mTurret.set(speed);
+//        if (isSafe()) mTurret.set(speed);
+//        else mTurret.stopMotor();
+        mTurret.set(-speed);
+    }
+
+    public void setAutoTurretSpeed(double speed) {
+        mTurret.set(-speed);
     }
 
     public boolean atAngleSetpoint() {
         return atSetpoint;
+    }
+
+    public void setTurretPosition(double angle) {
+        double position = angleToEncoder(angle);
+//        mTurret.set(turretPositionPIDController.calculate(getPosition(), position));
+    }
+
+    private double angleToEncoder(double angle) {
+        return angle * 1.2984;
     }
 
     public void setTurretAutoAlignAngle(double angle) {
@@ -160,7 +188,9 @@ public class Turret extends SubsystemBase {
     }
 
     @Override
-    public void outputToDashboard() { }
+    public void outputToDashboard() {
+        SmartDashboard.putNumber("turret encoder", getPosition());
+    }
 
     @Override
     public void zeroSensors() { }
@@ -179,4 +209,16 @@ public class Turret extends SubsystemBase {
     public double getVelocity() {
         return mTurret.getEncoder().getVelocity();
     }
+
+    public void reset() {
+        mTurret.getEncoder().setPosition(0);
+        turrentWantedPosition = 0;
+    }
+
+    public boolean isSafe() {
+        if (getPosition() > TurretConstants.maxTurretPosition || getPosition() < TurretConstants.minTurretPosition)
+            return false;
+        return true;
+    }
+
 }

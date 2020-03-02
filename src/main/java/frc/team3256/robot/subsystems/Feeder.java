@@ -45,8 +45,8 @@ public class Feeder extends SubsystemBase {
         mFeeder = SparkMAXUtil.generateGenericSparkMAX(feederID, CANSparkMaxLowLevel.MotorType.kBrushless);
         mFeeder.setInverted(true);
         SparkMAXUtil.setBrakeMode(mFeeder);
-//        mFeeder.burnFlash();
         mBar = TalonSRXUtil.generateGenericTalon(turretBarID);
+        mFeeder.setSmartCurrentLimit(30);
         mBar.setInverted(false);
     }
 
@@ -87,13 +87,13 @@ public class Feeder extends SubsystemBase {
     }
 
     private FeederControlState handleRunForward() {
-        mFeeder.set(0.3);
+        mFeeder.set(0.6);
         mBar.set(-0.5);
         return defaultStateTransfer();
     }
 
     private FeederControlState handleRunBackward() {
-        mFeeder.set(-0.2);
+        mFeeder.set(-0.6);
         mBar.set(-0.5);
         return defaultStateTransfer();
     }

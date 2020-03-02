@@ -36,12 +36,13 @@ public class Limelight implements Loop {
     private double angleToTarget = 0;
     private double velToTarget = 0;
 
-    private boolean aimAtInner = false;
+    private boolean aimAtInner = true;
+    private NetworkTableInstance inst;
 
 
     public void init() {
         //Setting up NetworkTables
-        NetworkTableInstance inst = NetworkTableInstance.getDefault();
+        inst = NetworkTableInstance.getDefault();
         NetworkTable limelight = inst.getTable("limelight");
 
         //Getting values
@@ -51,7 +52,6 @@ public class Limelight implements Loop {
         limeLightTs = limelight.getEntry("ts");
         limeLightTcornx = limelight.getEntry("tcornx");
         limeLightTcorny = limelight.getEntry("tcorny");
-
         //Setting up default stream
         inst.getTable("limelight").getEntry("ledMode").setNumber(0); //Uses LED Mode in current pipeline
         inst.getTable("limelight").getEntry("camMode").setNumber(0); //Uses Vision Processor Mode
@@ -184,8 +184,6 @@ public class Limelight implements Loop {
     @Override
     public void update(double timestamp) {
         double timeDif = timestamp-lastTimestamp;
-//        SmartDashboard.putNumber("timestamp", timeDif);
-//        SmartDashboard.putNumber("TAU", calculateTau());
 
         tx = limeLightTx.getDouble(2.0);
         ty = limeLightTy.getDouble(2.0);
@@ -244,6 +242,24 @@ public class Limelight implements Loop {
     public void setWantedEndAngle(double wantedEndAngle) {  // radians
         this.wantedEndAngle = wantedEndAngle;
     }
+
+    public double optimalEndAngle() {
+        double straightAngle = Math.tan(heightDif / getDistanceToInner());
+        double angle = straightAngle * 180.0 / Math.PI - 10;
+        if(angle > 5) {
+            angle = 5;
+        }
+        else if (angle < 0) {
+            angle = 0;
+        }
+        return 0 * Math.PI/180; //angle * Math.PI / 180.0;
+    }
+
+    public void turnOff() {
+        inst.getTable("limelight").getEntry("ledMode").setNumber(1);
+    }
+
+    public void turnOn() { inst.getTable("limelight").getEntry("ledMode").setNumber(3); }
 
     public double getAngleToTarget() {
         return angleToTarget;

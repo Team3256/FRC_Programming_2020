@@ -2,7 +2,10 @@ package frc.team3256.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Talon;
 import frc.team3256.warriorlib.hardware.TalonFXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
 
@@ -10,7 +13,7 @@ import static frc.team3256.robot.constants.IDConstants.*;
 
 public class Hanger extends SubsystemBase {
     private DoubleSolenoid hangerPancakes;
-    private TalonFX winchMotor;
+    private WPI_TalonFX winchMotor;
 
     WantedState mPrevWantedState;
     boolean mStateChanged;
@@ -19,13 +22,15 @@ public class Hanger extends SubsystemBase {
     public enum HangerState {
         ACTUATE_RELEASE,
         DRIVE_DOWN,
-        ACTUATE_HOLD
+        ACTUATE_HOLD,
+        IDLING
     }
 
     public enum WantedState {
         WANTS_TO_HANGER_ACTUATE_RELEASE,
         WANTS_TO_HANGER_DRIVE_DOWN,
-        WANTS_TO_HANGER_ACTUATE_HOLD
+        WANTS_TO_HANGER_ACTUATE_HOLD,
+        WANTS_TO_IDLE
     }
 
     private HangerState mCurrentState = HangerState.ACTUATE_HOLD;
@@ -33,11 +38,13 @@ public class Hanger extends SubsystemBase {
 
     private static Hanger instance;
 
-    private static Hanger getInstance() { return instance == null ? instance = new Hanger() : instance; }
+    public static Hanger getInstance() { return instance == null ? instance = new Hanger() : instance; }
 
     private Hanger() {
         hangerPancakes = new DoubleSolenoid(hangerPancakesForwardChannel,hangerPancakesReverseChannel);
         winchMotor = TalonFXUtil.generateGenericTalon(winchMotorID);
+        TalonFXUtil.setBrakeMode(winchMotor);
+        winchMotor.setInverted(true);
     }
 
     public void setWantedState(WantedState wantedState) { this.mWantedState = wantedState; }
@@ -55,6 +62,9 @@ public class Hanger extends SubsystemBase {
                 break;
             case DRIVE_DOWN:
                 newState = handleDriveDown();
+                break;
+            case IDLING:
+                newState = handleIdle();
                 break;
             case ACTUATE_HOLD:
             default:
@@ -86,12 +96,19 @@ public class Hanger extends SubsystemBase {
         return defaultStateTransfer();
     }
 
+    private HangerState handleIdle() {
+        winchMotor.stopMotor();
+        return defaultStateTransfer();
+    }
+
     private HangerState defaultStateTransfer() {
         switch (mWantedState) {
             case WANTS_TO_HANGER_ACTUATE_RELEASE:
                 return HangerState.ACTUATE_RELEASE;
             case WANTS_TO_HANGER_DRIVE_DOWN:
                 return HangerState.DRIVE_DOWN;
+            case WANTS_TO_IDLE:
+                return HangerState.IDLING;
             case WANTS_TO_HANGER_ACTUATE_HOLD:
             default:
                 return HangerState.ACTUATE_HOLD;

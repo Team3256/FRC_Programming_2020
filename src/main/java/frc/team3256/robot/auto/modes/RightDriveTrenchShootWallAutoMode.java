@@ -8,6 +8,7 @@ import frc.team3256.robot.constants.DriveConstants;
 import frc.team3256.robot.helper.BallCounter;
 import frc.team3256.robot.subsystems.DriveTrain;
 import frc.team3256.robot.subsystems.Flywheel;
+import frc.team3256.robot.subsystems.Turret;
 import frc.team3256.warriorlib.auto.AutoModeBase;
 import frc.team3256.warriorlib.auto.AutoModeEndedException;
 import frc.team3256.warriorlib.auto.action.ParallelAction;
@@ -27,6 +28,8 @@ public class RightDriveTrenchShootWallAutoMode extends AutoModeBase
         purePursuitTracker.setPaths(Paths.getRightTrenchCollectWallAutoPath(), DriveConstants.lookaheadDistance);
         BallCounter.getInstance().setCount(3);
         Flywheel.getInstance().setReadyToShoot(false);
+        Turret.getInstance().reset();
+        Turret.getInstance().setTurretPosition(180);
 
         double startTime = Timer.getFPGATimestamp();
         runAction(new ResetPursuitAction());

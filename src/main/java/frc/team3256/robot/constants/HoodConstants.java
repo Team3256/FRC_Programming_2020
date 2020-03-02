@@ -9,12 +9,12 @@ public class HoodConstants {
 
     //Hood Adjust PID
     public static final int kHoodAdjustSlot = 0;
-    public static final double kHoodAdjustP = 0.2;
-    public static final double kHoodAdjustI = 0.0001;
+    public static final double kHoodAdjustP = 0.1;
+    public static final double kHoodAdjustI = 0.00001;
     public static final double kHoodAdjustD = 0;
     public static final double kHoodAdjustF = 0;
     public static final double kHoodAdjustIZone = 0;
 
-    public static final double kHoodSetpointTolerance = 0.2;
+    public static final double kHoodSetpointTolerance = 0.5;
 
 }
