@@ -6,4 +6,5 @@ public class FlywheelConstants {
     public static final double kFlywheelD = 0.0;
     public static final double kFlywheelF = 1023/22050;    //1023/21800
     public static final double kAtSetpointTolerance = 30; //in RPM
+    public static final double maxFlywheelVel = 6500;
 }

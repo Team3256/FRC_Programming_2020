@@ -30,6 +30,7 @@ import frc.team3256.warriorlib.auto.AutoModeBase;
 import frc.team3256.warriorlib.auto.AutoModeExecuter;
 import frc.team3256.warriorlib.auto.purepursuit.PoseEstimator;
 import frc.team3256.warriorlib.auto.purepursuit.PurePursuitTracker;
+import frc.team3256.warriorlib.control.DrivePower;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.loop.Looper;
 import frc.team3256.warriorlib.subsystem.DriveTrainBase;
@@ -42,50 +43,46 @@ import frc.team3256.warriorlib.subsystem.DriveTrainBase;
  * project.
  */
 public class Robot extends TimedRobot {
-  //TODO: add burnFlash() to generateSlave method on warriorlib
-
   private final boolean WANTS_TO_LOG = false;
 
-  TeleopUpdater teleopUpdater;
-  private DriveTrain drivetrain;
-  private Intake intake;
-  private PoseEstimator poseEstimator;
-  private PurePursuitTracker purePursuitTracker;
+  private TeleopUpdater teleopUpdater;
+  private DriveTrain drivetrain = DriveTrain.getInstance();
+  private Intake intake = Intake.getInstance();
   private Limelight limelight = Limelight.getInstance();
   private Flywheel flywheel = Flywheel.getInstance();
   private Feeder feeder = Feeder.getInstance();
   private Hood hood = Hood.getInstance();
   private Turret turret = Turret.getInstance();
-
+  private Hanger hanger = Hanger.getInstance();
+  private BallCounter ballCounter = BallCounter.getInstance();
   private AirCompressor airCompressor = AirCompressor.getInstance();
+  private PoseEstimator poseEstimator;
+  private PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
 
   private AutoModeExecuter autoModeExecuter;
   private boolean maintainAutoExecution = true;
 
-  Looper loggerLooper;
-  private Looper enabledLooper, poseEstimatorLooper, limelightLooper, flywheelLooper;
-  SendableChooser<AutoModeBase> autoChooser = new SendableChooser<>();
+  private Looper enabledLooper,
+          poseEstimatorLooper,
+          limelightLooper,
+          flywheelLooper,
+          loggerLooper;
 
-  CANSparkMax spark;
+  SendableChooser<AutoModeBase> autoChooser = new SendableChooser<>();
 
   @Override
   public void robotInit() {
     airCompressor.turnOnCompressor();
     teleopUpdater = new TeleopUpdater();
-    drivetrain = DriveTrain.getInstance();
-    intake = Intake.getInstance();
     DriveTrainBase.setDriveTrain(drivetrain);
-    purePursuitTracker = PurePursuitTracker.getInstance();
-    limelight.init();
 
     Paths.initialize();
 
-    // Reset sensors
     drivetrain.resetEncoders();
     drivetrain.resetGyro();
 
     enabledLooper = new Looper(1 / 200D);
-    enabledLooper.addLoops(intake, hood, feeder);
+    enabledLooper.addLoops(intake, hood, feeder, ballCounter, hanger, turret);
 
     flywheelLooper = new Looper(1/500D);
     flywheelLooper.addLoops(flywheel);
@@ -97,27 +94,21 @@ public class Robot extends TimedRobot {
     limelightLooper = new Looper(1 / 100D);
     limelightLooper.addLoops(limelight);
 
-
     autoChooser.setDefaultOption("Do Nothing", new DoNothingAutoMode());
     autoChooser.addOption("Right Shoot Auto", new RightDriveShootAutoMode());
     autoChooser.addOption("Right Trench Shoot Auto", new RightDriveTrenchShootAutoMode());
     autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
-
     SmartDashboard.putData(autoChooser);
 
-    if(WANTS_TO_LOG) {
+    limelight.init();
 
+    if(WANTS_TO_LOG) {
       loggerLooper  = new Looper(1/15D);
       Logger.startInitialization();
       FalconAutoLogger.autoLog("Flywheel", "Motor", Flywheel.getInstance().getMotor());
       Logger.finishInitialization();
-
       loggerLooper.addLoops(LoggerUpdateLooper.getInstance());
     }
-
-//    spark = SparkMAXUtil.generateGenericSparkMAX(10, CANSparkMaxLowLevel.MotorType.kBrushless);
-//    SparkMAXUtil.setCoastMode(spark);
-//    spark.setInverted(false);
   }
 
   @Override
@@ -130,12 +121,13 @@ public class Robot extends TimedRobot {
 
     poseEstimator.reset();
     purePursuitTracker.reset();
-//    turret.reset();
 
     enabledLooper.start();
     flywheelLooper.start();
     poseEstimatorLooper.start();
     limelightLooper.start();
+
+    turret.reset();
 
     if (SmartDashboard.getBoolean("autoEnabled", true)) {
       maintainAutoExecution = true;
@@ -154,6 +146,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
     SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
     SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
+
     intake.update(0);
     feeder.update(0);
     turret.update(0);
@@ -178,11 +171,11 @@ public class Robot extends TimedRobot {
     enabledLooper.start();
     flywheelLooper.start();
     limelightLooper.start();
+
     drivetrain.resetGyro();
     drivetrain.resetEncoders();
     drivetrain.setBrakeMode();
     poseEstimator.reset();
-//    turret.reset();
     BallCounter.getInstance().setCount(0);
     if(WANTS_TO_LOG) loggerLooper.start();
   }

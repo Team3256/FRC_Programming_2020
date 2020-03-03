@@ -18,6 +18,7 @@ public class FeederIndexAction implements Action {
 
     @Override
     public void update() {
+        ballCounter.update(0);
         if (ballCounter.shouldFeed()) {
             mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
             mIntake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
