@@ -16,8 +16,9 @@ public class Hanger extends SubsystemBase {
     private WPI_TalonFX winchMotor;
 
     WantedState mPrevWantedState;
-    boolean mStateChanged;
-    boolean mWantedStateChanged;
+    private boolean mStateChanged;
+    private boolean mWantedStateChanged;
+    private double winchDownPower;
 
     public enum HangerState {
         ACTUATE_RELEASE,
@@ -43,6 +44,7 @@ public class Hanger extends SubsystemBase {
     private Hanger() {
         hangerPancakes = new DoubleSolenoid(hangerPancakesForwardChannel,hangerPancakesReverseChannel);
         winchMotor = TalonFXUtil.generateGenericTalon(winchMotorID);
+        winchDownPower = 0;
         TalonFXUtil.setBrakeMode(winchMotor);
         winchMotor.setInverted(true);
     }
@@ -87,8 +89,12 @@ public class Hanger extends SubsystemBase {
     }
 
     private HangerState handleDriveDown() {
-        winchMotor.set(ControlMode.PercentOutput, 1);
+        winchMotor.set(ControlMode.PercentOutput, winchDownPower);
         return defaultStateTransfer();
+    }
+
+    public void setWinchDownPower(double winchDownPower) {
+        this.winchDownPower = winchDownPower;
     }
 
     private HangerState handleActuateHold() {

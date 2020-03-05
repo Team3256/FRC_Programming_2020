@@ -28,11 +28,11 @@ public class XboxControllerConfig implements ControlsInterface {
 
     //Driver: Right Bumper
     @Override
-    public boolean getHangerUp() { return driver.getRawButton(6); }
+    public boolean getHangerUp() { return driver.getRawButton(6) && driver.getRawButton(5); }
 
     //Driver: Left Bumper
     @Override
-    public boolean getHangerDown() { return driver.getRawButton(5); }
+    public double getHangerDown() { return -Util.handleDeadband(driver.getRawAxis(2), 0.15); }
 
 
 

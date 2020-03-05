@@ -18,8 +18,8 @@ public class Intake extends SubsystemBase {
     private boolean intakeRaise;
 
     WantedState mPrevWantedState;
-    boolean mStateChanged;
-    boolean mWantedStateChanged;
+    private boolean mStateChanged;
+    private boolean mWantedStateChanged;
 
     public enum IntakeState {
         UNJAMMING,

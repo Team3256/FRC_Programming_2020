@@ -29,7 +29,7 @@ public class RightDriveShootAutoMode extends AutoModeBase {
         BallCounter.getInstance().setCount(3);
         Flywheel.getInstance().setReadyToShoot(false);
         Turret.getInstance().reset();
-        runAction(new MoveTurretAction(0.75));
+        runAction(new MoveTurretAction(20));
 
         runAction(new WaitAction(0.5));
         runAction(new ResetPursuitAction());

@@ -114,10 +114,6 @@ public class Robot extends TimedRobot {
 
       loggerLooper.addLoops(LoggerUpdateLooper.getInstance());
     }
-
-//    spark = SparkMAXUtil.generateGenericSparkMAX(10, CANSparkMaxLowLevel.MotorType.kBrushless);
-//    SparkMAXUtil.setCoastMode(spark);
-//    spark.setInverted(false);
   }
 
   @Override
@@ -130,7 +126,7 @@ public class Robot extends TimedRobot {
 
     poseEstimator.reset();
     purePursuitTracker.reset();
-//    turret.reset();
+    turret.reset();
 
     enabledLooper.start();
     flywheelLooper.start();
@@ -182,7 +178,7 @@ public class Robot extends TimedRobot {
     drivetrain.resetEncoders();
     drivetrain.setBrakeMode();
     poseEstimator.reset();
-//    turret.reset();
+    turret.reset();
     BallCounter.getInstance().setCount(0);
     if(WANTS_TO_LOG) loggerLooper.start();
   }
@@ -198,7 +194,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
     SmartDashboard.putBoolean("Hood Zeroed", Hood.getInstance().isZeroed());
     SmartDashboard.putNumber("wantedEnd", limelight.optimalEndAngle());
-//    turret.outputToDashboard();
     if(WANTS_TO_LOG){
       Logger.update();
     }

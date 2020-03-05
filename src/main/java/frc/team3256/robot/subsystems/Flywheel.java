@@ -17,9 +17,9 @@ public class Flywheel extends SubsystemBase {
     private WPI_TalonFX mLeftFlywheel, mRightFlywheel;
 
     WantedState mPrevWantedState;
-    boolean mStateChanged;
-    boolean mWantedStateChanged;
-    double velocitySetpoint;
+    private boolean mStateChanged;
+    private boolean mWantedStateChanged;
+    private double velocitySetpoint;
     private PIDController flywheelPIDController;
     private boolean atSetpoint;
     private boolean readyToShoot;

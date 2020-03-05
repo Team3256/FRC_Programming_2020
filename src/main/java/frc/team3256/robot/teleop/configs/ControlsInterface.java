@@ -20,7 +20,7 @@ public interface ControlsInterface {
     boolean getHangerUp();
 
     //Hold: Pulls down the hanger
-    boolean getHangerDown();
+    double getHangerDown();
 
 
 //--------------Manipulator--------------

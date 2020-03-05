@@ -25,10 +25,11 @@ public class TeleopUpdater {
     private Limelight limelight = Limelight.getInstance();
     private BallCounter ballCounter = BallCounter.getInstance();
     private boolean overrideFeeder = false;
-    private boolean feeding = false;
 
     private boolean intakeUp = true;
     private boolean prevIntakeToggle = false;
+
+    private boolean readyToHang = false;
 
 
     private static TeleopUpdater instance;
@@ -69,13 +70,8 @@ public class TeleopUpdater {
         boolean manualHoodUp = controls.manualHoodUp();
         boolean manualHoodDown = controls.manualHoodDown();
 
-        boolean autoAlign = controls.autoAlignTurret();
-        boolean autoAlignHood = controls.autoAlignHood();
-
-        boolean getShoot = controls.getShoot();
-
         boolean getHangerUp = controls.getHangerUp();
-        boolean getHangerDown = controls.getHangerDown();
+        double getHangerDown = controls.getHangerDown();
 
         //TODO: Implement these for final
         boolean getAutoAlign = controls.getAutoAlign();
@@ -107,9 +103,7 @@ public class TeleopUpdater {
             mIntake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
         }
 
-//        Feeder Indexing Logic
-
-        //UNCOMMENT BELOW FOR FEEDER AUTO-INDEXING
+        //Feeder Indexing Logic
         if (!overrideFeeder) {
             if (ballCounter.shouldFeed()) {
                 mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
@@ -124,9 +118,6 @@ public class TeleopUpdater {
         } else if (feederBackward) {
             mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
         }
-//        else {
-//            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
-//        }
 
         //Turret Subsystem
         if (manualTurretLeft) {
@@ -146,38 +137,18 @@ public class TeleopUpdater {
             mHood.setWantedState(Hood.WantedState.WANTS_TO_IDLE);
         }
 
-        if (getShoot) {
-            mFlywheel.setVelocitySetpoint(ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
-//            mFlywheel.setVelocitySetpoint(5863);
-            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
-        } else {
-            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
+        if(getHangerUp) {
+            mHanger.setWantedState(Hanger.WantedState.WANTS_TO_HANGER_ACTUATE_RELEASE);
+            readyToHang = true;
         }
-
-        //Auto Aligning Turret
-//        if (autoAlign) {
-//            double angle = limelight.calculateTau();
-//            mTurret.setTurretAutoAlignAngle(angle);
-//            mTurret.setWantedState(Turret.WantedState.WANTS_TO_AUTO_ALIGN);
-//        }
-
-        if (autoAlignHood) {
-//            limelight.calculateKinematics();
-//            limelight.setWantedEndAngle(limelight.optimalEndAngle());
-//            mHood.setPosSetpoint(ShootingKinematics.angleToHoodPos(limelight.getAngleToTarget()));
-//            mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
-//            mTurret.setTurretPosition(90);
-        }
-
-        if(getHangerDown) {
+        else if (readyToHang) {
+            mHanger.setWinchDownPower(getHangerDown);
             mHanger.setWantedState(Hanger.WantedState.WANTS_TO_HANGER_DRIVE_DOWN);
         }
         else {
             mHanger.setWantedState(Hanger.WantedState.WANTS_TO_IDLE);
         }
 
-
-        //TODO: TO BE IMPLEMENTED FOR FINAL
         if(getAutoAlign) {
             //Auto Aligning Turret
             double angle = limelight.calculateTau();
@@ -190,16 +161,19 @@ public class TeleopUpdater {
             mHood.setPosSetpoint(ShootingKinematics.angleToHoodPos(limelight.getAngleToTarget()));
             mHood.setWantedState(Hood.WantedState.WANTS_TO_POS);
         }
-//
-//        if(getRevUp) {
-//            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
-//        }
-//
-//        if(getFeederShoot) {
-//            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_FORWARD);
-//            mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
-//        }
-//
+
+        if (getRevUp) {
+            mFlywheel.setVelocitySetpoint(ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
+            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
+        } else {
+            mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
+        }
+
+        if(getFeederShoot) {
+            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
+            mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
+        }
+
         if(intakeToggle && !prevIntakeToggle) {
             mIntake.setIntakeTogglingState(!intakeUp);
             mIntake.setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);

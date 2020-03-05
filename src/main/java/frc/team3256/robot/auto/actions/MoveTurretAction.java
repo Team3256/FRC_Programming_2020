@@ -1,27 +1,28 @@
 package frc.team3256.robot.auto.actions;
 
-import edu.wpi.first.wpilibj.Timer;
 import frc.team3256.robot.subsystems.Turret;
 import frc.team3256.warriorlib.auto.action.Action;
 
 public class MoveTurretAction implements Action {
-
-    double startTime;
-    double actionTime;
     Turret mTurret = Turret.getInstance();
+    private double angleSetpoint;
+    private boolean isFinished = false;
 
-    public MoveTurretAction(double actionTime) {
-        this.actionTime = actionTime;
+    public MoveTurretAction(double angleSetpoint) {
+        this.angleSetpoint = angleSetpoint;
     }
 
     @Override
     public boolean isFinished() {
-        return Timer.getFPGATimestamp()-startTime > actionTime;
+        return isFinished;
     }
 
     @Override
     public void update() {
-        mTurret.setAutoTurretSpeed(-1.0);
+        mTurret.setPosition(angleSetpoint);
+        if (mTurret.getPosition() >= mTurret.angleToEncoder(angleSetpoint)) {
+            isFinished = true;
+        }
     }
 
     @Override
@@ -31,6 +32,5 @@ public class MoveTurretAction implements Action {
 
     @Override
     public void start() {
-        startTime = Timer.getFPGATimestamp();
     }
 }

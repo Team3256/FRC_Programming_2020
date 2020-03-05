@@ -29,7 +29,7 @@ public class RightDriveTrenchShootWallAutoMode extends AutoModeBase
         BallCounter.getInstance().setCount(3);
         Flywheel.getInstance().setReadyToShoot(false);
         Turret.getInstance().reset();
-        Turret.getInstance().setTurretPosition(180);
+        runAction(new MoveTurretAction(20));
 
         double startTime = Timer.getFPGATimestamp();
         runAction(new ResetPursuitAction());

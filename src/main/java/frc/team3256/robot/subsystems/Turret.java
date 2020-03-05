@@ -19,9 +19,9 @@ public class Turret extends SubsystemBase {
     private CANSparkMax mTurret;
 
     WantedState mPrevWantedState;
-    boolean mStateChanged;
-    boolean mWantedStateChanged;
-    double angleSetpoint;
+    private boolean mStateChanged;
+    private boolean mWantedStateChanged;
+    private double angleSetpoint;
     private Limelight limelight = new Limelight();
     private double initialLimelightAngle, headingError;
     private PIDController turretPIDController;
@@ -61,6 +61,10 @@ public class Turret extends SubsystemBase {
         firstRun = true;
         headingError = 0;
         mTurret = SparkMAXUtil.generateGenericSparkMAX(10, CANSparkMaxLowLevel.MotorType.kBrushless);
+        mTurret.getPIDController().setP(50.0);
+        mTurret.getPIDController().setI(0.0);
+        mTurret.getPIDController().setD(0.0);
+        mTurret.getPIDController().setFF(0.0);
         mTurret.setSmartCurrentLimit(30);
         mTurret.setInverted(false);
         atSetpoint = false;
@@ -86,9 +90,6 @@ public class Turret extends SubsystemBase {
                 break;
             case AUTO_ALIGN:
                 newState = handleAutoAlign();
-                break;
-            case IDLE:
-                newState = handleIdle();
                 break;
             default:
                 newState = handleIdle();
@@ -160,12 +161,7 @@ public class Turret extends SubsystemBase {
         return atSetpoint;
     }
 
-    public void setTurretPosition(double angle) {
-        double position = angleToEncoder(angle);
-//        mTurret.set(turretPositionPIDController.calculate(getPosition(), position));
-    }
-
-    private double angleToEncoder(double angle) {
+    public double angleToEncoder(double angle) {
         return angle * 1.2984;
     }
 
@@ -213,6 +209,12 @@ public class Turret extends SubsystemBase {
     public void reset() {
         mTurret.getEncoder().setPosition(0);
         turrentWantedPosition = 0;
+    }
+
+    public void setPosition(double angle) {
+        double setpoint = angleToEncoder(angle);
+        SmartDashboard.putNumber("Setpoint", setpoint);
+        mTurret.getPIDController().setReference(setpoint, ControlType.kPosition);
     }
 
     public boolean isSafe() {
