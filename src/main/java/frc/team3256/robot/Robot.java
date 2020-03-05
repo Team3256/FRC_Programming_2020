@@ -8,6 +8,9 @@
 package frc.team3256.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -99,6 +102,11 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Right Trench Shoot Auto", new RightDriveTrenchShootAutoMode());
     autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
     SmartDashboard.putData(autoChooser);
+
+    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    camera.setResolution(240, 160);
+    camera.setFPS(30);
+    camera.setPixelFormat(VideoMode.PixelFormat.kMJPEG);
 
     limelight.init();
 
