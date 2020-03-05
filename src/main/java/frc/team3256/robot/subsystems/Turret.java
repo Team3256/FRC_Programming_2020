@@ -16,20 +16,23 @@ import frc.team3256.warriorlib.subsystem.SubsystemBase;
 import static frc.team3256.robot.constants.IDConstants.turretID;
 
 public class Turret extends SubsystemBase {
+
+    private final double startingTurretAngle = 90;
+
     private CANSparkMax mTurret;
 
     WantedState mPrevWantedState;
     private boolean mStateChanged;
     private boolean mWantedStateChanged;
     private double angleSetpoint;
-    private Limelight limelight = new Limelight();
+    private Limelight limelight = Limelight.getInstance();
     private double initialLimelightAngle, headingError;
     private PIDController turretPIDController;
     private PIDController turretPositionPIDController;
     private boolean firstRun;
     private double autoAlignTolerance = TurretConstants.kAutoAlignTolerance;
     private boolean atSetpoint;
-    private double turrentWantedPosition;
+    private double turretWantedPosition;
 
     public enum TurretState {
         MANUAL_LEFT,
@@ -55,7 +58,7 @@ public class Turret extends SubsystemBase {
     private Turret() {
         limelight.init();
         initialLimelightAngle = 0;
-        turrentWantedPosition = 0;
+        turretWantedPosition = 0;
         turretPIDController = new PIDController(TurretConstants.turretkP, TurretConstants.turretkI, TurretConstants.turretkD);
         turretPositionPIDController = new PIDController(TurretConstants.turretPositionkP, TurretConstants.turretPositionkI, TurretConstants.turretPositionkD);
         firstRun = true;
@@ -208,7 +211,7 @@ public class Turret extends SubsystemBase {
 
     public void reset() {
         mTurret.getEncoder().setPosition(0);
-        turrentWantedPosition = 0;
+        turretWantedPosition = 0;
     }
 
     public void setPosition(double angle) {

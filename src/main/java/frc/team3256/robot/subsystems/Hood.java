@@ -162,14 +162,6 @@ public class Hood extends SubsystemBase {
         posSetpoint = pos;
     }
 
-    private double encoderToAngle(double encoder) {
-        return 0;
-    }
-
-    private double angleToEncoder(double angle) {
-        return 0;
-    }
-
     public boolean isZeroed() {
         return isZeroed;
     }

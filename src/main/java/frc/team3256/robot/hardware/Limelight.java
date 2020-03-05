@@ -6,6 +6,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.constants.LimelightConstants;
 import frc.team3256.warriorlib.loop.Loop;
+
+import static frc.team3256.robot.constants.FlywheelConstants.maxFlywheelVel;
 import static frc.team3256.robot.constants.LimelightConstants.*;
 import static frc.team3256.robot.constants.TurretConstants.turretHeight;
 
@@ -52,24 +54,23 @@ public class Limelight implements Loop {
         limeLightTs = limelight.getEntry("ts");
         limeLightTcornx = limelight.getEntry("tcornx");
         limeLightTcorny = limelight.getEntry("tcorny");
+
         //Setting up default stream
-        inst.getTable("limelight").getEntry("ledMode").setNumber(0); //Uses LED Mode in current pipeline
-        inst.getTable("limelight").getEntry("camMode").setNumber(0); //Uses Vision Processor Mode
-        inst.getTable("limelight").getEntry("pipeline").setNumber(0); //Uses pipeline #0
-        inst.getTable("limelight").getEntry("stream").setNumber(2); //Driver Camera Main, Vision Camera Lower-Right Corner
-        inst.getTable("limelight").getEntry("snapshot").setNumber(0); //Takes no snapshots
+        limelight.getEntry("ledMode").setNumber(0); //Uses LED Mode in current pipeline
+        limelight.getEntry("camMode").setNumber(0); //Uses Vision Processor Mode
+        limelight.getEntry("pipeline").setNumber(0); //Uses pipeline #0
+        limelight.getEntry("stream").setNumber(2); //Driver Camera Main, Vision Camera Lower-Right Corner
+        limelight.getEntry("snapshot").setNumber(0); //Takes no snapshots
     }
 
     public double getTx() { return tx; }
     public double getTy() { return ty; }
 
     public double getTopSkew() {
-//        SmartDashboard.putNumber("before skew", ts);
         double skewAngle = ts;
         if (skewAngle < -45) {
             skewAngle += 90;
         }
-//        SmartDashboard.putNumber("after skew", skewAngle);
         return skewAngle;
     }
 
@@ -109,7 +110,6 @@ public class Limelight implements Loop {
     public double getDistanceToInner() { return getDistanceToTarget() + toInnerTarget / Math.cos(calculateTopTheta()*Math.PI/180.0);}
 
     public double getAbsoluteHorizontalOffset(double targetHeight, double skew) {
-        SmartDashboard.putNumber("skew", skew);
         double skewAngle = skew * Math.PI / 180.0;
         double cosSSquared = Math.pow(Math.cos(skewAngle),2);
         double height = targetHeight - mountingHeight;
@@ -120,12 +120,10 @@ public class Limelight implements Loop {
     }
 
     public double calculateTopTheta() {
-//        SmartDashboard.putNumber("top theta", getAbsoluteHorizontalOffset(targetTopHeight, getTopSkew()));
         return getAbsoluteHorizontalOffset(targetTopHeight, getTopSkew());
     }
 
     public double calculateBottomTheta() {
-//        SmartDashboard.putNumber("bottom theta", getAbsoluteHorizontalOffset(targetBottomHeight, getBottomSkew()));
         return getAbsoluteHorizontalOffset(targetBottomHeight, getBottomSkew());
     }
 
@@ -134,7 +132,6 @@ public class Limelight implements Loop {
         double d = getDistanceToTarget();
         double f = toInnerTarget;
         double side = getTopSkew() > 0 ? 1 : -1;
-//        SmartDashboard.putNumber("side", side);
         double hashtagOne = (calculateTopTheta())/2 * side; //calculateBottomTheta
 
         double offset = Math.atan2(d*Math.sin((tx+hashtagOne)*Math.PI/180.0), f+d*Math.cos((tx+hashtagOne)*Math.PI/180.0))-(hashtagOne*Math.PI/180.0);
@@ -144,21 +141,14 @@ public class Limelight implements Loop {
     public double calculateMovingAngle (double outputVelocity, double hoodAngle) {
         //horizontal distance to target - may have to change distance to the inner goal
         double horizontalDistance = getDistanceToTarget()+toInnerTarget;
-
         //use angular velocity and distance to target (ground) to find the velocity perpendicular to the target
         double perpendicularVelocity = (dTheta*Math.PI/180.0)*horizontalDistance;
-
         //horizontal 2d output velocity
         double horizontalOutputVelocity = outputVelocity*Math.cos(hoodAngle*Math.PI/180.0);
-
         //time it takes to reach the target
         double timeToTarget = horizontalDistance/horizontalOutputVelocity;
-
         //how far the ball would go perpendicular to the target
         double offsetDist = perpendicularVelocity*timeToTarget;
-
-//        SmartDashboard.putNumber("offset distance", offsetDist);
-
         double newOffsetAngle = Math.atan2(offsetDist, horizontalDistance) * (180.0/Math.PI);
 
         if (newOffsetAngle<0) {
@@ -166,14 +156,7 @@ public class Limelight implements Loop {
         } else if (newOffsetAngle>0) {
             newOffsetAngle -= 90;
         }
-
         return newOffsetAngle;
-    }
-
-    public void outputToDashboard() {
-//        SmartDashboard.putNumber("Horizontal Degree", tx);
-//        SmartDashboard.putNumber("Vertical Degree", ty);
-//        SmartDashboard.putNumber("Target Area", ta);
     }
 
     @Override
@@ -183,7 +166,7 @@ public class Limelight implements Loop {
 
     @Override
     public void update(double timestamp) {
-        double timeDif = timestamp-lastTimestamp;
+//        double timeDif = timestamp-lastTimestamp;
 
         tx = limeLightTx.getDouble(2.0);
         ty = limeLightTy.getDouble(2.0);
@@ -194,37 +177,30 @@ public class Limelight implements Loop {
         getBottomSkew();
         getTopSkew();
 
-//        SmartDashboard.putNumber("tau", calculateTau());
-
-        if (timeDif > 0.05) {
-            lastTimestamp = timestamp;
-            double meanDiff = 0;
-            meanDiff = dThetaMean;
-//            SmartDashboard.putNumber("dtheta", meanDiff);
-
-
-            if (lastTheta != 0 && lastDistance != 0) {
-                dTheta = meanDiff;
-                dDistance = (getDistanceToTarget()-lastDistance)/timeDif;
-//                SmartDashboard.putNumber("Top Theta", calculateTopTheta());
-//                SmartDashboard.putNumber("Last Theta", lastTheta);
-            }
-            dTheta = meanDiff;
-            double thetaSign = calculateTopTheta()*Math.signum(getTopSkew());
-            lastTheta = thetaSign+tx;
-//            SmartDashboard.putNumber("Last Theta", lastTheta);
-            lastDistance = getDistanceToTarget();
-//            SmartDashboard.putNumber("moving correction", calculateMovingAngle(velToTarget, angleToTarget));
-
-        } else {
-            double thetaSign = calculateTopTheta()*Math.signum(getTopSkew());
-            if (Math.abs(thetaSign) <= 30) {
-                dThetaMean = dThetaMean*dThetaCount;
-                dThetaMean += thetaSign+tx-lastTheta;
-                dThetaCount++;
-                dThetaMean /= dThetaCount;
-            }
-        }
+//        if (timeDif > 0.05) {
+//            lastTimestamp = timestamp;
+//            double meanDiff = 0;
+//            meanDiff = dThetaMean;
+//
+//
+//            if (lastTheta != 0 && lastDistance != 0) {
+//                dTheta = meanDiff;
+//                dDistance = (getDistanceToTarget()-lastDistance)/timeDif;
+//            }
+//            dTheta = meanDiff;
+//            double thetaSign = calculateTopTheta()*Math.signum(getTopSkew());
+//            lastTheta = thetaSign+tx;
+//            lastDistance = getDistanceToTarget();
+//
+//        } else {
+//            double thetaSign = calculateTopTheta()*Math.signum(getTopSkew());
+//            if (Math.abs(thetaSign) <= 30) {
+//                dThetaMean = dThetaMean*dThetaCount;
+//                dThetaMean += thetaSign+tx-lastTheta;
+//                dThetaCount++;
+//                dThetaMean /= dThetaCount;
+//            }
+//        }
     }
 
     @Override
@@ -253,6 +229,18 @@ public class Limelight implements Loop {
             angle = 0;
         }
         return 0 * Math.PI/180; //angle * Math.PI / 180.0;
+    }
+
+    public double getStartAngleForFar() {
+        double distance = aimAtInner ? getDistanceToInner() : getDistanceToTarget();
+        double a = gravAcceleration * gravAcceleration / 4.0;
+        double b = gravAcceleration * heightDif - maxFlywheelVel * maxFlywheelVel;
+        double c = heightDif * heightDif + distance * distance;
+        double t = Math.sqrt(
+                (-b + Math.sqrt(b * b - 4 * a * c))/(2 * a)
+        );  // larger t
+        double angle = Math.acos(distance / maxFlywheelVel / t);
+        return angle;
     }
 
     public void turnOff() {
