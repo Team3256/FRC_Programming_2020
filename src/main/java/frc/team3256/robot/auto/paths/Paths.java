@@ -15,6 +15,7 @@ public class Paths {
     private static List<Path> rightTrenchCollectAutoPath;
     private static List<Path> rightTrenchCollectWallAutoPath;
     private static List<Path> rightTrenchCollectTenBallAutoPath;
+    private static List<Path> stealTwoBallAutoPath;
     private static PoseEstimator poseEstimator = PoseEstimator.getInstance();
 
     public static void initialize() {
@@ -22,6 +23,34 @@ public class Paths {
         getRightTrenchCollectAutoPath();
         getRightTrenchCollectWallAutoPath();
         getRightTrenchCollectTenBallAutoPath();
+        getStealTwoBallAutoPath();
+    }
+
+    public static List<Path> getStealTwoBallAutoPath() {
+        if (stealTwoBallAutoPath!= null)
+            return stealTwoBallAutoPath;
+        PathGenerator firstSegment = new PathGenerator(spacing, true);
+
+        firstSegment.addPoint(new Vector(0,0));
+        firstSegment.addPoint(new Vector(0,104)); //35.5 in robot length
+
+        firstSegment.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
+        firstSegment.setVelocities(maxVel, maxAccel, maxVelk);
+
+        Path firstSegmentPath = firstSegment.generatePath();
+
+        PathGenerator secondSegment = new PathGenerator(spacing, true);
+
+        secondSegment.addPoint(new Vector(0,104));
+        secondSegment.addPoint(new Vector(0,0));
+
+        secondSegment.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
+        secondSegment.setVelocities(maxVel, maxAccel, maxVelk);
+
+        Path secondSegmentPath = secondSegment.generatePath();
+
+        stealTwoBallAutoPath = Arrays.asList(firstSegmentPath, secondSegmentPath);
+        return stealTwoBallAutoPath;
     }
 
     public static List<Path> getRightShootAutoPath() {

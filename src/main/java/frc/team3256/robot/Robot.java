@@ -6,8 +6,6 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.team3256.robot;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -15,7 +13,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.hardware.AirCompressor;
-import frc.team3256.robot.hardware.IRSensors;
 import frc.team3256.robot.helper.BallCounter;
 import frc.team3256.robot.helper.ShootingKinematics;
 import frc.team3256.robot.auto.modes.DoNothingAutoMode;
@@ -33,8 +30,6 @@ import frc.team3256.warriorlib.auto.AutoModeBase;
 import frc.team3256.warriorlib.auto.AutoModeExecuter;
 import frc.team3256.warriorlib.auto.purepursuit.PoseEstimator;
 import frc.team3256.warriorlib.auto.purepursuit.PurePursuitTracker;
-import frc.team3256.warriorlib.control.DrivePower;
-import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.loop.Looper;
 import frc.team3256.warriorlib.subsystem.DriveTrainBase;
 
