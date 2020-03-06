@@ -5,6 +5,7 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ControlType;
+import edu.wpi.first.wpilibj.PWMSparkMax;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,6 +21,7 @@ public class Turret extends SubsystemBase {
     private final double startingTurretAngle = 90;
 
     private CANSparkMax mTurret;
+//    private PWMSparkMax mTurret = new PWMSparkMax(0);
 
     WantedState mPrevWantedState;
     private boolean mStateChanged;
@@ -188,7 +190,7 @@ public class Turret extends SubsystemBase {
 
     @Override
     public void outputToDashboard() {
-        SmartDashboard.putNumber("turret encoder", getPosition());
+        SmartDashboard.putNumber("turret encoder", 0);
     }
 
     @Override

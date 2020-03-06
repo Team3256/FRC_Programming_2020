@@ -1,7 +1,6 @@
 package frc.team3256.robot.auto.modes;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team3256.robot.auto.actions.GoalAlignRevAction;
 import frc.team3256.robot.auto.actions.MoveTurretAction;
 import frc.team3256.robot.auto.actions.ShootAction;
 import frc.team3256.robot.auto.paths.Paths;
@@ -21,7 +20,7 @@ import frc.team3256.warriorlib.auto.purepursuit.ResetPursuitAction;
 
 import java.util.Arrays;
 
-public class RightDriveShootAutoMode extends AutoModeBase {
+public class CrossBaselineAutoMode extends AutoModeBase {
     @Override
     protected void routine() throws AutoModeEndedException {
         PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
@@ -37,9 +36,6 @@ public class RightDriveShootAutoMode extends AutoModeBase {
         runAction(new WaitAction(0.5));
         runAction(new ResetPursuitAction());
         DriveTrain.getInstance().setHighGear(true);
-        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new ShootAction())));
-        runAction(new WaitAction(0.5));
-        Flywheel.getInstance().setReadyToShoot(true);
-        runAction(new ShootAction());
+        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0))));
     }
 }

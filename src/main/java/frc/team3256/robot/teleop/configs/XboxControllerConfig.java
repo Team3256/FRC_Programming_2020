@@ -125,13 +125,19 @@ public class XboxControllerConfig implements ControlsInterface {
 
     //Manipulator: Right Bumper
     @Override
-    public boolean getAutoAlign() { return manipulator.getRawButton(6); }
+    public boolean getAutoAlign() { return manipulator.getRawButton(5); }
 
     //Manipulator: Left Bumper
     @Override
-    public boolean getRevUp() { return manipulator.getRawButton(5); }
+    public boolean getRevUp() { return manipulator.getRawButton(6); }
 
     //Manipulator: Y Button
     @Override
     public boolean getFeederShoot() { return manipulator.getRawButton(4); }
+
+    @Override
+    public boolean getOuterGoalAlign() { return manipulator.getRawButton(2); }
+
+    @Override
+    public boolean getBallCountReset() { return manipulator.getRawButton(3); }
 }

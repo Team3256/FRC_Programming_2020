@@ -70,6 +70,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    limelight.turnOff();
     airCompressor.turnOnCompressor();
     teleopUpdater = new TeleopUpdater();
     DriveTrainBase.setDriveTrain(drivetrain);
@@ -204,12 +205,21 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-
+    limelight.turnOn();
+    limelightLooper.start();
+    poseEstimator.reset();
+    drivetrain.resetGyro();
+    drivetrain.resetEncoders();
+    drivetrain.setCoastMode();
   }
 
   @Override
   public void testPeriodic() {
-
+    SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
+    SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
+    SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
+    SmartDashboard.putNumber("limelight distance", limelight.getDistanceToTarget());
+    SmartDashboard.putNumber("Theta", limelight.calculateTopTheta());
   }
 
   @Override

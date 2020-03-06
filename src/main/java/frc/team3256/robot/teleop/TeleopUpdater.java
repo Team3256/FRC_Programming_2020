@@ -2,6 +2,7 @@ package frc.team3256.robot.teleop;
 
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3256.robot.hardware.IRSensors;
 import frc.team3256.robot.helper.BallCounter;
 import frc.team3256.robot.helper.ShootingKinematics;
 import frc.team3256.robot.hardware.Limelight;
@@ -43,7 +44,6 @@ public class TeleopUpdater {
         ballCounter.update(0);
         hanger.update(0);
 
-
         //Drivetrain
         double throttle = controls.getThrottle();
         double turn = controls.getTurn();
@@ -58,10 +58,12 @@ public class TeleopUpdater {
         //Feeder
         boolean feederForward = controls.getFeederForward();
         boolean feederBackward = controls.getFeederBackward();
+        boolean ballCountReset = controls.getBallCountReset();
 
         //Turret
         boolean manualTurretLeft = controls.manualTurretLeft();
         boolean manualTurretRight = controls.manualTurretRight();
+        boolean getAlignToOuter = controls.getOuterGoalAlign();
 
         //Hood
         boolean manualHoodUp = controls.manualHoodUp();
@@ -147,8 +149,14 @@ public class TeleopUpdater {
         }
 
         if(getAutoAlign) {
+            //Turn on Limelight if autoalign
+            limelight.turnOn();
+
             //Auto Aligning Turret
             double angle = limelight.calculateTau();
+            if (getAlignToOuter) {
+                angle = limelight.getTx();
+            }
             turret.setTurretAutoAlignAngle(angle);
             turret.setWantedState(Turret.WantedState.WANTS_TO_AUTO_ALIGN);
 
@@ -157,6 +165,10 @@ public class TeleopUpdater {
             limelight.setWantedEndAngle(0*(Math.PI/180));
             hood.setPosSetpoint(ShootingKinematics.angleToHoodPos(limelight.getAngleToTarget()));
             hood.setWantedState(Hood.WantedState.WANTS_TO_POS);
+        }
+        else {
+            //Turn off Limelight if not autoalign
+            limelight.turnOff();
         }
 
         if (getRevUp) {
@@ -178,6 +190,10 @@ public class TeleopUpdater {
         }
 
         prevIntakeToggle = intakeToggle;
+
+        if(ballCountReset) {
+            ballCounter.setCount(0);
+        }
     }
 
 }

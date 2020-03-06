@@ -11,5 +11,7 @@ import frc.team3256.warriorlib.auto.AutoModeEndedException;
 public class DoNothingAutoMode extends AutoModeBase {
     @Override
     protected void routine() throws AutoModeEndedException {
+        Turret.getInstance().reset();
+        runAction(new MoveTurretAction(20));
     }
 }

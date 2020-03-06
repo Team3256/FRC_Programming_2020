@@ -48,6 +48,7 @@ public class Feeder extends SubsystemBase {
         mBar = TalonSRXUtil.generateGenericTalon(turretBarID);
         mFeeder.setSmartCurrentLimit(30);
         mBar.setInverted(false);
+        mFeeder.burnFlash();
     }
 
     public void setWantedState(Feeder.WantedState wantedState) { this.mWantedState = wantedState; }

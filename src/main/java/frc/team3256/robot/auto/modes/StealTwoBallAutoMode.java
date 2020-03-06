@@ -27,8 +27,10 @@ public class StealTwoBallAutoMode extends AutoModeBase {
         purePursuitTracker.setPaths(Paths.getStealTwoBallAutoPath(), DriveConstants.lookaheadDistance);
         BallCounter.getInstance().setCount(3);
         Flywheel.getInstance().setReadyToShoot(false);
+        Intake.getInstance().setIntakeTogglingState(false);
+        Intake.getInstance().setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
         Turret.getInstance().reset();
-        runAction(new MoveTurretAction(20));
+        runAction(new MoveTurretAction(25));
 
         runAction(new WaitAction(0.5));
         runAction(new ResetPursuitAction());

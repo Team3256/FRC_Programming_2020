@@ -95,12 +95,13 @@ public class Hood extends SubsystemBase {
     }
 
     private HoodState handleManualUp() { //Runs Hood Up until encoder position of -8.8
-        if(mHood.getEncoder().getPosition() <= kHoodMaxPos) {
-            mHood.stopMotor();
-        }
-        else {
-            mHood.set(-kHoodSpeed);
-        }
+//        if(mHood.getEncoder().getPosition() <= kHoodMaxPos) {
+//            mHood.stopMotor();
+//        }
+//        else {
+//            mHood.set(-kHoodSpeed);
+//        }
+        mHood.set(-kHoodSpeed);
         return defaultStateTransfer();
     }
 
@@ -113,6 +114,7 @@ public class Hood extends SubsystemBase {
         else {
             mHood.set(kHoodSpeed);
         }
+//        mHood.set(kHoodSpeed);
         return defaultStateTransfer();
     }
 

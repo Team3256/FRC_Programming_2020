@@ -80,4 +80,11 @@ public interface ControlsInterface {
 
     //Hold: Runs the feeder & intake to shoot the balls
     boolean getFeederShoot();
+
+    //Hold: Aligns to outer goal
+    boolean getOuterGoalAlign();
+
+    //Single Press: Resets the ball counter
+    boolean getBallCountReset();
+
 }

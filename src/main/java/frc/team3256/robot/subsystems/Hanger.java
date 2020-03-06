@@ -84,6 +84,7 @@ public class Hanger extends SubsystemBase {
     }
 
     private HangerState handleActuateRelease() {
+        System.out.println("HANDLING ACTUATE RELEASE");
         hangerPancakes.set(DoubleSolenoid.Value.kReverse);
         return defaultStateTransfer();
     }
