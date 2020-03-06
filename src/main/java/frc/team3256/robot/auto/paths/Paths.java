@@ -13,6 +13,7 @@ import static frc.team3256.robot.constants.DriveConstants.*;
 public class Paths {
     private static List<Path> rightShootAutoPath;
     private static List<Path> rightTrenchCollectAutoPath;
+    private static List<Path> rightTrenchSixBallAutoPath;
     private static List<Path> rightTrenchCollectWallAutoPath;
     private static List<Path> rightTrenchCollectTenBallAutoPath;
     private static List<Path> stealTwoBallAutoPath;
@@ -21,6 +22,7 @@ public class Paths {
     public static void initialize() {
         getRightShootAutoPath();
         getRightTrenchCollectAutoPath();
+        getRightTrenchSixBallAutoPath();
         getRightTrenchCollectWallAutoPath();
         getRightTrenchCollectTenBallAutoPath();
         getStealTwoBallAutoPath();
@@ -197,6 +199,133 @@ public class Paths {
 
         rightTrenchCollectAutoPath = Arrays.asList(firstSegmentPath, secondSegmentPath);
         return rightTrenchCollectAutoPath;
+    }
+
+    public static List<Path> getRightTrenchSixBallAutoPath() {
+        if (rightTrenchSixBallAutoPath != null)
+            return rightTrenchSixBallAutoPath;
+
+        //First Segment (Forward Spline)
+
+        PathGenerator firstSegment = new PathGenerator(spacing, true);
+
+        firstSegment.addPoint(new Vector(0,0));
+        firstSegment.addPoint(new Vector(0,18));
+        firstSegment.addPoint(new Vector(-0.05, 18.61));
+        firstSegment.addPoint(new Vector(-1.52, 21.37));
+        firstSegment.addPoint(new Vector(-2.49, 22.51));
+        firstSegment.addPoint(new Vector(-5.31, 25.35));
+        firstSegment.addPoint(new Vector(-7.24, 27.12));
+        firstSegment.addPoint(new Vector(-9, 28.66));
+        firstSegment.addPoint(new Vector(-10.4,29.82));
+        firstSegment.addPoint(new Vector(-10.99, 30.40));
+        firstSegment.addPoint(new Vector(-11.88, 31.15));
+        firstSegment.addPoint(new Vector(-13.34, 32.38));
+        firstSegment.addPoint(new Vector(-14.66, 33.47));
+        firstSegment.addPoint(new Vector(-15.77, 34.39));
+        firstSegment.addPoint(new Vector(-16.55, 35.03));
+        firstSegment.addPoint(new Vector(-18.05, 36.25));
+        firstSegment.addPoint(new Vector(-19.32, 37.28));
+        firstSegment.addPoint(new Vector(-21.28, 38.86));
+        firstSegment.addPoint(new Vector(-21.91, 39.37));
+        firstSegment.addPoint(new Vector(-23.57, 40.7));
+        firstSegment.addPoint(new Vector(-28.92, 44.98));
+        firstSegment.addPoint(new Vector(-31.69, 47.22));
+        firstSegment.addPoint(new Vector(-35,50));
+        firstSegment.addPoint(new Vector(-37.62,52.27));
+        firstSegment.addPoint(new Vector(-35,50));
+        firstSegment.addPoint(new Vector(-37.31,52));
+        firstSegment.addPoint(new Vector(-39.95,54.37));
+        firstSegment.addPoint(new Vector(-41.10,55.42));
+        firstSegment.addPoint(new Vector(-45.38, 59.51));
+        firstSegment.addPoint(new Vector(-46.18,60.31));
+        firstSegment.addPoint(new Vector(-46.91,61.04));
+        firstSegment.addPoint(new Vector(-49.43,63.61));
+        firstSegment.addPoint(new Vector(-51.66,65.98));
+        firstSegment.addPoint(new Vector(-53.86,68.41));
+        firstSegment.addPoint(new Vector(-55.51,70.31));
+        firstSegment.addPoint(new Vector(-58.06,73.38));
+        firstSegment.addPoint(new Vector(-59.79,75.61));
+        firstSegment.addPoint(new Vector(-61,78.01));
+        firstSegment.addPoint(new Vector(-64.09,82.01));
+        firstSegment.addPoint(new Vector(-66.05,85.84));
+        firstSegment.addPoint(new Vector(-67.46,90.03));
+        firstSegment.addPoint(new Vector(-71.5, 96));
+        firstSegment.addPoint(new Vector(-71.5, 100));
+        firstSegment.addPoint(new Vector(-71.5, 110));
+        firstSegment.addPoint(new Vector(-71.5, 120));
+        firstSegment.addPoint(new Vector(-71.5, 130));
+        firstSegment.addPoint(new Vector(-71.5, 140));
+        firstSegment.addPoint(new Vector(-71.5, 150));
+        firstSegment.addPoint(new Vector(-71.5, 160));
+        firstSegment.addPoint(new Vector(-71.5, 170));
+
+        firstSegment.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
+        firstSegment.setVelocities(maxVel, maxAccel, maxVelk);
+
+        Path firstSegmentPath = firstSegment.generatePath();
+
+        //Second Segment (Backwards Spline)
+
+        PathGenerator secondSegment = new PathGenerator(spacing, false);
+
+        secondSegment.addPoint(new Vector(-71.5, 170));
+        secondSegment.addPoint(new Vector(-71.5, 160));
+        secondSegment.addPoint(new Vector(-71.5, 150));
+        secondSegment.addPoint(new Vector(-71.5, 140));
+        secondSegment.addPoint(new Vector(-71.5, 130));
+        secondSegment.addPoint(new Vector(-71.5, 120));
+        secondSegment.addPoint(new Vector(-71.5, 110));
+        secondSegment.addPoint(new Vector(-71.5, 100));
+        secondSegment.addPoint(new Vector(-71.5, 96));
+        secondSegment.addPoint(new Vector(-67.46,90.03));
+        secondSegment.addPoint(new Vector(-66.05,85.84));
+        secondSegment.addPoint(new Vector(-64.09,82.01));
+        secondSegment.addPoint(new Vector(-61,78.01));
+        secondSegment.addPoint(new Vector(-59.79,75.61));
+        secondSegment.addPoint(new Vector(-58.06,73.38));
+        secondSegment.addPoint(new Vector(-55.51,70.31));
+        secondSegment.addPoint(new Vector(-53.86,68.41));
+        secondSegment.addPoint(new Vector(-51.66,65.98));
+        secondSegment.addPoint(new Vector(-49.43,63.61));
+        secondSegment.addPoint(new Vector(-46.91,61.04));
+        secondSegment.addPoint(new Vector(-46.18,60.31));
+        secondSegment.addPoint(new Vector(-45.38, 59.51));
+        secondSegment.addPoint(new Vector(-41.10,55.42));
+        secondSegment.addPoint(new Vector(-39.95,54.37));
+        secondSegment.addPoint(new Vector(-37.31,52));
+        secondSegment.addPoint(new Vector(-35,50));
+        secondSegment.addPoint(new Vector(-37.62,52.27));
+        secondSegment.addPoint(new Vector(-35,50));
+        secondSegment.addPoint(new Vector(-31.69, 47.22));
+        secondSegment.addPoint(new Vector(-28.92, 44.98));
+        secondSegment.addPoint(new Vector(-23.57, 40.7));
+        secondSegment.addPoint(new Vector(-21.91, 39.37));
+        secondSegment.addPoint(new Vector(-21.28, 38.86));
+        secondSegment.addPoint(new Vector(-19.32, 37.28));
+        secondSegment.addPoint(new Vector(-18.05, 36.25));
+        secondSegment.addPoint(new Vector(-16.55, 35.03));
+        secondSegment.addPoint(new Vector(-15.77, 34.39));
+        secondSegment.addPoint(new Vector(-14.66, 33.47));
+        secondSegment.addPoint(new Vector(-13.34, 32.38));
+        secondSegment.addPoint(new Vector(-11.88, 31.15));
+        secondSegment.addPoint(new Vector(-10.99, 30.40));
+        secondSegment.addPoint(new Vector(-10.4,29.82));
+        secondSegment.addPoint(new Vector(-9, 28.66));
+        secondSegment.addPoint(new Vector(-7.24, 27.12));
+        secondSegment.addPoint(new Vector(-5.31, 25.35));
+        secondSegment.addPoint(new Vector(-2.49, 22.51));
+        secondSegment.addPoint(new Vector(-1.52, 21.37));
+        secondSegment.addPoint(new Vector(-0.05, 18.61));
+        secondSegment.addPoint(new Vector(0, 18));
+
+        secondSegment.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
+        secondSegment.setVelocities(maxVel, maxAccel, maxVelk);
+
+        Path secondSegmentPath = secondSegment.generatePath();
+
+        rightTrenchSixBallAutoPath = Arrays.asList(firstSegmentPath, secondSegmentPath);
+        return rightTrenchSixBallAutoPath;
     }
 
     public static List<Path> getRightTrenchCollectWallAutoPath() {

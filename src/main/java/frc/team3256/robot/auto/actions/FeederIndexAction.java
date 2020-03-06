@@ -10,10 +10,15 @@ public class FeederIndexAction implements Action {
     Feeder mFeeder = Feeder.getInstance();
     Intake mIntake = Intake.getInstance();
     BallCounter ballCounter = BallCounter.getInstance();
+    private double endBallCount;
+
+    public FeederIndexAction(double endBallCount) {
+        this.endBallCount = endBallCount;
+    }
 
     @Override
     public boolean isFinished() {
-        return ballCounter.isFull();
+        return ballCounter.isFull() || ballCounter.getCount() >= endBallCount;
     }
 
     @Override
