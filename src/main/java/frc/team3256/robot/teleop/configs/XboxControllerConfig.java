@@ -22,15 +22,15 @@ public class XboxControllerConfig implements ControlsInterface {
     @Override
     public boolean getQuickTurn() { return driver.getRawAxis(3) > 0.25; }
 
-    //Driver: Left Trigger
+    //Driver: Left Trigger - unused
     @Override
     public boolean getLowGear() { return driver.getRawAxis(2) > 0.25; }
 
-    //Driver: Right Bumper
+    //Driver: Left & Right Bumper
     @Override
-    public boolean getHangerUp() { return driver.getRawButton(5); }
+    public boolean toggleHangerPancake() { return driver.getRawButton(5) && driver.getRawButton(6); }
 
-    //Driver: Left Bumper
+    //Driver: Left Trigger
     @Override
     public double getHangerDown() { return -Util.handleDeadband(driver.getRawAxis(2), 0.15); }
 

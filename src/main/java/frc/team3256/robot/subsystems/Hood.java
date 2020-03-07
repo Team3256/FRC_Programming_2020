@@ -28,14 +28,16 @@ public class Hood extends SubsystemBase {
         MANUAL_UP,
         MANUAL_DOWN,
         IDLE,
-        CLOSED_LOOP
+        CLOSED_LOOP,
+        ZERO_HOOD
     }
 
     public enum WantedState {
         WANTS_TO_MANUAL_UP,
         WANTS_TO_MANUAL_DOWN,
         WANTS_TO_IDLE,
-        WANTS_TO_POS
+        WANTS_TO_POS,
+        WANTS_TO_ZERO_HOOD
     }
 
     private HoodState mCurrentState = HoodState.IDLE;
@@ -79,6 +81,8 @@ public class Hood extends SubsystemBase {
             case CLOSED_LOOP:
                 newState = handleClosedLoop();
                 break;
+            case ZERO_HOOD:
+                newState = handleZeroHood();
             case IDLE:
             default:
                 newState = handleIdle();
@@ -126,6 +130,19 @@ public class Hood extends SubsystemBase {
         }
         mHood.getPIDController().setReference(posSetpoint, ControlType.kPosition);
         atSetpoint = getHoodEncoder() > posSetpoint - kHoodSetpointTolerance && getHoodEncoder() < posSetpoint + kHoodSetpointTolerance;
+        return defaultStateTransfer();
+    }
+
+    //TODO: Ball counter reset is also hood reset
+    private HoodState handleZeroHood() { //Basically like manual hood down, but faster
+        if(isLimitSwitchPressed()) {
+            mHood.stopMotor();
+            mHood.getEncoder().setPosition(0);
+            isZeroed = true;
+        }
+        else {
+            mHood.set(kHoodSpeed);
+        }
         return defaultStateTransfer();
     }
 

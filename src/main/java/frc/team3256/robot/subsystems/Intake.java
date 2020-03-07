@@ -109,9 +109,10 @@ public class Intake extends SubsystemBase {
         this.outputToDashboard();
     }
 
+    //TODO: EVERYTHING 100 TEST
     public IntakeState handleIntake() {
-        mIntake.set(-0.70); //0.5
-        mCenterMech.set(-0.80);
+        mIntake.set(-1); //-0.5 //-0.7
+        mCenterMech.set(-1); //-0.8
         return defaultStateTransfer();
     }
 
@@ -137,9 +138,7 @@ public class Intake extends SubsystemBase {
         return defaultStateTransfer();
     }
 
-    public void setIntakeTogglingState(boolean raise) {
-        intakeRaise = raise;
-    }
+    public void setIntakeTogglingState(boolean raise) { intakeRaise = raise; }
 
     private IntakeState handleUnJam() {
         mIntake.set(-0.3);

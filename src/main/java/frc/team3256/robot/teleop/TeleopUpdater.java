@@ -27,6 +27,8 @@ public class TeleopUpdater {
     private boolean overrideFeeder = false;
     private boolean intakeUp = true;
     private boolean prevIntakeToggle = false;
+    private boolean hangerRelease = true;
+    private boolean prevHangerPancakesToggle = false;
 
     private boolean readyToHang = false;
 
@@ -68,7 +70,7 @@ public class TeleopUpdater {
         boolean manualHoodUp = controls.manualHoodUp();
         boolean manualHoodDown = controls.manualHoodDown();
 
-        boolean getHangerUp = controls.getHangerUp();
+        boolean hangerPancakesToggle = controls.toggleHangerPancakes();
         double getHangerDown = controls.getHangerDown();
 
         //TODO: Implement these for final
@@ -192,8 +194,47 @@ public class TeleopUpdater {
 
         prevIntakeToggle = intakeToggle;
 
+        //TODO: Making hanger actuators similar to intake toggle
+        if(hangerPancakesToggle && !prevHangerPancakesToggle) {
+            this.hanger.setHangerPancakesTogglingState(!hangerRelease);
+            this.hanger.setWantedState(Hanger.WantedState.WANTS_TO_HANGER_TOGGLE);
+            hangerRelease = !hangerRelease;
+            readyToHang = true;
+        }
+
+        //TODO: Implement after making sure the hangers can actuate up
+//        if(readyToHang) {
+//            this.hanger.setWinchDownPower(getHangerDown * getHangerDown * getHangerDown);
+//        }
+
+        //TODO: Ball counter reset is also hood reset
         if(ballCountReset) {
             ballCounter.setCount(0);
+            hood.setWantedState(Hood.WantedState.WANTS_TO_ZERO_HOOD);
+        }
+
+        //TODO: Smartdashboard Ball Counting Green Lights
+        if(ballCounter.getCount() == 0) {
+            SmartDashboard.putBoolean("BALL 1", false);
+            SmartDashboard.putBoolean("BALL 2", false);
+            SmartDashboard.putBoolean("BALL 3", false);
+            SmartDashboard.putBoolean("BALL 4", false);
+            SmartDashboard.putBoolean("BALL 5", false);
+        }
+        else if(ballCounter.getCount() == 1) {
+            SmartDashboard.putBoolean("BALL 1", true);
+        }
+        else if(ballCounter.getCount() == 2) {
+            SmartDashboard.putBoolean("BALL 2", true);
+        }
+        else if(ballCounter.getCount() == 3) {
+            SmartDashboard.putBoolean("BALL 3", true);
+        }
+        else if(ballCounter.getCount() == 4) {
+            SmartDashboard.putBoolean("BALL 4", true);
+        }
+        else if(ballCounter.getCount() == 5) {
+            SmartDashboard.putBoolean("BALL 5", true);
         }
     }
 

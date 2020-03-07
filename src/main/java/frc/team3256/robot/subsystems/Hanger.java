@@ -1,12 +1,8 @@
 package frc.team3256.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.warriorlib.hardware.TalonFXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
 
@@ -20,23 +16,22 @@ public class Hanger extends SubsystemBase {
     private boolean mStateChanged;
     private boolean mWantedStateChanged;
     private double winchDownPower;
+    private boolean hangerPancakesToggle;
 
     public enum HangerState {
-        ACTUATE_RELEASE,
+        HANGER_PANCAKE_TOGGLE,
         DRIVE_DOWN,
-        ACTUATE_HOLD,
-        IDLING
+        IDLING,
     }
 
     public enum WantedState {
-        WANTS_TO_HANGER_ACTUATE_RELEASE,
+        WANTS_TO_HANGER_TOGGLE,
         WANTS_TO_HANGER_DRIVE_DOWN,
-        WANTS_TO_HANGER_ACTUATE_HOLD,
         WANTS_TO_IDLE
     }
 
-    private HangerState mCurrentState = HangerState.ACTUATE_HOLD;
-    private WantedState mWantedState = WantedState.WANTS_TO_HANGER_ACTUATE_HOLD;
+    private HangerState mCurrentState = HangerState.IDLING;
+    private WantedState mWantedState = WantedState.WANTS_TO_IDLE;
 
     private static Hanger instance;
 
@@ -54,36 +49,21 @@ public class Hanger extends SubsystemBase {
 
     @Override
     public void update(double timestamp) {
-//        if(hangerPancakes.get() == DoubleSolenoid.Value.kReverse) {
-//            System.out.println("HANGER GOING REVERSE");
-//            SmartDashboard.putNumber("HANGER NUMBER", 0);
-//        }
-//        else if (hangerPancakes.get() == DoubleSolenoid.Value.kForward) {
-//            System.out.println("HANGER GOING FORWARD");
-//            SmartDashboard.putNumber("HANGER NUMBER", 1);
-//        }
-//        else {
-//            System.out.println("HANGER GOING NO DIRECTION");
-//            SmartDashboard.putNumber("HANGER NUMBER", 2);
-//        }
         if (mPrevWantedState != mWantedState) {
             mWantedStateChanged = true;
             mPrevWantedState = mWantedState;
         } else mWantedStateChanged = false;
         HangerState newState;
         switch (mCurrentState) {
-            case ACTUATE_RELEASE:
-                newState = handleActuateRelease();
-                break;
             case DRIVE_DOWN:
                 newState = handleDriveDown();
                 break;
-            case IDLING:
-                newState = handleIdle();
+            case HANGER_PANCAKE_TOGGLE:
+                newState = handlePancakesToggle();
                 break;
-            case ACTUATE_HOLD:
+            case IDLING:
             default:
-                newState = handleActuateHold();
+                newState = handleIdle();
                 break;
         }
 
@@ -96,8 +76,13 @@ public class Hanger extends SubsystemBase {
         this.outputToDashboard();
     }
 
-    private HangerState handleActuateRelease() {
-        hangerPancakes.set(DoubleSolenoid.Value.kReverse);
+    private HangerState handlePancakesToggle() {
+        if(hangerPancakesToggle) {
+            hangerPancakes.set(DoubleSolenoid.Value.kReverse);
+        }
+        else {
+            hangerPancakes.set(DoubleSolenoid.Value.kForward);
+        }
         return defaultStateTransfer();
     }
 
@@ -106,31 +91,24 @@ public class Hanger extends SubsystemBase {
         return defaultStateTransfer();
     }
 
-    public void setWinchDownPower(double winchDownPower) {
-        this.winchDownPower = winchDownPower;
-    }
-
-    private HangerState handleActuateHold() {
-        hangerPancakes.set(DoubleSolenoid.Value.kForward);
-        return defaultStateTransfer();
-    }
-
     private HangerState handleIdle() {
         winchMotor.stopMotor();
         return defaultStateTransfer();
     }
 
+    public void setHangerPancakesTogglingState(boolean raise) { hangerPancakesToggle = raise; }
+
+    public void setWinchDownPower(double winchDownPower) { this.winchDownPower = winchDownPower; }
+
     private HangerState defaultStateTransfer() {
         switch (mWantedState) {
-            case WANTS_TO_HANGER_ACTUATE_RELEASE:
-                return HangerState.ACTUATE_RELEASE;
+            case WANTS_TO_HANGER_TOGGLE:
+                return HangerState.HANGER_PANCAKE_TOGGLE;
             case WANTS_TO_HANGER_DRIVE_DOWN:
                 return HangerState.DRIVE_DOWN;
             case WANTS_TO_IDLE:
-                return HangerState.IDLING;
-            case WANTS_TO_HANGER_ACTUATE_HOLD:
             default:
-                return HangerState.ACTUATE_HOLD;
+                return HangerState.IDLING;
         }
     }
 

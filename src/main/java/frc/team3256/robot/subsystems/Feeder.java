@@ -99,8 +99,9 @@ public class Feeder extends SubsystemBase {
         return defaultStateTransfer();
     }
 
+    //TODO: EVERYTHING 100 TEST
     private FeederControlState handleIndex() {
-        mFeeder.set(0.3);
+        mFeeder.set(1.0); //0.3
         mBar.set(0.5);
         return defaultStateTransfer();
     }
