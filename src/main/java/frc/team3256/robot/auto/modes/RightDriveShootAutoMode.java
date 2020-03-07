@@ -36,7 +36,7 @@ public class RightDriveShootAutoMode extends AutoModeBase {
 
         runAction(new WaitAction(0.5));
         runAction(new ResetPursuitAction());
-        DriveTrain.getInstance().setHighGear(true);
+        //DriveTrain.getInstance().setHighGear(true);
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new ShootAction())));
         runAction(new WaitAction(0.5));
         Flywheel.getInstance().setReadyToShoot(true);

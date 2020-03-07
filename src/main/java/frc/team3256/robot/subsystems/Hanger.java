@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.warriorlib.hardware.TalonFXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
 
@@ -53,6 +54,18 @@ public class Hanger extends SubsystemBase {
 
     @Override
     public void update(double timestamp) {
+//        if(hangerPancakes.get() == DoubleSolenoid.Value.kReverse) {
+//            System.out.println("HANGER GOING REVERSE");
+//            SmartDashboard.putNumber("HANGER NUMBER", 0);
+//        }
+//        else if (hangerPancakes.get() == DoubleSolenoid.Value.kForward) {
+//            System.out.println("HANGER GOING FORWARD");
+//            SmartDashboard.putNumber("HANGER NUMBER", 1);
+//        }
+//        else {
+//            System.out.println("HANGER GOING NO DIRECTION");
+//            SmartDashboard.putNumber("HANGER NUMBER", 2);
+//        }
         if (mPrevWantedState != mWantedState) {
             mWantedStateChanged = true;
             mPrevWantedState = mWantedState;
@@ -84,7 +97,6 @@ public class Hanger extends SubsystemBase {
     }
 
     private HangerState handleActuateRelease() {
-        System.out.println("HANDLING ACTUATE RELEASE");
         hangerPancakes.set(DoubleSolenoid.Value.kReverse);
         return defaultStateTransfer();
     }

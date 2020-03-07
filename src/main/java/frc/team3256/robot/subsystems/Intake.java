@@ -110,8 +110,8 @@ public class Intake extends SubsystemBase {
     }
 
     public IntakeState handleIntake() {
-        mIntake.set(-0.5); //0.5
-        mCenterMech.set(-0.75);
+        mIntake.set(-0.70); //0.5
+        mCenterMech.set(-0.80);
         return defaultStateTransfer();
     }
 

@@ -39,16 +39,16 @@ public class IDConstants {
     //Pneumatics:------------------------------------------------------------------------------------------------
 
     //Shifter IDs
-    public static final int shifterForwardChannel = 4;
-    public static final int shifterReverseChannel = 3;
+    public static final int shifterForwardChannel = 4; //4
+    public static final int shifterReverseChannel = 3; //3
 
     //Intake Raise Mech IDs
     public static final int intakeRaiseForwardChannel = 2;
     public static final int intakeRaiseReverseChannel = 5;
 
     //Hanger Pancakes
-    public static final int hangerPancakesForwardChannel = 1; //TBD
-    public static final int hangerPancakesReverseChannel = 6; //TBD
+    public static final int hangerPancakesForwardChannel = 1; //TBD 1
+    public static final int hangerPancakesReverseChannel = 6; //TBD 6
 
     //DIO Ports:------------------------------------------------------------------------------------------------
     public static final int limitSwitchPort = 1;

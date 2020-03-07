@@ -28,7 +28,7 @@ public class XboxControllerConfig implements ControlsInterface {
 
     //Driver: Right Bumper
     @Override
-    public boolean getHangerUp() { return driver.getRawButton(6) && driver.getRawButton(5); }
+    public boolean getHangerUp() { return driver.getRawButton(5); }
 
     //Driver: Left Bumper
     @Override

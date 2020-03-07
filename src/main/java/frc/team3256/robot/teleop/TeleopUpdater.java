@@ -48,7 +48,6 @@ public class TeleopUpdater {
         double throttle = controls.getThrottle();
         double turn = controls.getTurn();
         boolean quickTurn = controls.getQuickTurn();
-        boolean shiftDown = controls.getLowGear();
 
         //Intake
         boolean unjam = controls.getUnjam();
@@ -82,10 +81,12 @@ public class TeleopUpdater {
             ballCounter.setCount(0);
         }
 
+        SmartDashboard.putBoolean("Ball IR", IRSensors.getInstance().isFeederIRIntact());
+
         // DriveTrain ---------------------------------------------------------------------------------------
         DrivePower drivePower = driveTrain.cheesyishDrive(throttle, turn, quickTurn);
         driveTrain.setPowerOpenLoop(drivePower.getLeft(), drivePower.getRight());
-        driveTrain.setHighGear(drivePower.getHighGear());
+        driveTrain.setHighGear(!drivePower.getHighGear());
 
         //Intake Subsystem | Some Feeder interactions
         if (unjam) {
@@ -136,17 +137,17 @@ public class TeleopUpdater {
             hood.setWantedState(Hood.WantedState.WANTS_TO_IDLE);
         }
 
-        if(getHangerUp) {
-            hanger.setWantedState(Hanger.WantedState.WANTS_TO_HANGER_ACTUATE_RELEASE);
-            readyToHang = true;
-        }
-        else if (readyToHang) {
-            hanger.setWinchDownPower(getHangerDown);
-            hanger.setWantedState(Hanger.WantedState.WANTS_TO_HANGER_DRIVE_DOWN);
-        }
-        else {
-            hanger.setWantedState(Hanger.WantedState.WANTS_TO_IDLE);
-        }
+//        if(getHangerUp) {
+//            hanger.setWantedState(Hanger.WantedState.WANTS_TO_HANGER_ACTUATE_RELEASE);
+//            readyToHang = true;
+//        }
+//        else if (readyToHang) {
+//            hanger.setWinchDownPower(Math.pow(getHangerDown, 5));
+//            hanger.setWantedState(Hanger.WantedState.WANTS_TO_HANGER_DRIVE_DOWN);
+//        }
+//        else {
+//            hanger.setWantedState(Hanger.WantedState.WANTS_TO_IDLE);
+//        }
 
         if(getAutoAlign) {
             //Turn on Limelight if autoalign

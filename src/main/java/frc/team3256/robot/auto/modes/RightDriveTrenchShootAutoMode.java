@@ -33,7 +33,7 @@ public class RightDriveTrenchShootAutoMode extends AutoModeBase {
 
         double startTime = Timer.getFPGATimestamp();
         runAction(new ResetPursuitAction());
-        DriveTrain.getInstance().setHighGear(true);
+        //DriveTrain.getInstance().setHighGear(true);
         Flywheel.getInstance().setReadyToShoot(true);
         runAction(new ShootAction());
         Flywheel.getInstance().setReadyToShoot(false);

@@ -35,7 +35,7 @@ public class RightDriveTrenchTenBallAutoMode extends AutoModeBase {
         double startTime = Timer.getFPGATimestamp();
         runAction(new WaitAction(0.5));
         runAction(new ResetPursuitAction());
-        DriveTrain.getInstance().setHighGear(true);
+        //DriveTrain.getInstance().setHighGear(true);
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(5), new ShootAction())));
         runAction(new WaitAction(10.0));
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(1), new StartIntakeAction(5), new ShootAction())));

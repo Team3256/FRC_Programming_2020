@@ -250,15 +250,15 @@ public class Paths {
         firstSegment.addPoint(new Vector(-64.09,82.01));
         firstSegment.addPoint(new Vector(-66.05,85.84));
         firstSegment.addPoint(new Vector(-67.46,90.03));
-        firstSegment.addPoint(new Vector(-71.5, 96));
-        firstSegment.addPoint(new Vector(-71.5, 100));
-        firstSegment.addPoint(new Vector(-71.5, 110));
-        firstSegment.addPoint(new Vector(-71.5, 120));
-        firstSegment.addPoint(new Vector(-71.5, 130));
-        firstSegment.addPoint(new Vector(-71.5, 140));
-        firstSegment.addPoint(new Vector(-71.5, 150));
-        firstSegment.addPoint(new Vector(-71.5, 160));
-        firstSegment.addPoint(new Vector(-71.5, 170));
+        firstSegment.addPoint(new Vector(-71.5, 96)); //-71.5
+        firstSegment.addPoint(new Vector(-71.5, 100)); //-71.5
+        firstSegment.addPoint(new Vector(-71.5, 110)); //-71.5
+        firstSegment.addPoint(new Vector(-71.5, 120)); //-71.5
+        firstSegment.addPoint(new Vector(-71.5, 130)); //-71.5
+        firstSegment.addPoint(new Vector(-71.5, 140)); //-71.5
+        firstSegment.addPoint(new Vector(-71.5, 150)); //-71.5
+        firstSegment.addPoint(new Vector(-71.5, 160)); //-71.5
+        firstSegment.addPoint(new Vector(-71.5, 170)); //-71.5
 
         firstSegment.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
         firstSegment.setVelocities(maxVel, maxAccel, maxVelk);

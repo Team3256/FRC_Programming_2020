@@ -21,7 +21,7 @@ public class DriveConstants {
     public static final double kVelocityHighGearI = 1E-9;
     public static final double kVelocityHighGearD = 0;
     public static final double kVelocityHighGearIZone = 0;
-    public static final double kVelocityHighGearF = 4e-4;
+    public static final double kVelocityHighGearF = 2e-4; //4e-4
 
     //Pure Pursuit
     public static final double spacing = 6; //inches

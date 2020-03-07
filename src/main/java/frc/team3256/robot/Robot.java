@@ -9,16 +9,15 @@ package frc.team3256.robot;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3256.robot.auto.modes.*;
 import frc.team3256.robot.hardware.AirCompressor;
 import frc.team3256.robot.helper.BallCounter;
 import frc.team3256.robot.helper.ShootingKinematics;
-import frc.team3256.robot.auto.modes.DoNothingAutoMode;
-import frc.team3256.robot.auto.modes.RightDriveShootAutoMode;
-import frc.team3256.robot.auto.modes.RightDriveTrenchShootAutoMode;
-import frc.team3256.robot.auto.modes.RightDriveTrenchTenBallAutoMode;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.robot.log.FalconAutoLogger;
@@ -51,7 +50,7 @@ public class Robot extends TimedRobot {
   private Feeder feeder = Feeder.getInstance();
   private Hood hood = Hood.getInstance();
   private Turret turret = Turret.getInstance();
-  private Hanger hanger = Hanger.getInstance();
+//  private Hanger hanger = Hanger.getInstance();
   private BallCounter ballCounter = BallCounter.getInstance();
   private AirCompressor airCompressor = AirCompressor.getInstance();
   private PoseEstimator poseEstimator;
@@ -70,7 +69,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    limelight.turnOff();
+    LiveWindow.disableAllTelemetry();
     airCompressor.turnOnCompressor();
     teleopUpdater = new TeleopUpdater();
     DriveTrainBase.setDriveTrain(drivetrain);
@@ -81,7 +80,7 @@ public class Robot extends TimedRobot {
     drivetrain.resetGyro();
 
     enabledLooper = new Looper(1 / 200D);
-    enabledLooper.addLoops(intake, hood, feeder, ballCounter, hanger, turret);
+    enabledLooper.addLoops(intake, hood, feeder, ballCounter, turret);
 
     flywheelLooper = new Looper(1/500D);
     flywheelLooper.addLoops(flywheel);
@@ -96,6 +95,7 @@ public class Robot extends TimedRobot {
     autoChooser.setDefaultOption("Do Nothing", new DoNothingAutoMode());
     autoChooser.addOption("Right Shoot Auto", new RightDriveShootAutoMode());
     autoChooser.addOption("Right Trench Shoot Auto", new RightDriveTrenchShootAutoMode());
+    autoChooser.addOption("Right Six Ball Shoot Auto", new RightDriveTrenchSixBallAutoMode());
     autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
     SmartDashboard.putData(autoChooser);
 
@@ -172,6 +172,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    maintainAutoExecution = false;
+    drivetrain.runZeroPower();
+
     limelight.turnOn();
     airCompressor.turnOnCompressor();
     enabledLooper.start();
@@ -181,6 +184,7 @@ public class Robot extends TimedRobot {
     drivetrain.resetGyro();
     drivetrain.resetEncoders();
     drivetrain.setBrakeMode();
+    drivetrain.setHighGear(true);
     poseEstimator.reset();
     turret.reset();
     BallCounter.getInstance().setCount(0);
@@ -190,14 +194,17 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     teleopUpdater.update();
-    SmartDashboard.putNumber("distance to outer", limelight.getDistanceToTarget());
     SmartDashboard.putNumber("Ball counter", BallCounter.getInstance().getCount());
-    SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
-    SmartDashboard.putNumber("wanted vel", ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
-    SmartDashboard.putNumber("TAU", limelight.calculateTau());
-    SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
     SmartDashboard.putBoolean("Hood Zeroed", Hood.getInstance().isZeroed());
-    SmartDashboard.putNumber("wantedEnd", limelight.optimalEndAngle());
+
+    //TODO: COMMENTED OUT TO INCREASE LATENCY, COMMENT BACK IN FOR DEBUG
+//    SmartDashboard.putNumber("distance to outer", limelight.getDistanceToTarget());
+//    SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
+//    SmartDashboard.putNumber("wanted vel", ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
+//    SmartDashboard.putNumber("TAU", limelight.calculateTau());
+//    SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
+//    SmartDashboard.putNumber("wantedEnd", limelight.optimalEndAngle());
+//
     if(WANTS_TO_LOG){
       Logger.update();
     }

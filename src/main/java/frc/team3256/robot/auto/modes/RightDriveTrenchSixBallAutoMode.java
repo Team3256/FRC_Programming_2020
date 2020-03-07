@@ -6,10 +6,7 @@ import frc.team3256.robot.auto.actions.*;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.constants.DriveConstants;
 import frc.team3256.robot.helper.BallCounter;
-import frc.team3256.robot.subsystems.DriveTrain;
-import frc.team3256.robot.subsystems.Flywheel;
-import frc.team3256.robot.subsystems.Hood;
-import frc.team3256.robot.subsystems.Turret;
+import frc.team3256.robot.subsystems.*;
 import frc.team3256.warriorlib.auto.AutoModeBase;
 import frc.team3256.warriorlib.auto.AutoModeEndedException;
 import frc.team3256.warriorlib.auto.action.ParallelAction;
@@ -26,19 +23,21 @@ public class RightDriveTrenchSixBallAutoMode extends AutoModeBase {
     protected void routine() throws AutoModeEndedException {
         PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
         purePursuitTracker.setRobotTrack(DriveConstants.kRobotTrackWidth);
-        purePursuitTracker.setPaths(Paths.getRightTrenchSixBallAutoPath(), DriveConstants.lookaheadDistance);
+        purePursuitTracker.setPaths(Paths.getRightTrenchSixBallAutoPath(),  DriveConstants.lookaheadDistance);
         BallCounter.getInstance().setCount(3);
         Flywheel.getInstance().setReadyToShoot(false);
         Turret.getInstance().reset();
+        Intake.getInstance().setIntakeTogglingState(false);
+        Intake.getInstance().setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
         runAction(new MoveTurretAction(25));
 
         double startTime = Timer.getFPGATimestamp();
         runAction(new ResetPursuitAction());
-        DriveTrain.getInstance().setHighGear(true);
+        //DriveTrain.getInstance().setHighGear(true);
         Flywheel.getInstance().setReadyToShoot(true);
         runAction(new ShootAction());
         Flywheel.getInstance().setReadyToShoot(false);
-        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(3), new FeederIndexAction(3))));
+        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(3), new FeederIndexAction(3), new ShootAction())));
         runAction(new WaitAction(0.5));
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(1), new ShootAction())));
         Flywheel.getInstance().setReadyToShoot(true);
