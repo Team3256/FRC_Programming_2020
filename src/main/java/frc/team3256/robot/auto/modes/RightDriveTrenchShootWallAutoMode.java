@@ -40,7 +40,7 @@ public class RightDriveTrenchShootWallAutoMode extends AutoModeBase
         Flywheel.getInstance().setReadyToShoot(true);
         runAction(new ShootAction());
         Flywheel.getInstance().setReadyToShoot(false);
-        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(5), new FeederIndexAction(5), new ShootAction())));
+        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(), new FeederIndexAction(), new ShootAction())));
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(1), new BackwardsIntakeAction(), new ShootAction())));
         runAction(new StopIntakeAction());
         Flywheel.getInstance().setReadyToShoot(true);

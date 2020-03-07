@@ -28,7 +28,7 @@ public class XboxControllerConfig implements ControlsInterface {
 
     //Driver: Left & Right Bumper
     @Override
-    public boolean toggleHangerPancake() { return driver.getRawButton(5) && driver.getRawButton(6); }
+    public boolean toggleHangerPancakes() { return driver.getRawButton(5) && driver.getRawButton(6); }
 
     //Driver: Left Trigger
     @Override
@@ -81,11 +81,6 @@ public class XboxControllerConfig implements ControlsInterface {
     @Override
     public boolean getFeederBackward() { return manipulator.getPOV() == 180; }
 
-    //TODO: Delete this and replace with getAutoAlign
-    //Manipulator: Left Bumper
-    @Override
-    public boolean autoAlignHood() { return manipulator.getRawButton(5); }
-
     //Manipulator: Left Analog Stick | Vertical Axis | Up
     @Override
     public boolean manualHoodUp() {
@@ -95,11 +90,6 @@ public class XboxControllerConfig implements ControlsInterface {
     @Override
     public boolean manualHoodDown() { return manipulator.getRawAxis(1) > .5; } //***NEED TO CONFIRM DIRECTION***
 
-    //TODO: Delete this and replace with getAutoAlign
-    //Manipulator: Right Bumper
-    @Override
-    public boolean autoAlignTurret() { return manipulator.getRawButton(6); }
-
     //Manipulator: Right Analog Stick | Horizontal Axis | Left
     @Override
     public boolean manualTurretLeft() { return manipulator.getRawAxis(4) < -0.5; } //***NEED TO CONFIRM DIRECTION***
@@ -107,11 +97,6 @@ public class XboxControllerConfig implements ControlsInterface {
     //Manipulator: Right Analog Stick | Horizontal Axis | Right
     @Override
     public boolean manualTurretRight() { return manipulator.getRawAxis(4) > 0.5; } //***NEED TO CONFIRM DIRECTION***
-
-    //TODO: Delete this and replace with getRevUp & getFeederShoot
-    //Manipulator: Y Button
-    @Override
-    public boolean getShoot() { return manipulator.getRawButton(4); }
 
     //Manipulator: A Button
     @Override

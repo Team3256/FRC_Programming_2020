@@ -4,21 +4,19 @@ import frc.team3256.robot.helper.BallCounter;
 import frc.team3256.robot.subsystems.Feeder;
 import frc.team3256.robot.subsystems.Intake;
 import frc.team3256.warriorlib.auto.action.Action;
+import frc.team3256.warriorlib.auto.purepursuit.PurePursuitTracker;
 
 public class FeederIndexAction implements Action {
 
     Feeder mFeeder = Feeder.getInstance();
-    Intake mIntake = Intake.getInstance();
     BallCounter ballCounter = BallCounter.getInstance();
-    private double endBallCount;
 
-    public FeederIndexAction(double endBallCount) {
-        this.endBallCount = endBallCount;
+    public FeederIndexAction() {
     }
 
     @Override
     public boolean isFinished() {
-        return ballCounter.isFull() || ballCounter.getCount() >= endBallCount;
+        return ballCounter.isFull() || PurePursuitTracker.getInstance().isDone();
     }
 
     @Override

@@ -12,6 +12,7 @@ import static frc.team3256.robot.constants.DriveConstants.*;
 
 public class Paths {
     private static List<Path> rightShootAutoPath;
+    private static List<Path> rightBackShootAutoPath;
     private static List<Path> rightTrenchCollectAutoPath;
     private static List<Path> rightTrenchSixBallAutoPath;
     private static List<Path> rightTrenchCollectWallAutoPath;
@@ -21,6 +22,7 @@ public class Paths {
 
     public static void initialize() {
         getRightShootAutoPath();
+        getRightBackShootAutoPath();
         getRightTrenchCollectAutoPath();
         getRightTrenchSixBallAutoPath();
         getRightTrenchCollectWallAutoPath();
@@ -70,6 +72,23 @@ public class Paths {
 
         rightShootAutoPath = Arrays.asList(firstSegmentPath);
         return rightShootAutoPath;
+    }
+
+    public static List<Path> getRightBackShootAutoPath() {
+        if (rightBackShootAutoPath != null)
+            return rightBackShootAutoPath;
+        PathGenerator firstSegment = new PathGenerator(spacing, false);
+
+        firstSegment.addPoint(new Vector(0,0));
+        firstSegment.addPoint(new Vector(0,-30));
+
+        firstSegment.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
+        firstSegment.setVelocities(maxVel, maxAccel, maxVelk);
+
+        Path firstSegmentPath = firstSegment.generatePath();
+
+        rightBackShootAutoPath = Arrays.asList(firstSegmentPath);
+        return rightBackShootAutoPath;
     }
 
     public static List<Path> getRightTrenchCollectAutoPath() {

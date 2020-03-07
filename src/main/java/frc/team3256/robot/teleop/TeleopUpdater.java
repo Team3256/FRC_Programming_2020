@@ -29,6 +29,7 @@ public class TeleopUpdater {
     private boolean prevIntakeToggle = false;
     private boolean hangerRelease = true;
     private boolean prevHangerPancakesToggle = false;
+    private boolean wantsToAutoIndex = true;
 
     private boolean readyToHang = false;
 
@@ -94,7 +95,14 @@ public class TeleopUpdater {
         if (unjam) {
             this.intake.setWantedState(Intake.WantedState.WANTS_TO_UNJAM);
         } else if (intakePressed) {
-            this.intake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
+            if (ballCounter.getCount() == 4) {
+                wantsToAutoIndex = false;
+                intake.setWantedState(Intake.WantedState.WANTS_TO_INDEX_LAST_BALL);
+            }
+            else {
+                wantsToAutoIndex = true;
+                this.intake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
+            }
         } else if (exhaust) {
             overrideFeeder = true;
             this.intake.setWantedState(Intake.WantedState.WANTS_TO_EXHAUST);
@@ -107,10 +115,11 @@ public class TeleopUpdater {
 
         //Feeder Indexing Logic
         if (!overrideFeeder) {
-            if (ballCounter.shouldFeed()) {
+            if (ballCounter.shouldFeed() && wantsToAutoIndex) {
                 feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
                 this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
-            } else {
+            }
+            else {
                 feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
             }
         }

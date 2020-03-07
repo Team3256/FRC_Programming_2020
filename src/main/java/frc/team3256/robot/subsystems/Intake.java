@@ -14,7 +14,6 @@ public class Intake extends SubsystemBase {
     private CANSparkMax mIntake;
     private WPI_TalonSRX mCenterMech;
     private DoubleSolenoid mRaiseMech;
-    private boolean wantsToToggle;
     private boolean intakeRaise;
 
     WantedState mPrevWantedState;
@@ -24,6 +23,7 @@ public class Intake extends SubsystemBase {
     public enum IntakeState {
         UNJAMMING,
         INTAKING,
+        INDEXING_LAST_BALL,
         INTAKING_AUTO_BACKWARDS,
         EXHAUSTING,
         TOGGLING,
@@ -33,6 +33,7 @@ public class Intake extends SubsystemBase {
     public enum WantedState {
         WANTS_TO_UNJAM,
         WANTS_TO_INTAKE,
+        WANTS_TO_INDEX_LAST_BALL,
         WANTS_TO_EXHAUST,
         WANTS_TO_AUTO_BACKWARDS_INTAKE,
         WANTS_TO_TOGGLE_INTAKE,
@@ -94,6 +95,9 @@ public class Intake extends SubsystemBase {
             case TOGGLING:
                 newState = handleToggling();
                 break;
+            case INDEXING_LAST_BALL:
+                newState = handleIndexingLastBall();
+                break;
             case STOP:
             default:
                 newState = handleStop();
@@ -113,6 +117,12 @@ public class Intake extends SubsystemBase {
     public IntakeState handleIntake() {
         mIntake.set(-1); //-0.5 //-0.7
         mCenterMech.set(-1); //-0.8
+        return defaultStateTransfer();
+    }
+
+    public IntakeState handleIndexingLastBall() {
+        mIntake.set(-0.7);
+        mCenterMech.set(0);
         return defaultStateTransfer();
     }
 
@@ -163,6 +173,8 @@ public class Intake extends SubsystemBase {
                 return IntakeState.UNJAMMING;
             case WANTS_TO_INTAKE:
                 return IntakeState.INTAKING;
+            case WANTS_TO_INDEX_LAST_BALL:
+                return IntakeState.INDEXING_LAST_BALL;
             case WANTS_TO_AUTO_BACKWARDS_INTAKE:
                 return IntakeState.INTAKING_AUTO_BACKWARDS;
             case WANTS_TO_EXHAUST:
