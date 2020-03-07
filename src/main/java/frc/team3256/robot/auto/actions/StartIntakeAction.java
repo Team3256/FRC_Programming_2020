@@ -3,19 +3,18 @@ package frc.team3256.robot.auto.actions;
 import frc.team3256.robot.helper.BallCounter;
 import frc.team3256.robot.subsystems.Intake;
 import frc.team3256.warriorlib.auto.action.Action;
+import frc.team3256.warriorlib.auto.purepursuit.PurePursuitTracker;
 
 public class StartIntakeAction implements Action {
 
     Intake intake = Intake.getInstance();
-    private double stopBallCount;
 
-    public StartIntakeAction(double stopBallCount) {
-        this.stopBallCount = stopBallCount;
+    public StartIntakeAction() {
     }
 
     @Override
     public boolean isFinished() {
-        return BallCounter.getInstance().getCount() >= stopBallCount;
+        return PurePursuitTracker.getInstance().isDone();
     }
 
     @Override

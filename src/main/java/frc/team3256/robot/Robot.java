@@ -93,9 +93,10 @@ public class Robot extends TimedRobot {
     limelightLooper.addLoops(limelight);
 
     autoChooser.setDefaultOption("Do Nothing", new DoNothingAutoMode());
-    autoChooser.addOption("Right Shoot Auto", new RightDriveShootAutoMode());
+    autoChooser.addOption("Right 3 Ball Towards Shoot Auto", new RightDriveTowardsShootAutoMode());
+    autoChooser.addOption("Right 3 Ball Away Shoot Auto", new RightDriveShootAutoMode());
     autoChooser.addOption("Right Trench Shoot Auto", new RightDriveTrenchShootAutoMode());
-    autoChooser.addOption("Right Six Ball Shoot Auto", new RightDriveTrenchSixBallAutoMode());
+    autoChooser.addOption("Right 6 Ball Shoot Auto", new RightDriveTrenchSixBallAutoMode());
     autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
     SmartDashboard.putData(autoChooser);
 
