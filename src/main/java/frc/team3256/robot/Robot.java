@@ -197,6 +197,8 @@ public class Robot extends TimedRobot {
     teleopUpdater.update();
     SmartDashboard.putNumber("Ball counter", BallCounter.getInstance().getCount());
     SmartDashboard.putBoolean("Hood Zeroed", Hood.getInstance().isZeroed());
+    SmartDashboard.putBoolean("Correct Distance", 60 < limelight.getDistanceToInner() && limelight.getDistanceToInner() < 144);
+    SmartDashboard.putBoolean("Correct Auto Align", turret.atAngleSetpoint() && hood.atHoodSetpoint() && flywheel.atSetpointVelocity());
 
     //TODO: COMMENTED OUT TO INCREASE LATENCY, COMMENT BACK IN FOR DEBUG
 //    SmartDashboard.putNumber("distance to outer", limelight.getDistanceToTarget());
