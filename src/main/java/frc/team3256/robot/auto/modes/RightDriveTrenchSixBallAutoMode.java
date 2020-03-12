@@ -34,10 +34,11 @@ public class RightDriveTrenchSixBallAutoMode extends AutoModeBase {
         double startTime = Timer.getFPGATimestamp();
         runAction(new ResetPursuitAction());
         DriveTrain.getInstance().setHighGear(true);
+        runAction(new ShootAction());
         Flywheel.getInstance().setReadyToShoot(true);
         runAction(new ShootAction());
         Flywheel.getInstance().setReadyToShoot(false);
-        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(), new FeederIndexAction(), new ShootAction())));
+        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(3.0), new FeederIndexAction(3.0))));
         runAction(new WaitAction(0.5));
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(1), new ShootAction())));
         Flywheel.getInstance().setReadyToShoot(true);

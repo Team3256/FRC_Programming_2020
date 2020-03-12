@@ -263,21 +263,21 @@ public class Paths {
         firstSegment.addPoint(new Vector(-51.66,65.98));
         firstSegment.addPoint(new Vector(-53.86,68.41));
         firstSegment.addPoint(new Vector(-55.51,70.31));
-        firstSegment.addPoint(new Vector(-58.06,73.38));
-        firstSegment.addPoint(new Vector(-59.79,75.61));
-        firstSegment.addPoint(new Vector(-61,78.01));
-        firstSegment.addPoint(new Vector(-64.09,82.01));
-        firstSegment.addPoint(new Vector(-66.05,85.84));
-        firstSegment.addPoint(new Vector(-67.46,90.03));
-        firstSegment.addPoint(new Vector(-71.5, 96)); //-71.5
-        firstSegment.addPoint(new Vector(-71.5, 100)); //-71.5
-        firstSegment.addPoint(new Vector(-71.5, 110)); //-71.5
-        firstSegment.addPoint(new Vector(-71.5, 120)); //-71.5
-        firstSegment.addPoint(new Vector(-71.5, 130)); //-71.5
-        firstSegment.addPoint(new Vector(-71.5, 140)); //-71.5
-        firstSegment.addPoint(new Vector(-71.5, 150)); //-71.5
-        firstSegment.addPoint(new Vector(-71.5, 160)); //-71.5
-        firstSegment.addPoint(new Vector(-71.5, 170)); //-71.5
+//        firstSegment.addPoint(new Vector(-58.06,73.38));
+//        firstSegment.addPoint(new Vector(-59.79,75.61));
+//        firstSegment.addPoint(new Vector(-61,78.01));
+//        firstSegment.addPoint(new Vector(-64.09,82.01));
+//        firstSegment.addPoint(new Vector(-66.05,85.84));
+//        firstSegment.addPoint(new Vector(-67.46,90.03));
+        firstSegment.addPoint(new Vector(-61, 96)); //-71.5
+        firstSegment.addPoint(new Vector(-61, 100)); //-71.5
+        firstSegment.addPoint(new Vector(-61, 110)); //-71.5
+        firstSegment.addPoint(new Vector(-63, 120)); //-71.5
+        firstSegment.addPoint(new Vector(-63, 130)); //-71.5
+        firstSegment.addPoint(new Vector(-63, 140)); //-71.5
+        firstSegment.addPoint(new Vector(-63, 150)); //-71.5
+        firstSegment.addPoint(new Vector(-63, 160)); //-71.5
+        firstSegment.addPoint(new Vector(-63, 167)); //-71.5
 
         firstSegment.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
         firstSegment.setVelocities(maxVel, maxAccel, maxVelk);
@@ -288,21 +288,21 @@ public class Paths {
 
         PathGenerator secondSegment = new PathGenerator(spacing, false);
 
-        secondSegment.addPoint(new Vector(-71.5, 170));
-        secondSegment.addPoint(new Vector(-71.5, 160));
-        secondSegment.addPoint(new Vector(-71.5, 150));
-        secondSegment.addPoint(new Vector(-71.5, 140));
-        secondSegment.addPoint(new Vector(-71.5, 130));
-        secondSegment.addPoint(new Vector(-71.5, 120));
-        secondSegment.addPoint(new Vector(-71.5, 110));
-        secondSegment.addPoint(new Vector(-71.5, 100));
-        secondSegment.addPoint(new Vector(-71.5, 96));
-        secondSegment.addPoint(new Vector(-67.46,90.03));
-        secondSegment.addPoint(new Vector(-66.05,85.84));
-        secondSegment.addPoint(new Vector(-64.09,82.01));
-        secondSegment.addPoint(new Vector(-61,78.01));
-        secondSegment.addPoint(new Vector(-59.79,75.61));
-        secondSegment.addPoint(new Vector(-58.06,73.38));
+        secondSegment.addPoint(new Vector(-63, 167));
+        secondSegment.addPoint(new Vector(-63, 160));
+        secondSegment.addPoint(new Vector(-63, 150));
+        secondSegment.addPoint(new Vector(-63, 140));
+        secondSegment.addPoint(new Vector(-63, 130));
+        secondSegment.addPoint(new Vector(-63, 120));
+        secondSegment.addPoint(new Vector(-61, 110));
+        secondSegment.addPoint(new Vector(-61, 100));
+        secondSegment.addPoint(new Vector(-61, 96));
+//        secondSegment.addPoint(new Vector(-67.46,90.03));
+//        secondSegment.addPoint(new Vector(-66.05,85.84));
+//        secondSegment.addPoint(new Vector(-64.09,82.01));
+//        secondSegment.addPoint(new Vector(-61,78.01));
+//        secondSegment.addPoint(new Vector(-59.79,75.61));
+//        secondSegment.addPoint(new Vector(-58.06,73.38));
         secondSegment.addPoint(new Vector(-55.51,70.31));
         secondSegment.addPoint(new Vector(-53.86,68.41));
         secondSegment.addPoint(new Vector(-51.66,65.98));
@@ -370,8 +370,9 @@ public class Paths {
         firstSegment.addPoint(new Vector(0, 140));
         firstSegment.addPoint(new Vector(0, 150));
         firstSegment.addPoint(new Vector(0, 160));
-        firstSegment.addPoint(new Vector(0, 170));
-        firstSegment.addPoint(new Vector(0, 237));
+        firstSegment.addPoint(new Vector(0,167));
+//        firstSegment.addPoint(new Vector(0, 170));
+//        firstSegment.addPoint(new Vector(0, 237));
 
         firstSegment.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
         firstSegment.setVelocities(maxVel, maxAccel, maxVelk);
@@ -382,56 +383,71 @@ public class Paths {
 
         PathGenerator secondSegment = new PathGenerator(spacing, false);
 
-        secondSegment.addPoint(new Vector(-71.5, 237).add(offset));
-        secondSegment.addPoint(new Vector(-71.5, 170).add(offset));
-        secondSegment.addPoint(new Vector(-71.5, 160).add(offset));
-        secondSegment.addPoint(new Vector(-71.5, 150).add(offset));
-        secondSegment.addPoint(new Vector(-71.5, 140).add(offset));
-        secondSegment.addPoint(new Vector(-71.5, 130).add(offset));
-        secondSegment.addPoint(new Vector(-71.5, 120).add(offset));
-        secondSegment.addPoint(new Vector(-71.5, 110).add(offset));
-        secondSegment.addPoint(new Vector(-71.5, 100).add(offset));
-        secondSegment.addPoint(new Vector(-71.5, 96).add(offset));
-        secondSegment.addPoint(new Vector(-67.46,90.03).add(offset));
-        secondSegment.addPoint(new Vector(-66.05,85.84).add(offset));
-        secondSegment.addPoint(new Vector(-64.09,82.01).add(offset));
-        secondSegment.addPoint(new Vector(-61,78.01).add(offset));
-        secondSegment.addPoint(new Vector(-59.79,75.61).add(offset));
-        secondSegment.addPoint(new Vector(-58.06,73.38).add(offset));
-        secondSegment.addPoint(new Vector(-55.51,70.31).add(offset));
-        secondSegment.addPoint(new Vector(-53.86,68.41).add(offset));
-        secondSegment.addPoint(new Vector(-51.66,65.98).add(offset));
-        secondSegment.addPoint(new Vector(-49.43,63.61).add(offset));
-        secondSegment.addPoint(new Vector(-46.91,61.04).add(offset));
-        secondSegment.addPoint(new Vector(-46.18,60.31).add(offset));
-        secondSegment.addPoint(new Vector(-45.38, 59.51).add(offset));
-        secondSegment.addPoint(new Vector(-41.10,55.42).add(offset));
-        secondSegment.addPoint(new Vector(-39.95,54.37).add(offset));
-        secondSegment.addPoint(new Vector(-37.31,52).add(offset));
-        secondSegment.addPoint(new Vector(-35,50).add(offset));
-        secondSegment.addPoint(new Vector(-37.62,52.27).add(offset));
-        secondSegment.addPoint(new Vector(-35,50).add(offset));
-        secondSegment.addPoint(new Vector(-31.69, 47.22).add(offset));
-        secondSegment.addPoint(new Vector(-28.92, 44.98).add(offset));
-        secondSegment.addPoint(new Vector(-23.57, 40.7).add(offset));
-        secondSegment.addPoint(new Vector(-21.91, 39.37).add(offset));
-        secondSegment.addPoint(new Vector(-21.28, 38.86).add(offset));
-        secondSegment.addPoint(new Vector(-19.32, 37.28).add(offset));
-        secondSegment.addPoint(new Vector(-18.05, 36.25).add(offset));
-        secondSegment.addPoint(new Vector(-16.55, 35.03).add(offset));
-        secondSegment.addPoint(new Vector(-15.77, 34.39).add(offset));
-        secondSegment.addPoint(new Vector(-14.66, 33.47).add(offset));
-        secondSegment.addPoint(new Vector(-13.34, 32.38).add(offset));
-        secondSegment.addPoint(new Vector(-11.88, 31.15).add(offset));
-        secondSegment.addPoint(new Vector(-10.99, 30.40).add(offset));
-        secondSegment.addPoint(new Vector(-10.4,29.82).add(offset));
-        secondSegment.addPoint(new Vector(-9, 28.66).add(offset));
-        secondSegment.addPoint(new Vector(-7.24, 27.12).add(offset));
-        secondSegment.addPoint(new Vector(-5.31, 25.35).add(offset));
-        secondSegment.addPoint(new Vector(-2.49, 22.51).add(offset));
-        secondSegment.addPoint(new Vector(-1.52, 21.37).add(offset));
-        secondSegment.addPoint(new Vector(-0.05, 18.61).add(offset));
-        secondSegment.addPoint(new Vector(0, 18).add(offset));
+        secondSegment.addPoint(new Vector(0, 167));
+        secondSegment.addPoint(new Vector(0, 150));
+        secondSegment.addPoint(new Vector(0, 140));
+        secondSegment.addPoint(new Vector(0, 130));
+        secondSegment.addPoint(new Vector(0, 120));
+        secondSegment.addPoint(new Vector(0, 110));
+        secondSegment.addPoint(new Vector(0, 100));
+        secondSegment.addPoint(new Vector(0, 90));
+        secondSegment.addPoint(new Vector(0, 80));
+        secondSegment.addPoint(new Vector(0, 70));
+        secondSegment.addPoint(new Vector(0, 60));
+        secondSegment.addPoint(new Vector(0, 40));
+        secondSegment.addPoint(new Vector(0, 20));
+        secondSegment.addPoint(new Vector(0, 10));
+
+//        secondSegment.addPoint(new Vector(-71.5, 237).add(offset));
+//        secondSegment.addPoint(new Vector(-71.5, 170).add(offset));
+//        secondSegment.addPoint(new Vector(-71.5, 160).add(offset));
+//        secondSegment.addPoint(new Vector(-71.5, 150).add(offset));
+//        secondSegment.addPoint(new Vector(-71.5, 140).add(offset));
+//        secondSegment.addPoint(new Vector(-71.5, 130).add(offset));
+//        secondSegment.addPoint(new Vector(-71.5, 120).add(offset));
+//        secondSegment.addPoint(new Vector(-71.5, 110).add(offset));
+//        secondSegment.addPoint(new Vector(-71.5, 100).add(offset));
+//        secondSegment.addPoint(new Vector(-71.5, 96).add(offset));
+//        secondSegment.addPoint(new Vector(-67.46,90.03).add(offset));
+//        secondSegment.addPoint(new Vector(-66.05,85.84).add(offset));
+//        secondSegment.addPoint(new Vector(-64.09,82.01).add(offset));
+//        secondSegment.addPoint(new Vector(-61,78.01).add(offset));
+//        secondSegment.addPoint(new Vector(-59.79,75.61).add(offset));
+//        secondSegment.addPoint(new Vector(-58.06,73.38).add(offset));
+//        secondSegment.addPoint(new Vector(-55.51,70.31).add(offset));
+//        secondSegment.addPoint(new Vector(-53.86,68.41).add(offset));
+//        secondSegment.addPoint(new Vector(-51.66,65.98).add(offset));
+//        secondSegment.addPoint(new Vector(-49.43,63.61).add(offset));
+//        secondSegment.addPoint(new Vector(-46.91,61.04).add(offset));
+//        secondSegment.addPoint(new Vector(-46.18,60.31).add(offset));
+//        secondSegment.addPoint(new Vector(-45.38, 59.51).add(offset));
+//        secondSegment.addPoint(new Vector(-41.10,55.42).add(offset));
+//        secondSegment.addPoint(new Vector(-39.95,54.37).add(offset));
+//        secondSegment.addPoint(new Vector(-37.31,52).add(offset));
+//        secondSegment.addPoint(new Vector(-35,50).add(offset));
+//        secondSegment.addPoint(new Vector(-37.62,52.27).add(offset));
+//        secondSegment.addPoint(new Vector(-35,50).add(offset));
+//        secondSegment.addPoint(new Vector(-31.69, 47.22).add(offset));
+//        secondSegment.addPoint(new Vector(-28.92, 44.98).add(offset));
+//        secondSegment.addPoint(new Vector(-23.57, 40.7).add(offset));
+//        secondSegment.addPoint(new Vector(-21.91, 39.37).add(offset));
+//        secondSegment.addPoint(new Vector(-21.28, 38.86).add(offset));
+//        secondSegment.addPoint(new Vector(-19.32, 37.28).add(offset));
+//        secondSegment.addPoint(new Vector(-18.05, 36.25).add(offset));
+//        secondSegment.addPoint(new Vector(-16.55, 35.03).add(offset));
+//        secondSegment.addPoint(new Vector(-15.77, 34.39).add(offset));
+//        secondSegment.addPoint(new Vector(-14.66, 33.47).add(offset));
+//        secondSegment.addPoint(new Vector(-13.34, 32.38).add(offset));
+//        secondSegment.addPoint(new Vector(-11.88, 31.15).add(offset));
+//        secondSegment.addPoint(new Vector(-10.99, 30.40).add(offset));
+//        secondSegment.addPoint(new Vector(-10.4,29.82).add(offset));
+//        secondSegment.addPoint(new Vector(-9, 28.66).add(offset));
+//        secondSegment.addPoint(new Vector(-7.24, 27.12).add(offset));
+//        secondSegment.addPoint(new Vector(-5.31, 25.35).add(offset));
+//        secondSegment.addPoint(new Vector(-2.49, 22.51).add(offset));
+//        secondSegment.addPoint(new Vector(-1.52, 21.37).add(offset));
+//        secondSegment.addPoint(new Vector(-0.05, 18.61).add(offset));
+//        secondSegment.addPoint(new Vector(0, 18).add(offset));
 
         secondSegment.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
         secondSegment.setVelocities(maxVel, maxAccel, maxVelk);

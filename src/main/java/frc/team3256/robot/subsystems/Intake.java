@@ -115,8 +115,8 @@ public class Intake extends SubsystemBase {
 
     //TODO: EVERYTHING 100 TEST
     public IntakeState handleIntake() {
-        mIntake.set(-1); //-0.5 //-0.7
-        mCenterMech.set(-1); //-0.8
+        mIntake.set(-0.8); //-0.5 //-0.7
+        mCenterMech.set(-.75); //-0.8
         return defaultStateTransfer();
     }
 

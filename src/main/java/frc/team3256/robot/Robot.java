@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
 
   private TeleopUpdater teleopUpdater;
   private DriveTrain drivetrain = DriveTrain.getInstance();
-  private Intake intake = Intake.getInstance();
+//  private Intake intake = Intake.getInstance();
   private Limelight limelight = Limelight.getInstance();
   private Flywheel flywheel = Flywheel.getInstance();
   private Feeder feeder = Feeder.getInstance();
@@ -73,6 +73,7 @@ public class Robot extends TimedRobot {
     airCompressor.turnOnCompressor();
     teleopUpdater = new TeleopUpdater();
     DriveTrainBase.setDriveTrain(drivetrain);
+    autoModeExecuter = new AutoModeExecuter();
 
     Paths.initialize();
 
@@ -80,7 +81,8 @@ public class Robot extends TimedRobot {
     drivetrain.resetGyro();
 
     enabledLooper = new Looper(1 / 200D);
-    enabledLooper.addLoops(intake, hood, feeder, ballCounter, turret);
+    //TODO: NEED TO ADD BACK IN INTAKE
+    enabledLooper.addLoops(hood, feeder, ballCounter, turret); //intake
 
     flywheelLooper = new Looper(1/500D);
     flywheelLooper.addLoops(flywheel);
@@ -93,10 +95,10 @@ public class Robot extends TimedRobot {
     limelightLooper.addLoops(limelight);
 
     autoChooser.setDefaultOption("Do Nothing", new DoNothingAutoMode());
-    autoChooser.addOption("Right 3 Ball Towards Shoot Auto", new RightDriveTowardsShootAutoMode());
+//    autoChooser.addOption("Right 3 Ball Towards Shoot Auto", new RightDriveTowardsShootAutoMode());
     autoChooser.addOption("Right 3 Ball Away Shoot Auto", new RightDriveShootAutoMode());
-    autoChooser.addOption("Right Trench Shoot Auto", new RightDriveTrenchShootAutoMode());
     autoChooser.addOption("Right 6 Ball Shoot Auto", new RightDriveTrenchSixBallAutoMode());
+//    autoChooser.addOption("Right Wall 6 Shoot Auto", new RightDriveTrenchShootWallAutoMode());
     autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
     SmartDashboard.putData(autoChooser);
 
@@ -134,12 +136,8 @@ public class Robot extends TimedRobot {
     poseEstimatorLooper.start();
     limelightLooper.start();
 
-    turret.reset();
-
     if (SmartDashboard.getBoolean("autoEnabled", true)) {
       maintainAutoExecution = true;
-
-      autoModeExecuter = new AutoModeExecuter();
       autoModeExecuter.setAutoMode(autoChooser.getSelected());
       autoModeExecuter.start();
     }
@@ -150,11 +148,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
-    SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
-    SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
+    //TODO: DO WE NEED THESE IN DASHBOARD DURING COMP???
+//    SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
+//    SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
+//    SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
 
-    intake.update(0);
+//    intake.update(0);
     feeder.update(0);
     turret.update(0);
     hood.update(0);
@@ -174,13 +173,14 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     maintainAutoExecution = false;
-    drivetrain.runZeroPower();
-
+    enabledLooper.stop();
+    purePursuitTracker.reset();
     limelight.turnOn();
     airCompressor.turnOnCompressor();
     enabledLooper.start();
     flywheelLooper.start();
     limelightLooper.start();
+    autoModeExecuter.setFinished(true);
 
     drivetrain.resetGyro();
     drivetrain.resetEncoders();
@@ -207,7 +207,7 @@ public class Robot extends TimedRobot {
 //    SmartDashboard.putNumber("TAU", limelight.calculateTau());
 //    SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
 //    SmartDashboard.putNumber("wantedEnd", limelight.optimalEndAngle());
-//
+//    private DoubleSolenoid hangerPancakes;
     if(WANTS_TO_LOG){
       Logger.update();
     }
@@ -236,7 +236,7 @@ public class Robot extends TimedRobot {
   public void disabledInit(){
     //TODO: Get rid of coast mode for final
     limelight.turnOff();
-    drivetrain.setCoastMode();
+//    drivetrain.setCoastMode();
     airCompressor.turnOffCompressor();
     if(WANTS_TO_LOG) {
       loggerLooper.stop();

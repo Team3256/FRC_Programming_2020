@@ -48,7 +48,7 @@ public class ShootAction implements Action {
         mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
 
         if (Flywheel.getInstance().getReadyToShoot() && Flywheel.getInstance().atSetpointVelocity()) {
-            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
+            mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_AUTO_SHOOT);
             mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
         }
     }

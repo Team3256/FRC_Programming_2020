@@ -3,9 +3,12 @@ package frc.team3256.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.ControlType;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.hardware.TalonSRXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
+
+import javax.naming.ldap.Control;
 
 import static frc.team3256.robot.constants.IDConstants.feederID;
 import static frc.team3256.robot.constants.IDConstants.turretBarID;
@@ -18,7 +21,9 @@ public class Feeder extends SubsystemBase {
     private enum FeederControlState {
         RUN_FORWARD,
         RUN_BACKWARD,
+        AUTO_SHOOTING,
         RUN_INDEX,
+        FURTHER_INDEXING,
         SHOOTING,
         IDLE
     }
@@ -27,6 +32,8 @@ public class Feeder extends SubsystemBase {
         WANTS_TO_RUN_FORWARD,
         WANTS_TO_RUN_BACKWARD,
         WANTS_TO_RUN_INDEX,
+        WANTS_TO_FURTHER_INDEX,
+        WANTS_TO_AUTO_SHOOT,
         WANTS_TO_SHOOT,
         WANTS_TO_IDLE
     }
@@ -72,6 +79,12 @@ public class Feeder extends SubsystemBase {
             case SHOOTING:
                 newState = handleShoot();
                 break;
+            case FURTHER_INDEXING:
+                newState = handleFurtherIndexing();
+                break;
+            case AUTO_SHOOTING:
+                newState = handleAutoShoot();
+                break;
             case RUN_INDEX:
                 newState = handleIndex();
                 break;
@@ -99,9 +112,20 @@ public class Feeder extends SubsystemBase {
         return defaultStateTransfer();
     }
 
+    private FeederControlState handleFurtherIndexing() {
+        mFeeder.getEncoder().setPosition(mFeeder.getEncoder().getPosition() - 100);
+        return defaultStateTransfer();
+    }
+
+    private FeederControlState handleAutoShoot() {
+        mFeeder.set(0.25);
+        mBar.set(-0.5);
+        return defaultStateTransfer();
+    }
+
     //TODO: EVERYTHING 100 TEST
     private FeederControlState handleIndex() {
-        mFeeder.set(1.0); //0.3
+        mFeeder.set(0.3); //0.3
         mBar.set(0.5);
         return defaultStateTransfer();
     }
@@ -124,8 +148,12 @@ public class Feeder extends SubsystemBase {
                 return FeederControlState.RUN_FORWARD;
             case WANTS_TO_RUN_BACKWARD:
                 return FeederControlState.RUN_BACKWARD;
+            case WANTS_TO_AUTO_SHOOT:
+                return FeederControlState.AUTO_SHOOTING;
             case WANTS_TO_RUN_INDEX:
                 return FeederControlState.RUN_INDEX;
+            case WANTS_TO_FURTHER_INDEX:
+                return FeederControlState.FURTHER_INDEXING;
             case WANTS_TO_SHOOT:
                 return FeederControlState.SHOOTING;
             case WANTS_TO_IDLE:

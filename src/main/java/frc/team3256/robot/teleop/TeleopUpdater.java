@@ -1,6 +1,7 @@
 package frc.team3256.robot.teleop;
 
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.hardware.IRSensors;
 import frc.team3256.robot.helper.BallCounter;
@@ -15,12 +16,12 @@ public class TeleopUpdater {
     private ControlsInterface controls = new XboxControllerConfig();
 
     private DriveTrain driveTrain = DriveTrain.getInstance();
-    private Intake intake = Intake.getInstance();
+//    private Intake intake = Intake.getInstance();
     private Feeder feeder = Feeder.getInstance();
     private Flywheel flywheel = Flywheel.getInstance();
     private Turret turret = Turret.getInstance();
     private Hood hood = Hood.getInstance();
-    private Hanger hanger = Hanger.getInstance();
+    //private Hanger hanger = Hanger.getInstance();
     private Limelight limelight = Limelight.getInstance();
     private BallCounter ballCounter = BallCounter.getInstance();
 
@@ -33,19 +34,22 @@ public class TeleopUpdater {
 
     private boolean readyToHang = false;
 
+    //private DoubleSolenoid hangerPancake;
+
     private static TeleopUpdater instance;
     public static TeleopUpdater getInstance() { return instance == null ? instance = new TeleopUpdater() : instance; }
 
     public void update() {
         driveTrain.update(0);
-        intake.update(0);
+//        intake.update(0);
         feeder.update(0);
         flywheel.update(0);
         turret.update(0);
         hood.update(0);
         limelight.update(0);
         ballCounter.update(0);
-        hanger.update(0);
+        //hanger.update(0);
+        //hangerPancake = new DoubleSolenoid(1, 6);
 
         //Drivetrain
         double throttle = controls.getThrottle();
@@ -78,6 +82,7 @@ public class TeleopUpdater {
         boolean getAutoAlign = controls.getAutoAlign();
         boolean getRevUp = controls.getRevUp();
         boolean getFeederShoot = controls.getFeederShoot();
+        boolean getDriverShoot = controls.getDriverShoot();
         boolean intakeToggle = controls.toggleIntake();
 
         if (SmartDashboard.getNumber("Ball Count Reset", 0) == 1) {
@@ -93,31 +98,30 @@ public class TeleopUpdater {
 
         //Intake Subsystem | Some Feeder interactions
         if (unjam) {
-            this.intake.setWantedState(Intake.WantedState.WANTS_TO_UNJAM);
+//            this.intake.setWantedState(Intake.WantedState.WANTS_TO_UNJAM);
         } else if (intakePressed) {
             if (ballCounter.getCount() == 4) {
-                wantsToAutoIndex = false;
-                intake.setWantedState(Intake.WantedState.WANTS_TO_INDEX_LAST_BALL);
+                feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
+//                intake.setWantedState(Intake.WantedState.WANTS_TO_INDEX_LAST_BALL);
             }
             else {
-                wantsToAutoIndex = true;
-                this.intake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
+//                this.intake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
             }
         } else if (exhaust) {
             overrideFeeder = true;
-            this.intake.setWantedState(Intake.WantedState.WANTS_TO_EXHAUST);
+//            this.intake.setWantedState(Intake.WantedState.WANTS_TO_EXHAUST);
             feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
         } else {
             overrideFeeder = false;
             feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
-            this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
+//            this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
         }
 
         //Feeder Indexing Logic
         if (!overrideFeeder) {
-            if (ballCounter.shouldFeed() && wantsToAutoIndex) {
+            if (ballCounter.shouldFeed()) {
                 feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
-                this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
+//                this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
             }
             else {
                 feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
@@ -190,30 +194,34 @@ public class TeleopUpdater {
             flywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
         }
 
-        if(getFeederShoot) {
+        if(getFeederShoot || getDriverShoot) {
             feeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
-            intake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
+//            intake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
         }
 
         if(intakeToggle && !prevIntakeToggle) {
-            this.intake.setIntakeTogglingState(!intakeUp);
-            this.intake.setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
+//            this.intake.setIntakeTogglingState(!intakeUp);
+//            this.intake.setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
             intakeUp = !intakeUp;
         }
 
         prevIntakeToggle = intakeToggle;
 
         //TODO: Making hanger actuators similar to intake toggle
-        if(hangerPancakesToggle && !prevHangerPancakesToggle) {
-            this.hanger.setHangerPancakesTogglingState(!hangerRelease);
-            this.hanger.setWantedState(Hanger.WantedState.WANTS_TO_HANGER_TOGGLE);
-            hangerRelease = !hangerRelease;
-            readyToHang = true;
-        }
+//        if(hangerPancakesToggle && !prevHangerPancakesToggle) {
+//            this.hanger.setHangerPancakesTogglingState(!hangerRelease);
+//            this.hanger.setWantedState(Hanger.WantedState.WANTS_TO_HANGER_TOGGLE);
+//            hangerRelease = !hangerRelease;
+//            readyToHang = true;
+//        }
 
         //TODO: Implement after making sure the hangers can actuate up
 //        if(readyToHang) {
 //            this.hanger.setWinchDownPower(getHangerDown * getHangerDown * getHangerDown);
+//            hanger.setWantedState(Hanger.WantedState.WANTS_TO_HANGER_DRIVE_DOWN);
+//        }
+//        else {
+//            hanger.setWantedState(Hanger.WantedState.WANTS_TO_IDLE);
 //        }
 
         //TODO: Ball counter reset is also hood reset

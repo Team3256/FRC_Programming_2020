@@ -25,9 +25,12 @@ public class MoveTurretAction implements Action {
     @Override
     public void update() {
 //        mTurret.setAutoTurretSpeed(0.7);
-        mTurret.setPosition(angleSetpoint);
+//        mTurret.setPosition(angleSetpoint);
         if (mTurret.getPosition() >= mTurret.angleToEncoder(angleSetpoint)) {
             isFinished = true;
+        }
+        else {
+            mTurret.setAutoTurretSpeed(-1.0);
         }
     }
 

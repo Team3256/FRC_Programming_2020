@@ -5,6 +5,7 @@ import frc.team3256.robot.auto.actions.ShootAction;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.constants.DriveConstants;
 import frc.team3256.robot.helper.BallCounter;
+import frc.team3256.robot.subsystems.DriveTrain;
 import frc.team3256.robot.subsystems.Flywheel;
 import frc.team3256.robot.subsystems.Intake;
 import frc.team3256.robot.subsystems.Turret;
@@ -27,13 +28,13 @@ public class RightDriveTowardsShootAutoMode extends AutoModeBase {
         BallCounter.getInstance().setCount(3);
         Flywheel.getInstance().setReadyToShoot(false);
         Turret.getInstance().reset();
-        Intake.getInstance().setIntakeTogglingState(false);
-        Intake.getInstance().setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
+//        Intake.getInstance().setIntakeTogglingState(false);
+//        Intake.getInstance().setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
         runAction(new MoveTurretAction(25));
 
         runAction(new WaitAction(0.5));
         runAction(new ResetPursuitAction());
-        //DriveTrain.getInstance().setHighGear(true);
+        DriveTrain.getInstance().setHighGear(true);
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new ShootAction())));
         runAction(new WaitAction(0.5));
         Flywheel.getInstance().setReadyToShoot(true);

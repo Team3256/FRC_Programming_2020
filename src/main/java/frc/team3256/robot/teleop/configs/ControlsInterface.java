@@ -22,6 +22,8 @@ public interface ControlsInterface {
     //Hold: Pulls down the hanger
     double getHangerDown();
 
+    boolean getDriverShoot();
+
 
 //--------------Manipulator--------------
 

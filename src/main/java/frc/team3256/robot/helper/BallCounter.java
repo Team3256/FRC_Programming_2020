@@ -1,6 +1,7 @@
 package frc.team3256.robot.helper;
 
 import frc.team3256.robot.hardware.IRSensors;
+import frc.team3256.robot.subsystems.Feeder;
 import frc.team3256.robot.subsystems.Flywheel;
 import frc.team3256.robot.subsystems.Intake;
 import frc.team3256.warriorlib.loop.Loop;
@@ -28,7 +29,10 @@ public class BallCounter implements Loop {
         shouldIndex = false;
 
         if (feederBlocked) {
-            if (!feederPrevBlocked && Intake.getInstance().getWantedState() == Intake.WantedState.WANTS_TO_INTAKE ) count++;
+            if (!feederPrevBlocked && Intake.getInstance().getWantedState() == Intake.WantedState.WANTS_TO_INTAKE ) {
+                count++;
+//                Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_FURTHER_INDEX);
+            }
             if (!isFull()) shouldIndex = true;
         }
 

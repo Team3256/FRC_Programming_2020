@@ -32,17 +32,19 @@ public class RightDriveTrenchShootWallAutoMode extends AutoModeBase
         Intake.getInstance().setIntakeTogglingState(false);
         Intake.getInstance().setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
         Turret.getInstance().reset();
-        runAction(new MoveTurretAction(25));
+//        runAction(new MoveTurretAction(25));
 
         double startTime = Timer.getFPGATimestamp();
         runAction(new ResetPursuitAction());
-        //DriveTrain.getInstance().setHighGear(true);
+        DriveTrain.getInstance().setHighGear(true);
+        runAction(new ShootAction());
         Flywheel.getInstance().setReadyToShoot(true);
         runAction(new ShootAction());
         Flywheel.getInstance().setReadyToShoot(false);
-        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(), new FeederIndexAction(), new ShootAction())));
-        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(1), new BackwardsIntakeAction(), new ShootAction())));
-        runAction(new StopIntakeAction());
+        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(3.0), new FeederIndexAction(3.0), new ShootAction())));
+        runAction(new WaitAction(1.0));
+        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(1), new ShootAction())));
+        runAction(new ShootAction());
         Flywheel.getInstance().setReadyToShoot(true);
         runAction(new ShootAction());
         SmartDashboard.putNumber("Total Auto Time: ", Timer.getFPGATimestamp() - startTime);

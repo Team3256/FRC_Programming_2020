@@ -34,6 +34,10 @@ public class XboxControllerConfig implements ControlsInterface {
     @Override
     public double getHangerDown() { return -Util.handleDeadband(driver.getRawAxis(2), 0.15); }
 
+    @Override
+    public boolean getDriverShoot() {
+        return driver.getRawButton(1);
+    }
 
 
 //--------------Manipulator--------------
@@ -114,7 +118,7 @@ public class XboxControllerConfig implements ControlsInterface {
 
     //Manipulator: Left Bumper
     @Override
-    public boolean getRevUp() { return manipulator.getRawButton(6); }
+    public boolean getRevUp() { return manipulator.getRawButton(5) || manipulator.getRawButton(6); }
 
     //Manipulator: Y Button
     @Override

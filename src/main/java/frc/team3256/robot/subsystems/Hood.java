@@ -83,6 +83,7 @@ public class Hood extends SubsystemBase {
                 break;
             case ZERO_HOOD:
                 newState = handleZeroHood();
+                break;
             case IDLE:
             default:
                 newState = handleIdle();
@@ -117,6 +118,7 @@ public class Hood extends SubsystemBase {
         }
         else {
             mHood.set(kHoodSpeed);
+            isZeroed = false;
         }
 //        mHood.set(kHoodSpeed);
         return defaultStateTransfer();
@@ -141,7 +143,7 @@ public class Hood extends SubsystemBase {
             isZeroed = true;
         }
         else {
-            mHood.set(kHoodSpeed);
+            mHood.set(.4);
         }
         return defaultStateTransfer();
     }
@@ -163,15 +165,15 @@ public class Hood extends SubsystemBase {
                 return HoodState.MANUAL_DOWN;
             case WANTS_TO_POS:
                 return HoodState.CLOSED_LOOP;
+            case WANTS_TO_ZERO_HOOD:
+                return HoodState.ZERO_HOOD;
             case WANTS_TO_IDLE:
             default:
                 return HoodState.IDLE;
         }
     }
 
-    private boolean isLimitSwitchPressed() {
-        return !bottomLimit.get();
-    }
+    private boolean isLimitSwitchPressed() { return !bottomLimit.get(); }
 
     public double getHoodEncoder() {
         return mHood.getEncoder().getPosition();
@@ -181,9 +183,7 @@ public class Hood extends SubsystemBase {
         posSetpoint = pos;
     }
 
-    public boolean isZeroed() {
-        return isZeroed;
-    }
+    public boolean isZeroed() { return isZeroed; }
 
     @Override
     public void outputToDashboard() {

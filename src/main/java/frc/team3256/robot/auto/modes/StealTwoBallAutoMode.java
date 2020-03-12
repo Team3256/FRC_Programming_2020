@@ -34,8 +34,8 @@ public class StealTwoBallAutoMode extends AutoModeBase {
 
         runAction(new WaitAction(0.5));
         runAction(new ResetPursuitAction());
-        //DriveTrain.getInstance().setHighGear(true);
-        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(), new FeederIndexAction())));
+        DriveTrain.getInstance().setHighGear(true);
+        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(3.0), new FeederIndexAction(3.0))));
         runAction(new WaitAction(1.0));
         runAction(new PurePursuitAction(1));
     }

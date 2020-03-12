@@ -66,7 +66,7 @@ public class Turret extends SubsystemBase {
         firstRun = true;
         headingError = 0;
         mTurret = SparkMAXUtil.generateGenericSparkMAX(10, CANSparkMaxLowLevel.MotorType.kBrushless);
-        mTurret.getPIDController().setP(50.0);
+        mTurret.getPIDController().setP(150.0); //50.0
         mTurret.getPIDController().setI(0.0);
         mTurret.getPIDController().setD(0.0);
         mTurret.getPIDController().setFF(0.0);
@@ -190,7 +190,7 @@ public class Turret extends SubsystemBase {
 
     @Override
     public void outputToDashboard() {
-        SmartDashboard.putNumber("turret encoder", 0);
+        //SmartDashboard.putNumber("turret encoder", 0);
     }
 
     @Override
@@ -218,7 +218,7 @@ public class Turret extends SubsystemBase {
 
     public void setPosition(double angle) {
         double setpoint = angleToEncoder(angle);
-        SmartDashboard.putNumber("Setpoint", setpoint);
+        //SmartDashboard.putNumber("Setpoint", setpoint);
         mTurret.getPIDController().setReference(setpoint, ControlType.kPosition);
     }
 
