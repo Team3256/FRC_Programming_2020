@@ -9,7 +9,6 @@ package frc.team3256.robot;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -17,12 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.auto.modes.*;
 import frc.team3256.robot.hardware.AirCompressor;
 import frc.team3256.robot.helper.BallCounter;
-import frc.team3256.robot.helper.ShootingKinematics;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.hardware.Limelight;
-import frc.team3256.robot.log.FalconAutoLogger;
-import frc.team3256.robot.log.Logger;
-import frc.team3256.robot.log.LoggerUpdateLooper;
 import frc.team3256.robot.subsystems.*;
 import frc.team3256.robot.teleop.TeleopUpdater;
 import frc.team3256.warriorlib.auto.AutoModeBase;
@@ -44,7 +39,7 @@ public class Robot extends TimedRobot {
 
   private TeleopUpdater teleopUpdater;
   private DriveTrain drivetrain = DriveTrain.getInstance();
-//  private Intake intake = Intake.getInstance();
+  private Intake intake = Intake.getInstance();
   private Limelight limelight = Limelight.getInstance();
   private Flywheel flywheel = Flywheel.getInstance();
   private Feeder feeder = Feeder.getInstance();
@@ -63,6 +58,7 @@ public class Robot extends TimedRobot {
           poseEstimatorLooper,
           limelightLooper,
           flywheelLooper,
+  intaeLooper,
           loggerLooper;
 
   SendableChooser<AutoModeBase> autoChooser = new SendableChooser<>();
@@ -82,7 +78,7 @@ public class Robot extends TimedRobot {
 
     enabledLooper = new Looper(1 / 200D);
     //TODO: NEED TO ADD BACK IN INTAKE
-    enabledLooper.addLoops(hood, feeder, ballCounter, turret); //intake
+    enabledLooper.addLoops(hood, feeder, ballCounter, turret, intake); //intake
 
     flywheelLooper = new Looper(1/500D);
     flywheelLooper.addLoops(flywheel);
@@ -110,11 +106,6 @@ public class Robot extends TimedRobot {
     limelight.init();
 
     if(WANTS_TO_LOG) {
-      loggerLooper  = new Looper(1/15D);
-      Logger.startInitialization();
-      FalconAutoLogger.autoLog("Flywheel", "Motor", Flywheel.getInstance().getMotor());
-      Logger.finishInitialization();
-      loggerLooper.addLoops(LoggerUpdateLooper.getInstance());
     }
   }
 
@@ -209,7 +200,6 @@ public class Robot extends TimedRobot {
 //    SmartDashboard.putNumber("wantedEnd", limelight.optimalEndAngle());
 //    private DoubleSolenoid hangerPancakes;
     if(WANTS_TO_LOG){
-      Logger.update();
     }
   }
 
@@ -240,7 +230,6 @@ public class Robot extends TimedRobot {
     airCompressor.turnOffCompressor();
     if(WANTS_TO_LOG) {
       loggerLooper.stop();
-      Logger.flush();
     }
   }
 
