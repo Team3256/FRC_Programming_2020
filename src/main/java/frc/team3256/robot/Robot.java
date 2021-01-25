@@ -18,6 +18,7 @@ import frc.team3256.robot.hardware.AirCompressor;
 import frc.team3256.robot.helper.BallCounter;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.hardware.Limelight;
+import frc.team3256.robot.helper.ShootingKinematics;
 import frc.team3256.robot.subsystems.*;
 import frc.team3256.robot.teleop.TeleopUpdater;
 import frc.team3256.warriorlib.auto.AutoModeBase;
@@ -194,9 +195,9 @@ public class Robot extends TimedRobot {
     //TODO: COMMENTED OUT TO INCREASE LATENCY, COMMENT BACK IN FOR DEBUG
 //    SmartDashboard.putNumber("distance to outer", limelight.getDistanceToTarget());
 //    SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
-//    SmartDashboard.putNumber("wanted vel", ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
+   SmartDashboard.putNumber("wanted vel", ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
 //    SmartDashboard.putNumber("TAU", limelight.calculateTau());
-//    SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
+    SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
 //    SmartDashboard.putNumber("wantedEnd", limelight.optimalEndAngle());
 //    private DoubleSolenoid hangerPancakes;
     if(WANTS_TO_LOG){

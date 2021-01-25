@@ -178,8 +178,8 @@ public class Flywheel extends SubsystemBase {
     public void end(double timestamp) { }
 
     public double getVelocity() {
-        return sensorUnitsToRPM(mLeftFlywheel.getSelectedSensorVelocity());
-    }
+    return sensorUnitsToRPM(mLeftFlywheel.getSelectedSensorVelocity());
+}
 
     public double getSensorVelocity() {
         return mLeftFlywheel.getSelectedSensorVelocity();

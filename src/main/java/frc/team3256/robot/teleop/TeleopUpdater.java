@@ -16,7 +16,7 @@ public class TeleopUpdater {
     private ControlsInterface controls = new XboxControllerConfig();
 
     private DriveTrain driveTrain = DriveTrain.getInstance();
-//    private Intake intake = Intake.getInstance();
+    private Intake intake = Intake.getInstance();
     private Feeder feeder = Feeder.getInstance();
     private Flywheel flywheel = Flywheel.getInstance();
     private Turret turret = Turret.getInstance();
@@ -41,7 +41,7 @@ public class TeleopUpdater {
 
     public void update() {
         driveTrain.update(0);
-//        intake.update(0);
+        intake.update(0);
         feeder.update(0);
         flywheel.update(0);
         turret.update(0);
@@ -98,30 +98,30 @@ public class TeleopUpdater {
 
         //Intake Subsystem | Some Feeder interactions
         if (unjam) {
-//            this.intake.setWantedState(Intake.WantedState.WANTS_TO_UNJAM);
+            this.intake.setWantedState(Intake.WantedState.WANTS_TO_UNJAM);
         } else if (intakePressed) {
             if (ballCounter.getCount() == 4) {
                 feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
-//                intake.setWantedState(Intake.WantedState.WANTS_TO_INDEX_LAST_BALL);
+               intake.setWantedState(Intake.WantedState.WANTS_TO_INDEX_LAST_BALL);
             }
             else {
-//                this.intake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
+                this.intake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
             }
         } else if (exhaust) {
             overrideFeeder = true;
-//            this.intake.setWantedState(Intake.WantedState.WANTS_TO_EXHAUST);
+           this.intake.setWantedState(Intake.WantedState.WANTS_TO_EXHAUST);
             feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
         } else {
             overrideFeeder = false;
             feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
-//            this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
+            this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
         }
 
         //Feeder Indexing Logic
         if (!overrideFeeder) {
             if (ballCounter.shouldFeed()) {
                 feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
-//                this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
+                this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
             }
             else {
                 feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
@@ -188,20 +188,22 @@ public class TeleopUpdater {
         }
 
         if (getRevUp) {
-            flywheel.setVelocitySetpoint(ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
+//            flywheel.setVelocitySetpoint(ShootingKinematics.outputVelTolFlywheelVel(limelight.getVelToTarget()));
+            flywheel.setVelocitySetpoint(4000);
             flywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
+
         } else {
             flywheel.setWantedState(Flywheel.WantedState.WANTS_TO_IDLE);
         }
 
         if(getFeederShoot || getDriverShoot) {
             feeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
-//            intake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
+            intake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
         }
 
         if(intakeToggle && !prevIntakeToggle) {
-//            this.intake.setIntakeTogglingState(!intakeUp);
-//            this.intake.setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
+           this.intake.setIntakeTogglingState(!intakeUp);
+            this.intake.setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
             intakeUp = !intakeUp;
         }
 
