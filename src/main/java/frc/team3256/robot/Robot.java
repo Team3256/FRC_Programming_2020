@@ -97,6 +97,7 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Right 6 Ball Shoot Auto", new RightDriveTrenchSixBallAutoMode());
 //    autoChooser.addOption("Right Wall 6 Shoot Auto", new RightDriveTrenchShootWallAutoMode());
     autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
+    autoChooser.addOption("Slalom Path Auto", new SlalomPathAutoMode());
     SmartDashboard.putData(autoChooser);
 
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
