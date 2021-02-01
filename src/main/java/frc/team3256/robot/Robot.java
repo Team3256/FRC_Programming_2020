@@ -72,6 +72,8 @@ public class Robot extends TimedRobot {
     DriveTrainBase.setDriveTrain(drivetrain);
     autoModeExecuter = new AutoModeExecuter();
 
+    limelight.turnOff();
+
     Paths.initialize();
 
     drivetrain.resetEncoders();
@@ -97,6 +99,7 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Right 6 Ball Shoot Auto", new RightDriveTrenchSixBallAutoMode());
 //    autoChooser.addOption("Right Wall 6 Shoot Auto", new RightDriveTrenchShootWallAutoMode());
     autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
+    autoChooser.addOption("Cross Baseline", new CrossBaselineAutoMode());
     autoChooser.addOption("Slalom Path Auto", new SlalomPathAutoMode());
     SmartDashboard.putData(autoChooser);
 
@@ -145,6 +148,12 @@ public class Robot extends TimedRobot {
 //    SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
 //    SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
 //    SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
+
+    SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
+    SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
+    SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
+    SmartDashboard.putNumber("left encoder",drivetrain.getLeftDistance());
+    SmartDashboard.putNumber("right encoder",drivetrain.getRightDistance());
 
 //    intake.update(0);
     feeder.update(0);
@@ -210,6 +219,7 @@ public class Robot extends TimedRobot {
     limelight.turnOn();
     limelightLooper.start();
     poseEstimator.reset();
+    poseEstimatorLooper.start();
     drivetrain.resetGyro();
     drivetrain.resetEncoders();
     drivetrain.setCoastMode();
@@ -220,15 +230,15 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
     SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
     SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
-    SmartDashboard.putNumber("limelight distance", limelight.getDistanceToTarget());
-    SmartDashboard.putNumber("Theta", limelight.calculateTopTheta());
+    SmartDashboard.putNumber("left encoder",drivetrain.getLeftDistance());
+    SmartDashboard.putNumber("right encoder",drivetrain.getRightDistance());
   }
 
   @Override
   public void disabledInit(){
     //TODO: Get rid of coast mode for final
     limelight.turnOff();
-//    drivetrain.setCoastMode();
+    drivetrain.setCoastMode();
     airCompressor.turnOffCompressor();
     if(WANTS_TO_LOG) {
       loggerLooper.stop();

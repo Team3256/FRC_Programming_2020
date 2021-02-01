@@ -31,7 +31,7 @@ public class DriveConstants {
     public static final double purePursuitA = 1 - purePursuitB;
     public static final double smoothingTolerance = 0.001;
     public static final double loopTime = 1.0 / 200.0; //how often Looper updates
-    public static final double lookaheadDistance = 22;
+    public static final double lookaheadDistance = 15;
     public static final double maxAccel = 15; //max robot acceleration
     public static final double maxVel = 200; //max robot velocity
     public static final double kV = 1/maxVel; // 1/max robot speed
