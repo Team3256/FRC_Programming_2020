@@ -151,7 +151,7 @@ public class Paths {
         s.addPoint(new Vector(-1.8862693056703392, 81.82955539083952));
         s.addPoint(new Vector(-4.516248655859243, 76.42229234927508));
         s.addPoint(new Vector(-7.930458830993871, 71.47544626616533));
-        /*s.addPoint(new Vector(-11.739864140668175, 66.77673402936435));
+        s.addPoint(new Vector(-11.739864140668175, 66.77673402936435));
         s.addPoint(new Vector(-15.907589246381065, 62.424168722321326));
         s.addPoint(new Vector(-20.26377252032364, 58.29279894997819));
         s.addPoint(new Vector(-24.785229286713474, 54.20566198842073));
@@ -170,7 +170,13 @@ public class Paths {
         s.addPoint(new Vector(-67.7713278863414, -7.593469888103755));
         s.addPoint(new Vector(-67.99564290284559, -13.695325333818857));
         s.addPoint(new Vector(-68.21793728127354, -19.713168187744436));
-        s.addPoint(new Vector(-68.21793728127354, -19.713168187744436));*/
+        s.addPoint(new Vector(-68.21793728127354, -30.713168187744436));
+        s.addPoint(new Vector(-68.21793728127354, -40.713168187744436));
+        s.addPoint(new Vector(-68.21793728127354, -50.713168187744436));
+        s.addPoint(new Vector(-68.21793728127354, -60.713168187744436));
+        s.addPoint(new Vector(-68.21793728127354, -70.713168187744436));
+        s.addPoint(new Vector(-68.21793728127354, -80.713168187744436));
+        s.addPoint(new Vector(-68.21793728127354, -90.713168187744436));
 
         s.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
         s.setVelocities(maxVel, maxAccel, maxVelk);

@@ -35,5 +35,5 @@ public class DriveConstants {
     public static final double maxAccel = 15; //max robot acceleration
     public static final double maxVel = 200; //max robot velocity
     public static final double kV = 1/maxVel; // 1/max robot speed
-    public static final double maxVelk = 2; //generally between 1-5
+    public static final double maxVelk = .5; //generally between 1-5 //2 //1 //5
 }

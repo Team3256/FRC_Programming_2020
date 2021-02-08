@@ -238,7 +238,6 @@ public class Robot extends TimedRobot {
   public void disabledInit(){
     //TODO: Get rid of coast mode for final
     limelight.turnOff();
-    drivetrain.setCoastMode();
     airCompressor.turnOffCompressor();
     if(WANTS_TO_LOG) {
       loggerLooper.stop();

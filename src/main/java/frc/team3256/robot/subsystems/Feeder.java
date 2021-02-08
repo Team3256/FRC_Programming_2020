@@ -137,6 +137,7 @@ public class Feeder extends SubsystemBase {
     }
 
     private FeederControlState handleIdle() {
+
         mFeeder.stopMotor();
         mBar.stopMotor();
         return defaultStateTransfer();
