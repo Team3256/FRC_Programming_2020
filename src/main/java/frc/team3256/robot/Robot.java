@@ -59,7 +59,6 @@ public class Robot extends TimedRobot {
           poseEstimatorLooper,
           limelightLooper,
           flywheelLooper,
-  intaeLooper,
           loggerLooper;
 
   SendableChooser<AutoModeBase> autoChooser = new SendableChooser<>();
@@ -95,12 +94,14 @@ public class Robot extends TimedRobot {
 
     autoChooser.setDefaultOption("Do Nothing", new DoNothingAutoMode());
 //    autoChooser.addOption("Right 3 Ball Towards Shoot Auto", new RightDriveTowardsShootAutoMode());
-    autoChooser.addOption("Right 3 Ball Away Shoot Auto", new RightDriveShootAutoMode());
-    autoChooser.addOption("Right 6 Ball Shoot Auto", new RightDriveTrenchSixBallAutoMode());
+//    autoChooser.addOption("Right 3 Ball Away Shoot Auto", new RightDriveShootAutoMode());
+//    autoChooser.addOption("Right 6 Ball Shoot Auto", new RightDriveTrenchSixBallAutoMode());
 //    autoChooser.addOption("Right Wall 6 Shoot Auto", new RightDriveTrenchShootWallAutoMode());
-    autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
+//    autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
     autoChooser.addOption("Cross Baseline", new CrossBaselineAutoMode());
     autoChooser.addOption("Slalom Path Auto", new SlalomPathAutoMode());
+    autoChooser.addOption("Bounce Path", new BouncePathAutoMode());
+    autoChooser.addOption("Barrel Racing Path", new BarrelRacingAutoMode());
     SmartDashboard.putData(autoChooser);
 
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
@@ -156,10 +157,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("right encoder",drivetrain.getRightDistance());
 
 //    intake.update(0);
-    feeder.update(0);
-    turret.update(0);
-    hood.update(0);
-    flywheel.update(0);
+//    feeder.update(0);
+//    turret.update(0);
+//    hood.update(0);
+//    flywheel.update(0);
 
     if (!maintainAutoExecution) {
       teleopUpdater.update();
@@ -216,6 +217,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
+    autoModeExecuter.setFinished(true);
     limelight.turnOn();
     limelightLooper.start();
     poseEstimator.reset();

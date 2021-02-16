@@ -187,6 +187,14 @@ public class Paths {
         return slalomPath;
     }
 
+    public static List<Path> getBarrelRacingPath() {
+        return Arrays.asList(new Path(1,true));
+    }
+
+    public static List<Path> getBouncePath() {
+        return Arrays.asList(new Path(1,true));
+    }
+
     public static List<Path> getStealTwoBallAutoPath() {
         if (stealTwoBallAutoPath!= null)
             return stealTwoBallAutoPath;

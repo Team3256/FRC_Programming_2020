@@ -56,7 +56,7 @@ public class PathReader {
 
     public static void main(String args[]) {
         PathReader p = new PathReader();
-        ArrayList<Vector> arr = p.getPath("C:\\Users\\WB17\\Documents\\2021 At Home Auto Paths\\CSVPaths\\slalom.wpilib.csv");
+        ArrayList<Vector> arr = p.getPath("C:\\Users\\linuszheng\\Desktop\\pathCSV\\slalom_modified.csv");
         for (int i = 0; i < arr.size(); i++) {
             System.out.println("s.addPoint(new Vector("+arr.get(i).x + ", " + arr.get(i).y+"));");
         }
