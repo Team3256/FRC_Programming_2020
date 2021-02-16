@@ -56,9 +56,11 @@ public class PathReader {
 
     public static void main(String args[]) {
         PathReader p = new PathReader();
-        ArrayList<Vector> arr = p.getPath("C:\\Users\\linuszheng\\Desktop\\pathCSV\\slalom_modified.csv");
+        int offsetX = -65;
+        int offsetY = 230;
+        ArrayList<Vector> arr = p.getPath("C:\\Users\\WB17\\Downloads\\RobotPaths\\bounce path\\csv\\three (end).wpilib.csv");
         for (int i = 0; i < arr.size(); i++) {
-            System.out.println("s.addPoint(new Vector("+arr.get(i).x + ", " + arr.get(i).y+"));");
+            System.out.println("pathFourGen.addPoint(new Vector("+ (arr.get(i).x + offsetX) + ", " + (arr.get(i).y + offsetY) +"));");
         }
     }
 }
