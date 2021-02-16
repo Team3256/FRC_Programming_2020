@@ -5,6 +5,7 @@ import frc.team3256.warriorlib.auto.purepursuit.PathGenerator;
 import frc.team3256.warriorlib.auto.purepursuit.PoseEstimator;
 import frc.team3256.warriorlib.math.Vector;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,6 +19,8 @@ public class Paths {
     private static List<Path> rightTrenchCollectWallAutoPath;
     private static List<Path> rightTrenchCollectTenBallAutoPath;
     private static List<Path> stealTwoBallAutoPath;
+    private static List<Path> barrelRacingPath;
+    private static List<Path> bouncePath;
     private static PoseEstimator poseEstimator = PoseEstimator.getInstance();
 
     private static List<Path> slalomPath;
@@ -31,6 +34,8 @@ public class Paths {
         getRightTrenchCollectTenBallAutoPath();
         getStealTwoBallAutoPath();
         getSlalomPath();
+        getBarrelRacingPath();
+        getBouncePath();
     }
 
     public static List<Path> getSlalomPath() {
@@ -188,11 +193,52 @@ public class Paths {
     }
 
     public static List<Path> getBarrelRacingPath() {
-        return Arrays.asList(new Path(1,true));
+
+        // STARTING POSITION: (40, -90)
+
+        if (barrelRacingPath != null) return barrelRacingPath;
+
+        PathGenerator pathGen = new PathGenerator(spacing, true);
+        pathGen.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
+        pathGen.setVelocities(maxVel, maxAccel, maxVelk);
+
+        //pathGen.addPoint(aijsdflkasdflkajsdf);
+
+        Path path = pathGen.generatePath();
+
+        barrelRacingPath = Arrays.asList(path);
+        return barrelRacingPath;
     }
 
     public static List<Path> getBouncePath() {
-        return Arrays.asList(new Path(1,true));
+
+        // STARTING POSITION: (40, -90)
+
+        if (bouncePath != null) return bouncePath;
+
+        PathGenerator pathOneGen = new PathGenerator(spacing, true);
+        PathGenerator pathTwoGen = new PathGenerator(spacing, false);
+        PathGenerator pathThreeGen = new PathGenerator(spacing, true);
+        PathGenerator pathFourGen = new PathGenerator(spacing, false);
+
+        pathOneGen.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
+        pathOneGen.setVelocities(maxVel, maxAccel, maxVelk);
+        pathTwoGen.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
+        pathTwoGen.setVelocities(maxVel, maxAccel, maxVelk);
+        pathThreeGen.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
+        pathThreeGen.setVelocities(maxVel, maxAccel, maxVelk);
+        pathFourGen.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
+        pathFourGen.setVelocities(maxVel, maxAccel, maxVelk);
+
+        //pathOneGen.addPoint(asdfasdfasdfasf);
+
+        Path pathOne = pathOneGen.generatePath();
+        Path pathTwo = pathTwoGen.generatePath();
+        Path pathThree = pathThreeGen.generatePath();
+        Path pathFour = pathFourGen.generatePath();
+
+        bouncePath = Arrays.asList(pathOne, pathTwo, pathThree, pathFour);
+        return bouncePath;
     }
 
     public static List<Path> getStealTwoBallAutoPath() {
