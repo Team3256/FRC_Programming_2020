@@ -132,7 +132,7 @@ public class Flywheel extends SubsystemBase {
         mRightFlywheel.set(output);
     }
 
-    private void setFlywheelVelocityPID(double speed) {
+    public void setFlywheelVelocityPID(double speed) {
         double output = flywheelPIDController.calculate(getVelocity(), speed) + calculateFeedForward(speed);
         mLeftFlywheel.set(ControlMode.PercentOutput, output);
         mRightFlywheel.set(ControlMode.PercentOutput, output);

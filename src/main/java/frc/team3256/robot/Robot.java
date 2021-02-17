@@ -100,6 +100,7 @@ public class Robot extends TimedRobot {
 //    autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
     autoChooser.addOption("Cross Baseline", new CrossBaselineAutoMode());
     autoChooser.addOption("Slalom Path Auto", new SlalomPathAutoMode());
+    autoChooser.addOption("Galactic Search Red A Path Auto", new GalacticSearchRedAPathAutoMode());
     autoChooser.addOption("Bounce Path", new BouncePathAutoMode());
     autoChooser.addOption("Barrel Racing Path", new BarrelRacingAutoMode());
     SmartDashboard.putData(autoChooser);

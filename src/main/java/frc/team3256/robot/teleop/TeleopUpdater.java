@@ -120,6 +120,7 @@ public class TeleopUpdater {
         //Feeder Indexing Logic
         if (!overrideFeeder) {
             if (ballCounter.shouldFeed()) {
+
                 feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
                 this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
             }

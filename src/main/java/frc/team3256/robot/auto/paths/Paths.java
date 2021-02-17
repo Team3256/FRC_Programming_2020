@@ -12,6 +12,8 @@ import java.util.List;
 import static frc.team3256.robot.constants.DriveConstants.*;
 
 public class Paths {
+
+    // ROBOT DIMENSIONS: 31in x 42in
     private static List<Path> rightShootAutoPath;
     private static List<Path> rightBackShootAutoPath;
     private static List<Path> rightTrenchCollectAutoPath;
@@ -21,6 +23,7 @@ public class Paths {
     private static List<Path> stealTwoBallAutoPath;
     private static List<Path> barrelRacingPath;
     private static List<Path> bouncePath;
+    private static List<Path> redGalacticSearchPathA;
     private static PoseEstimator poseEstimator = PoseEstimator.getInstance();
 
     private static List<Path> slalomPath;
@@ -36,6 +39,95 @@ public class Paths {
         getSlalomPath();
         getBarrelRacingPath();
         getBouncePath();
+        getredGalacticSearchPathA();
+    }
+
+    public static List<Path> getredGalacticSearchPathA() {
+        if (redGalacticSearchPathA != null)
+            return redGalacticSearchPathA;
+
+        PathGenerator s = new PathGenerator(spacing, true);
+
+        s.addPoint(new Vector(0.0, 0.0));
+        s.addPoint(new Vector(-0.2213576068699581, 6.007126760344708));
+        s.addPoint(new Vector(-0.5585069939262723, 12.028263836803834));
+        s.addPoint(new Vector(-0.9030294972796895, 18.062359525057214));
+        s.addPoint(new Vector(-1.2252364891655958, 24.073426378099153));
+        s.addPoint(new Vector(-1.4740928733947811, 30.110783851277997));
+        s.addPoint(new Vector(-1.4518674757419205, 36.15554977352707));
+        s.addPoint(new Vector(-1.7360189943882176, 42.17163345861792));
+        s.addPoint(new Vector(-2.004126251010831, 48.19167982676933));
+        s.addPoint(new Vector(-2.0467103634527035, 54.211699541658476));
+        s.addPoint(new Vector(-1.504962765121519, 60.303212452189456));
+        s.addPoint(new Vector(0.9962582980154053, 65.80623400298958));
+        s.addPoint(new Vector(6.203360601619565, 68.8988239997089));
+        s.addPoint(new Vector(12.0941718572642, 70.4214498186236));
+        s.addPoint(new Vector(18.047634003480766, 71.63030876730966));
+        s.addPoint(new Vector(23.923414724194842, 72.93151434083617));
+        s.addPoint(new Vector(29.527797227703687, 75.08564830799787));
+        s.addPoint(new Vector(33.32651800988805, 79.82125403325452));
+        s.addPoint(new Vector(35.78728829671738, 85.39768942708793));
+        s.addPoint(new Vector(37.43912864506471, 91.25010188523231));
+        s.addPoint(new Vector(38.18426680054873, 97.30814307116117));
+        s.addPoint(new Vector(37.7319136328875, 103.37139936248596));
+        s.addPoint(new Vector(36.40870479850015, 109.28897564132973));
+        s.addPoint(new Vector(34.586302675726955, 115.01025015778728));
+        s.addPoint(new Vector(31.9514200556701, 120.46247429741902));
+        s.addPoint(new Vector(27.21085382470055, 124.20007405230646));
+        s.addPoint(new Vector(21.35979406338099, 125.74568983847584));
+        s.addPoint(new Vector(15.448546994673322, 126.93297397929666));
+        s.addPoint(new Vector(9.52367992604728, 128.03091463113438));
+        s.addPoint(new Vector(3.5572468052564687, 129.1042052678015));
+        s.addPoint(new Vector(-2.3744530339891554, 130.1662736132502));
+        s.addPoint(new Vector(-8.3618949513493, 131.2518846725711));
+        s.addPoint(new Vector(-14.320633376361997, 132.36313224647787));
+        s.addPoint(new Vector(-20.27686846139339, 133.5257979065192));
+        s.addPoint(new Vector(-26.191941003979565, 134.76347909970147));
+        s.addPoint(new Vector(-32.066909656495454, 136.13298184814704));
+        s.addPoint(new Vector(-37.93957600471195, 137.7834930760146));
+        s.addPoint(new Vector(-43.51094562238667, 140.09026469859137));
+        s.addPoint(new Vector(-48.623366208454556, 143.2432005352154));
+        s.addPoint(new Vector(-53.74081847859394, 146.58912871280685));
+        s.addPoint(new Vector(-58.66115950271971, 150.10907016078386));
+        s.addPoint(new Vector(-62.71458666023453, 154.58439113605172));
+        s.addPoint(new Vector(-63.45382726434231, 160.54790664948004));
+        s.addPoint(new Vector(-64.13566576410916, 166.5592828244375));
+        s.addPoint(new Vector(-64.76542628070563, 172.6197594741932));
+        s.addPoint(new Vector(-65.3364680052078, 178.6968678890209));
+        s.addPoint(new Vector(-65.84063120856537, 184.7792874644045));
+        s.addPoint(new Vector(-66.26427338139892, 190.82962029112565));
+        s.addPoint(new Vector(-66.59376004031687, 196.88225624754872));
+        s.addPoint(new Vector(-66.80458912289556, 202.98060493532086));
+        s.addPoint(new Vector(-66.85296618340878, 209.0199008889789));
+        s.addPoint(new Vector(-66.67472620259501, 215.0302511282076));
+        s.addPoint(new Vector(-66.14811544552613, 221.04189009924906));
+        s.addPoint(new Vector(-65.07869381422789, 227.00249700036343));
+        s.addPoint(new Vector(-63.485158302247456, 232.84691356263974));
+        s.addPoint(new Vector(-61.10892621876819, 238.39717342921924));
+        s.addPoint(new Vector(-57.868143222339924, 243.46298675134304));
+        s.addPoint(new Vector(-54.14226406117372, 248.2455595795188));
+        s.addPoint(new Vector(-50.185491666059065, 252.80644843345434));
+        s.addPoint(new Vector(-46.06058576086416, 257.25922215518517));
+        s.addPoint(new Vector(-41.84246000483101, 261.62232790704445));
+        s.addPoint(new Vector(-37.582128924328245, 265.90677808226155));
+        s.addPoint(new Vector(-33.2875741213785, 270.149010331868));
+        s.addPoint(new Vector(-28.94381862871934, 274.3979346236072));
+        s.addPoint(new Vector(-24.643764710784964, 278.59395022546727));
+        s.addPoint(new Vector(-20.32149306224072, 282.83418018340024));
+        s.addPoint(new Vector(-16.049535816351764, 287.087626693997));
+        s.addPoint(new Vector(-11.805697303025312, 291.4356603159637));
+        s.addPoint(new Vector(-7.6972633609218235, 295.8716975459545));
+        s.addPoint(new Vector(-3.8136482312730067, 300.53019808598356));
+        s.addPoint(new Vector(-0.5958693080854118, 305.6974936678391));
+        s.addPoint(new Vector(0.0, 310.4039167686666));
+
+        s.setSmoothingParameters(purePursuitA, purePursuitB, smoothingTolerance);
+        s.setVelocities(maxVel, maxAccel, maxVelk);
+
+        Path sPath = s.generatePath();
+
+        redGalacticSearchPathA = Arrays.asList(sPath);
+        return redGalacticSearchPathA;
     }
 
     public static List<Path> getSlalomPath() {
