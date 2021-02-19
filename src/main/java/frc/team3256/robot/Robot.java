@@ -156,6 +156,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
     SmartDashboard.putNumber("left encoder",drivetrain.getLeftDistance());
     SmartDashboard.putNumber("right encoder",drivetrain.getRightDistance());
+    SmartDashboard.putBoolean("Should Index", ballCounter.shouldFeed());
 
 //    intake.update(0);
 //    feeder.update(0);
