@@ -58,7 +58,7 @@ public class PathReader {
         PathReader p = new PathReader();
         int offsetX = -0;
         int offsetY = 0;
-        ArrayList<Vector> arr = p.getPath("C:\\Users\\WB17\\Downloads\\Red Ball Path.wpilib.csv");
+        ArrayList<Vector> arr = p.getPath("C:\\Users\\dylan\\Downloads\\blue.csv");
         for (int i = 0; i < arr.size(); i++) {
             System.out.println("s.addPoint(new Vector("+ (arr.get(i).x + offsetX) + ", " + (arr.get(i).y + offsetY) +"));");
         }
