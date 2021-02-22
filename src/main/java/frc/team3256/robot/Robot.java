@@ -112,7 +112,7 @@ public class Robot extends TimedRobot {
     camera.setFPS(30);
     camera.setPixelFormat(VideoMode.PixelFormat.kMJPEG);
 
-    limelight.init();
+    //limelight.init();
 
     if(WANTS_TO_LOG) {
     }
@@ -124,7 +124,7 @@ public class Robot extends TimedRobot {
     drivetrain.resetGyro();
     drivetrain.setBrakeMode();
 
-    limelight.turnOn();
+    //limelight.turnOn();
 
     poseEstimator.reset();
     purePursuitTracker.reset();
@@ -134,7 +134,7 @@ public class Robot extends TimedRobot {
     enabledLooper.start();
     flywheelLooper.start();
     poseEstimatorLooper.start();
-    limelightLooper.start();
+    //limelightLooper.start();
 
     if (SmartDashboard.getBoolean("autoEnabled", true)) {
       maintainAutoExecution = true;
@@ -182,11 +182,11 @@ public class Robot extends TimedRobot {
     maintainAutoExecution = false;
     enabledLooper.stop();
     purePursuitTracker.reset();
-    limelight.turnOn();
+    //limelight.turnOn();
     airCompressor.turnOnCompressor();
     enabledLooper.start();
     flywheelLooper.start();
-    limelightLooper.start();
+    //limelightLooper.start();
     autoModeExecuter.setFinished(true);
 
     drivetrain.resetGyro();
@@ -204,13 +204,13 @@ public class Robot extends TimedRobot {
     teleopUpdater.update();
     SmartDashboard.putNumber("Ball counter", BallCounter.getInstance().getCount());
     SmartDashboard.putBoolean("Hood Zeroed", Hood.getInstance().isZeroed());
-    SmartDashboard.putBoolean("Correct Distance", 60 < limelight.getDistanceToInner() && limelight.getDistanceToInner() < 144);
+    //SmartDashboard.putBoolean("Correct Distance", 60 < limelight.getDistanceToInner() && limelight.getDistanceToInner() < 144);
     SmartDashboard.putBoolean("Correct Auto Align", turret.atAngleSetpoint() && hood.atHoodSetpoint() && flywheel.atSetpointVelocity());
 
     //TODO: COMMENTED OUT TO INCREASE LATENCY, COMMENT BACK IN FOR DEBUG
 //    SmartDashboard.putNumber("distance to outer", limelight.getDistanceToTarget());
 //    SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
-   SmartDashboard.putNumber("wanted vel", ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
+   //SmartDashboard.putNumber("wanted vel", ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
 //    SmartDashboard.putNumber("TAU", limelight.calculateTau());
     SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
 //    SmartDashboard.putNumber("wantedEnd", limelight.optimalEndAngle());

@@ -91,7 +91,7 @@ public class DriveTrain extends DriveTrainBase implements Loop {
 
         turn *= kWheelGain;
         DrivePower signal = Kinematics.inverseKinematics(new Twist2d(throttle, 0.0, turn), DriveConstants.kRobotTrackWidth, DriveConstants.kTrackScrubFactor);
-        return new DrivePower(signal.getLeft(), signal.getRight(), quickTurn);
+        return new DrivePower(signal.getLeft(), signal.getRight(), false); //quickTurn
     }
 
     public void setHighGear(boolean highGear) { shifter.set(highGear ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse); }
