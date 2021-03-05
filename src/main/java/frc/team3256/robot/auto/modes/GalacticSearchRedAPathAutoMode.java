@@ -25,9 +25,9 @@ public class GalacticSearchRedAPathAutoMode extends AutoModeBase {
         PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
         purePursuitTracker.setRobotTrack(DriveConstants.kRobotTrackWidth);
         BallCounter.getInstance().setCount(0);
-        Intake.getInstance().setIntakeTogglingState(false);
+         Intake.getInstance().setIntakeTogglingState(false);
         Intake.getInstance().setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
-        purePursuitTracker.setPaths(Paths.getRedGalacticSearchPathA(), 8);
+        purePursuitTracker.setPaths(Paths.getRedGalacticSearchPathA(), 13);
         purePursuitTracker.setClosestPointLimit(4);
 
         double startTime = Timer.getFPGATimestamp();

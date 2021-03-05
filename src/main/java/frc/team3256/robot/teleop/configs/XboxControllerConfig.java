@@ -39,6 +39,11 @@ public class XboxControllerConfig implements ControlsInterface {
         return driver.getRawButton(1);
     }
 
+    @Override
+    public boolean getToggleReverseDrivetrain() {
+        return driver.getRawButton(3);
+    }
+
 
 //--------------Manipulator--------------
 
@@ -124,9 +129,11 @@ public class XboxControllerConfig implements ControlsInterface {
     @Override
     public boolean getFeederShoot() { return manipulator.getRawButton(4); }
 
+    //Manipulator: B Button
     @Override
     public boolean getOuterGoalAlign() { return manipulator.getRawButton(2); }
 
+    //Manipulator: X Button
     @Override
     public boolean getBallCountReset() { return manipulator.getRawButton(3); }
 }

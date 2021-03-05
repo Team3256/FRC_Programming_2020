@@ -3,6 +3,7 @@ package frc.team3256.robot.teleop;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3256.robot.constants.DriveConstants;
 import frc.team3256.robot.hardware.IRSensors;
 import frc.team3256.robot.helper.BallCounter;
 import frc.team3256.robot.helper.ShootingKinematics;
@@ -28,6 +29,7 @@ public class TeleopUpdater {
     private boolean overrideFeeder = false;
     private boolean intakeUp = true;
     private boolean prevIntakeToggle = false;
+    private boolean prevDrivetrainReverseToggle = false;
     private boolean hangerRelease = true;
     private boolean prevHangerPancakesToggle = false;
     private boolean wantsToAutoIndex = true;
@@ -84,6 +86,7 @@ public class TeleopUpdater {
         boolean getFeederShoot = controls.getFeederShoot();
         boolean getDriverShoot = controls.getDriverShoot();
         boolean intakeToggle = controls.toggleIntake();
+        boolean drivetrainReverseToggle = controls.getToggleReverseDrivetrain();
 
         if (SmartDashboard.getNumber("Ball Count Reset", 0) == 1) {
             ballCounter.setCount(0);
@@ -189,8 +192,8 @@ public class TeleopUpdater {
         }
 
         if (getRevUp) {
-//            flywheel.setVelocitySetpoint(ShootingKinematics.outputVelTolFlywheelVel(limelight.getVelToTarget()));
-            flywheel.setVelocitySetpoint(4000);
+            flywheel.setVelocitySetpoint(ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
+//            flywheel.setVelocitySetpoint(4000);
             flywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
 
         } else {
@@ -209,6 +212,17 @@ public class TeleopUpdater {
         }
 
         prevIntakeToggle = intakeToggle;
+
+//        if(drivetrainReverseToggle && !prevDrivetrainReverseToggle) {
+//            if (drivetrainReverseToggle) {
+//                DriveTrain.getInstance().setInvertedReverse();
+//            }
+//            else
+//                DriveTrain.getInstance().setInvertedNormal();
+//        }
+//
+//        prevDrivetrainReverseToggle = drivetrainReverseToggle;
+//        SmartDashboard.putBoolean("drivetrain invert",drivetrainReverseToggle);
 
         //TODO: Making hanger actuators similar to intake toggle
 //        if(hangerPancakesToggle && !prevHangerPancakesToggle) {

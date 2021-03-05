@@ -24,6 +24,8 @@ public interface ControlsInterface {
 
     boolean getDriverShoot();
 
+    boolean getToggleReverseDrivetrain();
+
 
 //--------------Manipulator--------------
 

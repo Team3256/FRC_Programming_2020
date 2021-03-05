@@ -31,11 +31,11 @@ public class GalacticSearchBlueBPathAutoMode extends AutoModeBase {
       purePursuitTracker.setClosestPointLimit(4);
 
       double startTime = Timer.getFPGATimestamp();
-      runAction(new WaitAction(5.0));
+      runAction(new WaitAction(1.0));
       runAction(new ResetPursuitAction());
       DriveTrain.getInstance().setHighGear(true);
       // Flywheel.getInstance().setFlywheelVelocityPID(30);
-      runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(20.0), new FeederIndexAction(20.0))));
+      runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(8.0), new FeederIndexAction(8.0))));
       SmartDashboard.putNumber("Total Auto Time: ", Timer.getFPGATimestamp() - startTime);
    }
 }

@@ -20,7 +20,7 @@ public class BarrelRacingAutoMode extends AutoModeBase {
         tracker.setPaths(Paths.getBarrelRacingPath(), DriveConstants.lookaheadDistance);
         tracker.setClosestPointLimit(3);
 
-        runAction(new WaitAction(5.0));
+        runAction(new WaitAction(1.0));
 
         double startTime = Timer.getFPGATimestamp();
 

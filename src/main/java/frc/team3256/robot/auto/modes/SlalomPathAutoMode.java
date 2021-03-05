@@ -18,11 +18,11 @@ public class SlalomPathAutoMode extends AutoModeBase {
         PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
         purePursuitTracker.setRobotTrack(DriveConstants.kRobotTrackWidth);
         purePursuitTracker.setPaths(Paths.getSlalomPath(), 14);
-        purePursuitTracker.setClosestPointLimit(2);
+        purePursuitTracker.setClosestPointLimit(4);
 
 
         double startTime = Timer.getFPGATimestamp();
-        runAction(new WaitAction(5.0));
+        runAction(new WaitAction(2.0));
         runAction(new ResetPursuitAction());
         DriveTrain.getInstance().setHighGear(true);
         runAction(new PurePursuitAction(0));
