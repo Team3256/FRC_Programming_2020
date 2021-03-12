@@ -38,7 +38,7 @@ public class Limelight implements Loop {
     private double angleToTarget = 0;
     private double velToTarget = 0;
 
-    private boolean aimAtInner = true;
+    private boolean aimAtInner = false; //was true
     private NetworkTableInstance inst;
 
 

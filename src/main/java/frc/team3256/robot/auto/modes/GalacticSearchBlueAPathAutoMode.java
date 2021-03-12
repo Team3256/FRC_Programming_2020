@@ -19,23 +19,23 @@ import frc.team3256.warriorlib.auto.purepursuit.ResetPursuitAction;
 
 import java.util.Arrays;
 
-public class GalacticSearchRedAPathAutoMode extends AutoModeBase {
+public class GalacticSearchBlueAPathAutoMode extends AutoModeBase {
     @Override
     protected void routine() throws AutoModeEndedException {
         PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
         purePursuitTracker.setRobotTrack(DriveConstants.kRobotTrackWidth);
         BallCounter.getInstance().setCount(0);
-         Intake.getInstance().setIntakeTogglingState(false);
+        Intake.getInstance().setIntakeTogglingState(false);
         Intake.getInstance().setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
-        purePursuitTracker.setPaths(Paths.getRedGalacticSearchPathA(), 13);
+        purePursuitTracker.setPaths(Paths.getBlueGalacticSearchPathA(), DriveConstants.lookaheadDistance);
         purePursuitTracker.setClosestPointLimit(4);
 
         double startTime = Timer.getFPGATimestamp();
         runAction(new WaitAction(1.0));
         runAction(new ResetPursuitAction());
         DriveTrain.getInstance().setHighGear(true);
-      // Flywheel.getInstance().setFlywheelVelocityPID(30);
-        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(15.0), new FeederIndexAction(15.0))));
+        // Flywheel.getInstance().setFlywheelVelocityPID(30);
+        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(8.0), new FeederIndexAction(8.0))));
         SmartDashboard.putNumber("Total Auto Time: ", Timer.getFPGATimestamp() - startTime);
     }
 }

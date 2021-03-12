@@ -56,6 +56,9 @@ public class DriveTrain extends DriveTrainBase implements Loop {
 
         SparkMAXUtil.setBrakeMode(leftMaster, leftSlave, rightMaster, rightSlave);
 
+//        rightMaster.setInverted(true);
+//        leftMaster.setInverted(false);
+
         rightMaster.setInverted(false);
         leftMaster.setInverted(true);
 
@@ -70,6 +73,17 @@ public class DriveTrain extends DriveTrainBase implements Loop {
         rightMaster.set(rightPower);
     }
 
+
+    public void setInvertedReverse() {
+        leftMaster.setInverted(false);
+        rightMaster.setInverted(true);
+    }
+
+    public void setInvertedNormal() {
+        leftMaster.setInverted(true);
+        rightMaster.setInverted(false);
+    }
+
     public DrivePower cheesyishDrive(double throttle, double turn, boolean quickTurn) {
         if (Util.epsilonEquals(throttle, 0.0, 0.04)) {
             throttle = 0.0;
@@ -80,7 +94,7 @@ public class DriveTrain extends DriveTrainBase implements Loop {
         }
 
         final double kWheelGain = 0.05;
-        final double kWheelNonlinearity = 0.05;
+        final double kWheelNonlinearity = 0.09; //0.05
         final double denominator = Math.sin(Math.PI / 2.0 * kWheelNonlinearity);
         // Apply a sin function that's scaled to make it feel better.
         if (!quickTurn) {
@@ -91,6 +105,8 @@ public class DriveTrain extends DriveTrainBase implements Loop {
 
         turn *= kWheelGain;
         DrivePower signal = Kinematics.inverseKinematics(new Twist2d(throttle, 0.0, turn), DriveConstants.kRobotTrackWidth, DriveConstants.kTrackScrubFactor);
+
+//        return new DrivePower(signal.getRight(), signal.getLeft(), false); //quickTurn
         return new DrivePower(signal.getLeft(), signal.getRight(), false); //quickTurn
     }
 
