@@ -28,9 +28,9 @@ public class BouncePathAutoMode extends AutoModeBase {
         DriveTrain.getInstance().setHighGear(true);
         DriveTrain.getInstance().setBrakeMode();
         runAction(new PurePursuitAction(0));
-        runAction(new PurePursuitAction(1));
-        runAction(new PurePursuitAction(2));
-        runAction(new PurePursuitAction(3));
+//        runAction(new PurePursuitAction(1));
+//        runAction(new PurePursuitAction(2));
+//        runAction(new PurePursuitAction(3));
 
         SmartDashboard.putNumber("Total Auto Time: ", Timer.getFPGATimestamp() - startTime);
 
