@@ -900,9 +900,10 @@ public class Paths {
         pathFourGen.addPoint(new Vector(-35.469841576573856, 236.26643464498278));
         pathFourGen.addPoint(new Vector(-29.646753118122675, 237.99108347382793));
         pathFourGen.addPoint(new Vector(-23.920198689705444, 239.87461923164204));
-        pathFourGen.addPoint(new Vector(-18.291463563496734, 242.0036034920618));
+        pathFourGen.addPoint(new Vector(-19.291463563496734, 241.0036034920618));
         pathFourGen.addPoint(new Vector(-12.797433500916213, 244.55457430097226));
         pathFourGen.addPoint(new Vector(-8.340329350984746, 247.17468517920588));
+        pathFourGen.addPoint(new Vector(-3.340329350984746, 250.17468517920588));
 
         Path pathOne = pathOneGen.generatePath();
         Path pathTwo = pathTwoGen.generatePath();
