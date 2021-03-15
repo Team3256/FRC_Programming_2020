@@ -100,8 +100,10 @@ public class Limelight implements Loop {
             }
         }
 
-        double skewRad = Math.atan2(lowestY - secLowestY, tcornx[lowestIndex] - tcornx[secLowestIndex]);
-        skew = Math.abs(skewRad * (180.0/Math.PI));
+        if(tcornx.length > lowestIndex && tcornx.length > secLowestIndex){
+            double skewRad = Math.atan2(lowestY - secLowestY, tcornx[lowestIndex] - tcornx[secLowestIndex]);
+            skew = Math.abs(skewRad * (180.0/Math.PI));
+        }
         return skew;
     }
 

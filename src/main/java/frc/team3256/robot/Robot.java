@@ -18,6 +18,7 @@ import frc.team3256.robot.hardware.AirCompressor;
 import frc.team3256.robot.helper.BallCounter;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.hardware.Limelight;
+import frc.team3256.robot.helper.GalacticSearchPathSelection;
 import frc.team3256.robot.helper.ShootingKinematics;
 import frc.team3256.robot.subsystems.*;
 import frc.team3256.robot.teleop.TeleopUpdater;
@@ -51,6 +52,9 @@ public class Robot extends TimedRobot {
   private AirCompressor airCompressor = AirCompressor.getInstance();
   private PoseEstimator poseEstimator;
   private PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
+
+
+  private GalacticSearchPathSelection g;
 
   private AutoModeExecuter autoModeExecuter;
   private boolean maintainAutoExecution = true;
@@ -183,11 +187,11 @@ public class Robot extends TimedRobot {
     maintainAutoExecution = false;
     enabledLooper.stop();
     purePursuitTracker.reset();
-    limelight.turnOn();
+    //limelight.turnOn();
     airCompressor.turnOnCompressor();
     enabledLooper.start();
     flywheelLooper.start();
-    limelightLooper.start();
+    //limelightLooper.start();
     autoModeExecuter.setFinished(true);
 
     drivetrain.resetGyro();
@@ -196,7 +200,8 @@ public class Robot extends TimedRobot {
     drivetrain.setHighGear(true);
     poseEstimator.reset();
     turret.reset();
-    BallCounter.getInstance().setCount(0);
+    BallCounter.getInstance().setCount(3);
+    hood.setWantedState(Hood.WantedState.WANTS_TO_ZERO_HOOD);
     if(WANTS_TO_LOG) loggerLooper.start();
   }
 
@@ -205,15 +210,15 @@ public class Robot extends TimedRobot {
     teleopUpdater.update();
     SmartDashboard.putNumber("Ball counter", BallCounter.getInstance().getCount());
     SmartDashboard.putBoolean("Hood Zeroed", Hood.getInstance().isZeroed());
-    SmartDashboard.putBoolean("Correct Distance", 60 < limelight.getDistanceToInner() && limelight.getDistanceToInner() < 144);
+    //SmartDashboard.putBoolean("Correct Distance", 60 < limelight.getDistanceToInner() && limelight.getDistanceToInner() < 144);
     SmartDashboard.putNumber("Target Distance", limelight.getDistanceToInner());
     SmartDashboard.putBoolean("Correct Auto Align", turret.atAngleSetpoint() && hood.atHoodSetpoint() && flywheel.atSetpointVelocity());
 
     //TODO: COMMENTED OUT TO INCREASE LATENCY, COMMENT BACK IN FOR DEBUG
 //    SmartDashboard.putNumber("distance to outer", limelight.getDistanceToTarget());
-//    SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
+    //SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
 //   SmartDashboard.putNumber("wanted vel", ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
-//    SmartDashboard.putNumber("TAU", limelight.calculateTau());
+    //SmartDashboard.putNumber("TAU", limelight.calculateTau());
 //    SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
 //    SmartDashboard.putNumber("wantedEnd", limelight.optimalEndAngle());
 //    private DoubleSolenoid hangerPancakes;
@@ -231,6 +236,7 @@ public class Robot extends TimedRobot {
     drivetrain.resetGyro();
     drivetrain.resetEncoders();
     drivetrain.setCoastMode();
+    g = new GalacticSearchPathSelection();
   }
 
   @Override
@@ -240,6 +246,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
     SmartDashboard.putNumber("left encoder",drivetrain.getLeftDistance());
     SmartDashboard.putNumber("right encoder",drivetrain.getRightDistance());
+    g.isRed(true);
   }
 
   @Override

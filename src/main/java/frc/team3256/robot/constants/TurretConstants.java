@@ -5,9 +5,9 @@ public class TurretConstants {
     public static final double turretkI = 0.0005;
     public static final double turretkD = 0.0013;
     public static final double turretHeight = 22.5;
-    public static final double kAutoAlignTolerance = 0.1;
+    public static final double kAutoAlignTolerance = 0.3; //0.1
 
-    public static final double turretPositionkP = 2.0;    // need to tune
+    public static final double turretPositionkP = 1.7;    // need to tune 2.0
     public static final double turretPositionkI = 1e-4;
     public static final double turretPositionkD = 0;
 

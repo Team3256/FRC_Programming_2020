@@ -49,7 +49,8 @@ public class BallCounter implements Loop {
     }
 
     public boolean shouldFeed() {
-        return shouldIndex;
+        //return shouldIndex;
+        return false;
     }
 
     public void setCount(double count) {
