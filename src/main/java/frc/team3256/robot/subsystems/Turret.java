@@ -135,10 +135,10 @@ public class Turret extends SubsystemBase {
             setTurretSpeed(0);
         }
         else {
-            double getTo = angleSetpoint;
-            if (limelight.getTopSkew() < -45) {
-                headingError = angleSetpoint - limelight.getTx();
-                getTo = -angleSetpoint;
+            double getTo = angleSetpoint + 2; //+2
+                if (limelight.getTopSkew() < -45) {
+                    headingError = angleSetpoint - limelight.getTx();
+                    getTo = -angleSetpoint;
             } else
                 headingError = -angleSetpoint - limelight.getTx();
             if (firstRun) {

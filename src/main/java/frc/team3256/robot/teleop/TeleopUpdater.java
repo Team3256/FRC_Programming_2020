@@ -184,7 +184,7 @@ public class TeleopUpdater {
             //Auto Aligning Hood
             limelight.calculateKinematics();
             limelight.setWantedEndAngle(5*(Math.PI/180));
-            if (limelight.getDistanceToInner() > 250) { // red
+            if (limelight.getDistanceToInner() > 230) { // red
                 hood.setPosSetpoint(ShootingKinematics.angleToHoodPos(0.651));
             } else if (limelight.getDistanceToInner() > 190) { // blue
                 hood.setPosSetpoint(ShootingKinematics.angleToHoodPos(38*Math.PI/180.0)); //33.5
@@ -200,9 +200,9 @@ public class TeleopUpdater {
         }
 
         if (getRevUp) {
-            if (limelight.getDistanceToInner() > 250) {
-                flywheel.setVelocitySetpoint(5250); //6000
-            } else if (limelight.getDistanceToInner() > 190) {
+            if (limelight.getDistanceToInner() > 230) { //230
+                flywheel.setVelocitySetpoint(4800); //4800
+            } else if (limelight.getDistanceToInner() > 160) {
                 flywheel.setVelocitySetpoint(4300); //6000
         } //280 220
         else
