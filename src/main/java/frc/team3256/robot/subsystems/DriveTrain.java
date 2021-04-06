@@ -69,6 +69,8 @@ public class DriveTrain extends DriveTrainBase implements Loop {
     }
 
     public void setPowerOpenLoop(double leftPower, double rightPower) {
+//        leftMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
+//        rightMaster.setIdleMode(CANSparkMax.IdleMode.kCoast);
         leftMaster.set(leftPower);
         rightMaster.set(rightPower);
     }
@@ -94,7 +96,7 @@ public class DriveTrain extends DriveTrainBase implements Loop {
         }
 
         final double kWheelGain = 0.05;
-        final double kWheelNonlinearity = 0.09; //0.05
+        final double kWheelNonlinearity = 0.07; //0.05, 0.09
         final double denominator = Math.sin(Math.PI / 2.0 * kWheelNonlinearity);
         // Apply a sin function that's scaled to make it feel better.
         if (!quickTurn) {

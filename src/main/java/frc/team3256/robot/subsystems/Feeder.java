@@ -113,7 +113,14 @@ public class Feeder extends SubsystemBase {
     }
 
     private FeederControlState handleFurtherIndexing() {
-        mFeeder.getEncoder().setPosition(mFeeder.getEncoder().getPosition() - 100);
+//        mFeeder.getEncoder().setPosition(mFeeder.getEncoder().getPosition() - 100);
+        mFeeder.set(1);
+        try {
+            Thread.sleep(70);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        mFeeder.set(0);
         return defaultStateTransfer();
     }
 

@@ -31,7 +31,7 @@ public class BallCounter implements Loop {
         if (feederBlocked) {
             if (!feederPrevBlocked && Intake.getInstance().getWantedState() == Intake.WantedState.WANTS_TO_INTAKE ) {
                 count++;
-//                Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_FURTHER_INDEX);
+                Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_FURTHER_INDEX);
             }
             if (!isFull()) shouldIndex = true;
         }
@@ -49,8 +49,8 @@ public class BallCounter implements Loop {
     }
 
     public boolean shouldFeed() {
-        //return shouldIndex;
-        return false;
+        return shouldIndex;
+//        return false;
     }
 
     public void setCount(double count) {

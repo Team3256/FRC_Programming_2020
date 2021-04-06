@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
   private PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
 
 
-  private GalacticSearchPathSelection g;
+  private GalacticSearchPathSelection g = GalacticSearchPathSelection.getInstance();
 
   private AutoModeExecuter autoModeExecuter;
   private boolean maintainAutoExecution = true;
@@ -104,10 +104,12 @@ public class Robot extends TimedRobot {
 //    autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
     autoChooser.addOption("Cross Baseline", new CrossBaselineAutoMode());
     autoChooser.addOption("Slalom Path Auto", new SlalomPathAutoMode());
-    autoChooser.addOption("Galactic Search Red A Path Auto", new GalacticSearchRedAPathAutoMode());
-    autoChooser.addOption("Galactic Search Red B Path Auto", new GalacticSearchRedBPathAutoMode());
-    autoChooser.addOption("Galactic Search Blue B Path Auto", new GalacticSearchBlueBPathAutoMode());
-    autoChooser.addOption("Galactic Search Blue A Path Auto", new GalacticSearchBlueAPathAutoMode());
+//    autoChooser.addOption("Galactic Search Red A Path Auto", new GalacticSearchRedAPathAutoMode());
+//    autoChooser.addOption("Galactic Search Red B Path Auto", new GalacticSearchRedBPathAutoMode());
+//    autoChooser.addOption("Galactic Search Blue B Path Auto", new GalacticSearchBlueBPathAutoMode());
+//    autoChooser.addOption("Galactic Search Blue A Path Auto", new GalacticSearchBlueAPathAutoMode());
+    autoChooser.addOption("Galactic Search A Path Auto", new GalacticSearchAPathAuto());
+    autoChooser.addOption("Galactic Search B Path Auto", new GalacticSearchBPathAuto());
     autoChooser.addOption("Bounce Path", new BouncePathAutoMode());
     autoChooser.addOption("Barrel Racing Path", new BarrelRacingAutoMode());
     SmartDashboard.putData(autoChooser);
@@ -184,6 +186,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    limelight.turnOn();
     maintainAutoExecution = false;
     enabledLooper.stop();
     purePursuitTracker.reset();
@@ -207,6 +210,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    g.isRed(true);
     teleopUpdater.update();
     SmartDashboard.putNumber("Ball counter", BallCounter.getInstance().getCount());
     SmartDashboard.putBoolean("Hood Zeroed", Hood.getInstance().isZeroed());
@@ -236,7 +240,6 @@ public class Robot extends TimedRobot {
     drivetrain.resetGyro();
     drivetrain.resetEncoders();
     drivetrain.setCoastMode();
-    g = new GalacticSearchPathSelection();
   }
 
   @Override

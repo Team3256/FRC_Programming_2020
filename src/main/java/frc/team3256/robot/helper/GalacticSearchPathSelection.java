@@ -1,21 +1,20 @@
 package frc.team3256.robot.helper;
 
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3256.robot.constants.VisionConstants;
+import frc.team3256.robot.hardware.Limelight;
 
 public class GalacticSearchPathSelection {
     private double ballCenterX, ballCenterY, ballXAngle;
     private NetworkTableInstance inst;
-    double pathARedX = 0;
-    double pathARedY = 0;
-    double pathABlueX = 0;
-    double pathABlueY = 0;
-    double pathBRedX = 0;
-    double pathBRedY = 0;
-    double pathBBlueX = 0;
-    double pathBBlueY = 0;
+
+    private static GalacticSearchPathSelection instance;
+
+    public static GalacticSearchPathSelection getInstance(){
+        return instance == null ? instance = new GalacticSearchPathSelection() : instance;
+    }
 
     public boolean isRed(boolean isPathA) {
         //Setting up NetworkTables
@@ -31,10 +30,11 @@ public class GalacticSearchPathSelection {
         SmartDashboard.putNumber("Ball Center Y: ", ballCenterY);
         SmartDashboard.putNumber("Ball Center Angle: ", ballXAngle);
         if(isPathA){
-            if(ballXAngle > 10){return true;}else{return false;}
+            return(!(ballXAngle > VisionConstants.pathABorderAngle)); //true is red, false is blue
         } else {
-            if(ballXAngle > 10){return true;}else{return false;}
+            return(ballXAngle < VisionConstants.pathBBorderAngle);
         }
     }
+
 
 }

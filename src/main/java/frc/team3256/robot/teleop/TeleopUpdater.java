@@ -124,8 +124,9 @@ public class TeleopUpdater {
         if (!overrideFeeder) {
             if (ballCounter.shouldFeed()) {
 
-                feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
-                this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
+//                feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
+                feeder.setWantedState(Feeder.WantedState.WANTS_TO_FURTHER_INDEX);
+//                this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
             }
             else {
                 feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
@@ -168,12 +169,12 @@ public class TeleopUpdater {
 //            hanger.setWantedState(Hanger.WantedState.WANTS_TO_IDLE);
 //        }
 
-        if(getAutoAlign) {
-            //Turn on Limelight if autoalign
-            limelight.turnOn();
+        //Turn on Limelight if autoalign
+        limelight.turnOn();
 
-            //Auto Aligning Turret
-            double angle = limelight.calculateTau();
+        //Auto Aligning Turret
+        double angle = limelight.calculateTau();
+        if(getAutoAlign) {
             if (getAlignToOuter) {
                 angle = limelight.getTx();
             }
@@ -183,29 +184,29 @@ public class TeleopUpdater {
             //Auto Aligning Hood
             limelight.calculateKinematics();
             limelight.setWantedEndAngle(5*(Math.PI/180));
-            if (limelight.getDistanceToInner() > 250) {
-                hood.setPosSetpoint(ShootingKinematics.angleToHoodPos(0.671));
-            } else if (limelight.getDistanceToInner() > 190) {
-                hood.setPosSetpoint(ShootingKinematics.angleToHoodPos(35.5*Math.PI/180.0));
+            if (limelight.getDistanceToInner() > 250) { // red
+                hood.setPosSetpoint(ShootingKinematics.angleToHoodPos(0.651));
+            } else if (limelight.getDistanceToInner() > 190) { // blue
+                hood.setPosSetpoint(ShootingKinematics.angleToHoodPos(38*Math.PI/180.0)); //33.5
             } //280 220
-            else
+            else // yellow and green
                 hood.setPosSetpoint(ShootingKinematics.angleToHoodPos(limelight.getAngleToTarget()));
             hood.setWantedState(Hood.WantedState.WANTS_TO_POS);
             SmartDashboard.putNumber("angle to target", limelight.getAngleToTarget());
         }
         else {
             //Turn off Limelight if not autoalign
-            limelight.turnOff();
+//            limelight.turnOff();
         }
 
         if (getRevUp) {
             if (limelight.getDistanceToInner() > 250) {
-                flywheel.setVelocitySetpoint(6000);
+                flywheel.setVelocitySetpoint(5250); //6000
             } else if (limelight.getDistanceToInner() > 190) {
-                flywheel.setVelocitySetpoint(6000);
-            } //280 220
-            else
-                flywheel.setVelocitySetpoint(ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
+                flywheel.setVelocitySetpoint(4300); //6000
+        } //280 220
+        else
+            flywheel.setVelocitySetpoint(ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
             SmartDashboard.putNumber("flywheel vel",flywheel.getVelocity());
             SmartDashboard.putNumber("target vel",ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
 //            flywheel.setVelocitySetpoint(4000);
