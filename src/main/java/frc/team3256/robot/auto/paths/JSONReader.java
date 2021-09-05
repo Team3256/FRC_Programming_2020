@@ -1,16 +1,11 @@
 package frc.team3256.robot.auto.paths;
 
 import java.util.Iterator;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import org.json.simple.*;
 import org.json.simple.parser.*;
-
-import javax.swing.text.html.HTMLDocument;
+import java.util.ArrayList;
 
 public class JSONReader {
     private String file; // file to read from
@@ -29,24 +24,34 @@ public class JSONReader {
         }
     }
 
-    public void ParseJSONFile() {
+    public ArrayList<float[]> ParseJSONFile() {
         JSONArray translation = (JSONArray) ((JSONObject) obj).get("translation"); // array of points
 
         Iterator itr = ((Map) translation.iterator()).entrySet().iterator();
         int counter = 0;
 
-        float x;
-        float y;
+        float x = 0.0f;
+        float y = 0.0f;
+
+        ArrayList<float[]> coordinates = new ArrayList<float[]>();
+        float[] coordinate = {0.0f, 0.0f};
 
         while (itr.hasNext()) {
             Map.Entry pair = (Map.Entry) itr.next();
             if (counter == 0) {
-                x = (float) pair.getValue(); // x-value
+                x = (float) pair.getValue(); // current x-value
             } else if (counter == 1) {
-                y = (float) pair.getValue(); // y-value
+                y = (float) pair.getValue(); // current y-value
             }
 
             counter++;
+
+            coordinate[0] = x;
+            coordinate[1] = y;
+
+            coordinates.add(coordinate);
         }
+
+        return coordinates;
     }
 }
