@@ -25,6 +25,12 @@ public class JSONReader {
         translation = (JSONArray) ((JSONObject) obj).get("translation"); // array of points
     }
 
+    public JSONReader() {
+        this.file = "";
+        translation = null;
+        obj = null;
+    }
+
     public JSONArray getTranslation() {
         return translation;
     }
