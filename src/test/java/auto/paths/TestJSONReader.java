@@ -8,27 +8,37 @@ import org.junit.Test;
 
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
 public class TestJSONReader {
     @Test
     public void GettingAllTranslationsFromParser() {
-        String sampleText = "\"translation\": {    \n" +
+        String sampleText = "{\n" +
+                "\"acceleration\": 10.0,\n" +
+                "\"curvature\": 0.0,\n" +
+                "\"pose\": {\n" +
+                "\"rotation\": {\n" +
+                "\"radians\": -0.23210383807515578\n" +
+                "},\n" +
+                "\"translation\": {    \n" +
                 "\"x\": 123.30239583340617,\n" +
                 "\"y\": 44.4397520790277\n" +
-                "}";
+                "}\n" +
+                "},";
 
         String result = "";
-        ArrayList<float[]> coordinates = new ArrayList<float[]>();
+        List<float[]> coordinates = new ArrayList<float[]>();
         float[] pair = {123.30239583340617f, 44.4397520790277f};
         coordinates.add(pair);
 
-        String translated = coordinates.toString();
+        String translated = coordinates.stream().map(Object::toString).collect(Collectors.joining(", "));
         try {
             JSONArray translation = (JSONArray) ((JSONObject) new JSONParser().parse(sampleText)).get("translation");
 
-            ArrayList<float[]> translatedCoords = (new JSONReader()).ParseJSONFile(translation);
+            List<float[]> translatedCoords = (new JSONReader()).ParseJSONFile(translation);
             result = translatedCoords.toString();
         } catch (Exception e) {
             result = e.getLocalizedMessage();
