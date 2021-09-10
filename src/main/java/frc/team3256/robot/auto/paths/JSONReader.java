@@ -10,23 +10,26 @@ import java.util.ArrayList;
 public class JSONReader {
     private String file; // file to read from
     private Object obj; // JSONParser to parse json 'file'
+    private JSONArray translation;
 
     public JSONReader(String file) {
         this.file = file;
-    }
 
-    public void initJSONReader() {
         try {
-             obj = new JSONParser().parse(new FileReader(file));
+            obj = new JSONParser().parse(new FileReader(file));
         } catch (Exception e) {
             System.out.println(e);
             return;
         }
+
+        translation = (JSONArray) ((JSONObject) obj).get("translation"); // array of points
     }
 
-    public ArrayList<float[]> ParseJSONFile() {
-        JSONArray translation = (JSONArray) ((JSONObject) obj).get("translation"); // array of points
+    public JSONArray getTranslation() {
+        return translation;
+    }
 
+    public ArrayList<float[]> ParseJSONFile(JSONArray translation) {
         Iterator itr = ((Map) translation.iterator()).entrySet().iterator();
         int counter = 0;
 
