@@ -41,7 +41,7 @@ public class TestJSONReader {
             List<float[]> translatedCoords = (new JSONReader()).ParseJSONFile(translation);
             result = translatedCoords.toString();
         } catch (Exception e) {
-            result = e.getLocalizedMessage();
+            result = e.toString();
         }
 
         assertEquals(translated, result);
