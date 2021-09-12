@@ -99,6 +99,7 @@ public class TeleopUpdater {
         driveTrain.setPowerOpenLoop(drivePower.getLeft(), drivePower.getRight());
         driveTrain.setHighGear(!drivePower.getHighGear());
 
+        //TODO: Dylan - This is a mess, we probably want to get rid of any bad logic here
         //Intake Subsystem | Some Feeder interactions
         if (unjam) {
             this.intake.setWantedState(Intake.WantedState.WANTS_TO_UNJAM);

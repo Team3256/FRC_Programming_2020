@@ -24,6 +24,7 @@ public class Feeder extends SubsystemBase {
         AUTO_SHOOTING,
         RUN_INDEX,
         FURTHER_INDEXING,
+        PID_POSITIONING,
         SHOOTING,
         IDLE
     }
@@ -33,6 +34,7 @@ public class Feeder extends SubsystemBase {
         WANTS_TO_RUN_BACKWARD,
         WANTS_TO_RUN_INDEX,
         WANTS_TO_FURTHER_INDEX,
+        WANTS_TO_PID_POSITION,
         WANTS_TO_AUTO_SHOOT,
         WANTS_TO_SHOOT,
         WANTS_TO_IDLE
@@ -82,6 +84,9 @@ public class Feeder extends SubsystemBase {
             case FURTHER_INDEXING:
                 newState = handleFurtherIndexing();
                 break;
+            case PID_POSITIONING:
+                newState = handlePIDPositioning();
+                break;
             case AUTO_SHOOTING:
                 newState = handleAutoShoot();
                 break;
@@ -111,8 +116,20 @@ public class Feeder extends SubsystemBase {
         mBar.set(-0.5);
         return defaultStateTransfer();
     }
+    private FeederControlState handlePIDPositioning(){
+
+        if(mStateChanged){
+            //This only runs when we first switch to the state
+            //AKA this only runs in the beginning, once
+        }
+
+        //TODO: Put PID Control Here, this runs 50hz when PID positioning state is on
+        return defaultStateTransfer();
+    }
 
     private FeederControlState handleFurtherIndexing() {
+
+        //TODO: Dylan - What is this delay? Probably remove the delay
 //        mFeeder.getEncoder().setPosition(mFeeder.getEncoder().getPosition() - 100);
         mFeeder.set(1);
         try {
@@ -131,6 +148,7 @@ public class Feeder extends SubsystemBase {
     }
 
     //TODO: EVERYTHING 100 TEST
+    //TODO: Dylan - This probably needs to be in constants file, actually all of this stuff does
     private FeederControlState handleIndex() {
         mFeeder.set(1); //0.3
         mBar.set(0.5);
@@ -164,6 +182,8 @@ public class Feeder extends SubsystemBase {
                 return FeederControlState.FURTHER_INDEXING;
             case WANTS_TO_SHOOT:
                 return FeederControlState.SHOOTING;
+            case WANTS_TO_PID_POSITION:
+                return FeederControlState.PID_POSITIONING;
             case WANTS_TO_IDLE:
             default:
                 return FeederControlState.IDLE;

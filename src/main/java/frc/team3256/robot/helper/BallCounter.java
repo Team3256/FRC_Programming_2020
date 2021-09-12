@@ -8,7 +8,7 @@ import frc.team3256.warriorlib.loop.Loop;
 
 public class BallCounter implements Loop {
     private static BallCounter instance;
-    private double count = 0;
+    private int count = 0;
     private IRSensors irSensors = IRSensors.getInstance();
     private boolean feederBlocked = false;
     private boolean feederPrevBlocked = false;
@@ -22,26 +22,28 @@ public class BallCounter implements Loop {
     public void init(double timestamp) {
     }
 
+
+    /**
+     * Runs at 50hz
+     * @param timestamp Time between runs of this method
+     */
     @Override
     public void update(double timestamp) {
         feederBlocked = !irSensors.isFeederIRIntact();
         flywheelBlocked = !irSensors.isFlywheelIRIntact();
         shouldIndex = false;
+        //TODO: Dylan - Do logic for choosing PID /  Power Only
 
-        if (feederBlocked) {
-            if (!feederPrevBlocked && Intake.getInstance().getWantedState() == Intake.WantedState.WANTS_TO_INTAKE ) {
-                count++;
-                Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_FURTHER_INDEX);
-            }
-            if (!isFull()) shouldIndex = true;
-        }
+        //EXAMPLES -------------------------------\
 
-        if (flywheelBlocked) {
-            if (!flywheelPrevBlocked && Flywheel.getInstance().getWantedState() == Flywheel.WantedState.WANTS_TO_RUN) count--;
-        }
+        //This runs the PID Position method at 50hz
+        Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_PID_POSITION);
 
-        feederPrevBlocked = feederBlocked;
-        flywheelPrevBlocked = flywheelBlocked;
+        //This Stops the feeder
+        Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
+
+        //This runs the Index method at 50 hz, which just runs at a current speed
+        Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
     }
 
     @Override
@@ -53,7 +55,7 @@ public class BallCounter implements Loop {
 //        return false;
     }
 
-    public void setCount(double count) {
+    public void setCount(int count) {
         this.count = count;
     }
 
