@@ -2,7 +2,10 @@ package frc.team3256.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import frc.team3256.robot.constants.FeederConstants;
 import com.revrobotics.ControlType;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.hardware.TalonSRXUtil;
@@ -43,6 +46,8 @@ public class Feeder extends SubsystemBase {
     private FeederControlState mCurrentState = FeederControlState.IDLE;
     private WantedState mWantedState = WantedState.WANTS_TO_IDLE;
     private WantedState mPrevWantedState = WantedState.WANTS_TO_IDLE;
+    private PIDController feederPIDController;
+    private double positionSetpoint = FeederConstants.position;
 
     boolean mStateChanged = false;
     boolean mWantedStateChanged = false;
@@ -58,6 +63,8 @@ public class Feeder extends SubsystemBase {
         mFeeder.setSmartCurrentLimit(30);
         mBar.setInverted(false);
         mFeeder.burnFlash();
+
+        feederPIDController = new PIDController(0,0,0);
     }
 
     public void setWantedState(Feeder.WantedState wantedState) { this.mWantedState = wantedState; }
@@ -105,6 +112,11 @@ public class Feeder extends SubsystemBase {
         }
     }
 
+    public void setPIDPositioning(double positionSetpoint){
+        CANEncoder encoder = mFeeder.getEncoder();
+        double output = feederPIDController.calculate(getPosition(encoder), positionSetpoint);
+        mFeeder.set(output);
+    }
     private FeederControlState handleRunForward() {
         mFeeder.set(0.6);
         mBar.set(-0.5);
@@ -119,8 +131,7 @@ public class Feeder extends SubsystemBase {
     private FeederControlState handlePIDPositioning(){
 
         if(mStateChanged){
-            //This only runs when we first switch to the state
-            //AKA this only runs in the beginning, once
+            setPIDPositioning(positionSetpoint);
         }
 
         //TODO: Put PID Control Here, this runs 50hz when PID positioning state is on
@@ -190,6 +201,10 @@ public class Feeder extends SubsystemBase {
         }
     }
 
+    public double getPosition(CANEncoder encoder) {
+        return encoder.getPosition();
+    }
+
     @Override
     public void outputToDashboard() { }
 
@@ -197,7 +212,7 @@ public class Feeder extends SubsystemBase {
     public void zeroSensors() { }
 
     @Override
-    public void init(double timestamp) { }
+    public void init(double timestamp) {}
 
     @Override
     public void end(double timestamp) { }
