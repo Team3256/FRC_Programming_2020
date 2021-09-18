@@ -35,16 +35,19 @@ public class JSONReader {
         return translation;
     }
 
-    public ArrayList<float[]> ParseJSONFile(JSONArray translation) {
-        Iterator itr = ((Map) translation.iterator()).entrySet().iterator();
-        int counter = 0;
+    public ArrayList<float[]> ParseJSONFile(JSONObject translation) { //change from here
+        //Iterator itr = ((Map) translation.iterator()).entrySet().iterator();
+        Object x = translation.get("x");
+        Object y = translation.get("y");
+        //int counter = 0;
 
-        float x = 0.0f;
-        float y = 0.0f;
+        //float x = 0.0f;
+        //float y = 0.0f;
 
-        ArrayList<float[]> coordinates = new ArrayList<float[]>();
-        float[] coordinate = {0.0f, 0.0f};
 
+        //ArrayList<float[]> coordinates = new ArrayList<float[]>();
+        //float[] coordinate = {0.0f, 0.0f};
+        /*
         while (itr.hasNext()) {
             Map.Entry pair = (Map.Entry) itr.next();
             if (counter == 0) {
@@ -58,7 +61,7 @@ public class JSONReader {
             coordinate[0] = x;
             coordinate[1] = y;
 
-            coordinates.add(coordinate);
+            coordinates.add(coordinate);*/
         }
 
         return coordinates;

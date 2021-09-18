@@ -19,7 +19,7 @@ public class TestJSONReader {
         String sampleText = "{\n" +
                 "\"acceleration\": 10.0,\n" +
                 "\"curvature\": 0.0,\n" +
-                "\"pose\": {\n" +
+                "\"pose\": {},\n" +
                 "\"rotation\": {\n" +
                 "\"radians\": -0.23210383807515578\n" +
                 "},\n" +
@@ -27,8 +27,9 @@ public class TestJSONReader {
                 "\"x\": 123.30239583340617,\n" +
                 "\"y\": 44.4397520790277\n" +
                 "}\n" +
-                "},";
+                "}";
 
+        System.out.println(sampleText);
         String result = "";
         List<float[]> coordinates = new ArrayList<float[]>();
         float[] pair = {123.30239583340617f, 44.4397520790277f};
@@ -36,7 +37,7 @@ public class TestJSONReader {
 
         String translated = coordinates.stream().map(Object::toString).collect(Collectors.joining(", "));
         try {
-            JSONArray translation = (JSONArray) ((JSONObject) new JSONParser().parse(sampleText)).get("translation");
+            JSONObject translation = (JSONObject) ((JSONObject) new JSONParser().parse(sampleText)).get("translation");
 
             List<float[]> translatedCoords = (new JSONReader()).ParseJSONFile(translation);
             result = translatedCoords.toString();
