@@ -35,7 +35,7 @@ public class JSONReader {
         return translation;
     }
 
-    public List<Object[]> coordinates = new ArrayList<Object[]> { //change from here
+    public ArrayList<Object[]> ParseJSONFile(JSONObject translation) { //change from here
         //Iterator itr = ((Map) translation.iterator()).entrySet().iterator();
         Object x = translation.get("x");
         Object y = translation.get("y");
