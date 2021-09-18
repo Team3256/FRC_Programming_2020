@@ -3,6 +3,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.SparkMax;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import frc.team3256.robot.constants.IDConstants;
@@ -14,17 +15,23 @@ import java.util.Objects;
  * A Class to test if CAN devices are online
  */
 public class CANTest {
-    private static final int[] SparkMaxIDs = new int[]{IDConstants.leftMasterID,
+    private static final int[] SparkMaxIDs;
+    static {
+        SparkMaxIDs = new int[]{IDConstants.leftMasterID,
             IDConstants.leftSlaveID,
             IDConstants.rightMasterID,
             IDConstants.rightSlaveID,
             IDConstants.feederID};
+    }
 
-    private static final int[] TalonFXIDs = new int[]{IDConstants.leftMasterID,
-            IDConstants.intakeID,
-            IDConstants.centerMechID,
-            IDConstants.leftFlywheelID,
-            IDConstants.rightFlywheelID};
+    private static final int[] TalonFXIDs;
+    static {
+        TalonFXIDs = new int[]{IDConstants.leftMasterID,
+                IDConstants.intakeID,
+                IDConstants.centerMechID,
+                IDConstants.leftFlywheelID,
+                IDConstants.rightFlywheelID};
+    }
 
     /**
      * Main method to test can devices.
