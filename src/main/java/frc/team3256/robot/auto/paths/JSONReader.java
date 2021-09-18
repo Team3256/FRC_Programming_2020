@@ -62,7 +62,6 @@ public class JSONReader {
             coordinate[1] = y;
 
             coordinates.add(coordinate);*/
-        }
 
         return coordinates;
     }
