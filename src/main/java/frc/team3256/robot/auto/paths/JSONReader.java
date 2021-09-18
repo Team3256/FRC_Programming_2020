@@ -20,9 +20,10 @@ public class JSONReader {
         } catch (Exception e) {
             System.out.println(e);
             return;
-        //}
+            //}
 
-        translation = (JSONArray) ((JSONObject) obj).get("translation"); // array of points
+//            JSONArray translation = (JSONArray) ((JSONObject) obj).get("translation"); // array of points
+        }
     }
 
     public JSONReader() {
