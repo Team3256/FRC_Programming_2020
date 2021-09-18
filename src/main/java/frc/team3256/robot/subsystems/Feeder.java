@@ -47,7 +47,7 @@ public class Feeder extends SubsystemBase {
     private WantedState mWantedState = WantedState.WANTS_TO_IDLE;
     private WantedState mPrevWantedState = WantedState.WANTS_TO_IDLE;
     private static PIDController feederPIDController;
-    private double positionSetpoint = FeederConstants.kSpaceBetweenPowerCells;
+
 
     boolean mStateChanged = false;
     boolean mWantedStateChanged = false;
@@ -64,7 +64,7 @@ public class Feeder extends SubsystemBase {
         mBar.setInverted(false);
         mFeeder.burnFlash();
 
-        feederPIDController = new PIDController(0,0,0);
+        feederPIDController = new PIDController(FeederConstants.kP,FeederConstants.kI,FeederConstants.kD);
     }
 
     public void setWantedState(Feeder.WantedState wantedState) { this.mWantedState = wantedState; }
@@ -125,6 +125,7 @@ public class Feeder extends SubsystemBase {
     }
 
     public static boolean atSetpoint(){
+        feederPIDController.setTolerance(FeederConstants.positionTolerance, FeederConstants.velocityTolerance);
         return feederPIDController.atSetpoint();
     }
     private FeederControlState handleRunForward() {
@@ -140,7 +141,7 @@ public class Feeder extends SubsystemBase {
     }
     private FeederControlState handlePIDPositioning(){
         //TODO: Put PID Control Here, this runs 50hz when PID positioning state is on
-        setPIDPositioning(positionSetpoint);
+        setPIDPositioning(FeederConstants.kSpaceBetweenPowerCells);
         return defaultStateTransfer();
     }
 
