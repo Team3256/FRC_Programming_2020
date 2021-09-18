@@ -18,7 +18,7 @@ public class IDConstants {
     public static final int centerMechID = 6;
 
     //Feeder Constants
-    public static final int feederID = 7;  //spark max
+    public static final int feederID = 7;  // spark max
     public static final int turretBarID = 8;
 
     //Shooter Constants

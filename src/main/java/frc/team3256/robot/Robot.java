@@ -6,6 +6,10 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.team3256.robot;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -13,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.auto.modes.*;
 import frc.team3256.robot.hardware.AirCompressor;
 import frc.team3256.robot.helper.BallCounter;
+import frc.team3256.robot.helper.ShootingKinematics;
 import frc.team3256.robot.helper.CANTest;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.hardware.Limelight;
@@ -98,10 +103,10 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
     SmartDashboard.putData(autoChooser);
 
-//    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-//    camera.setResolution(240, 160);
-//    camera.setFPS(30);
-//    camera.setPixelFormat(VideoMode.PixelFormat.kMJPEG);
+    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    camera.setResolution(240, 160);
+    camera.setFPS(30);
+    camera.setPixelFormat(VideoMode.PixelFormat.kMJPEG);
 
     limelight.init();
 
@@ -211,14 +216,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-//    limelight.turnOn();
-//    limelightLooper.start();
-//    poseEstimator.reset();
-//    drivetrain.resetGyro();
-//    drivetrain.resetEncoders();
-//    drivetrain.setCoastMode();
+    limelight.turnOn();
+    limelightLooper.start();
+    poseEstimator.reset();
+    drivetrain.resetGyro();
+    drivetrain.resetEncoders();
+    drivetrain.setCoastMode();
 
-      CANTest.test();
+    CANTest.test();
   }
 
   @Override
