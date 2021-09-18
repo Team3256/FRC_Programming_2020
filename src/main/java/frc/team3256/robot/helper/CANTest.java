@@ -27,7 +27,7 @@ public class CANTest {
         if (b) {
             System.out.println("All CAN Devices Online");
         } else {
-            System.out.println("CAN Errors exist");
+            System.out.println("CAN Errors Exist");
         }
     }
 
