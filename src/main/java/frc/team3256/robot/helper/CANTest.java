@@ -18,11 +18,15 @@ public class CANTest {
      * Main method to test can devices.
      */
     public static void test() {
-        boolean b = testTalonFX(new int[]{5, 6, 11, 12, 15}) &&
-                testSparkMax(new int[]{1, 2, 3, 4, 7}) &&
+        boolean b = testTalonFX(new int[]{5, 6, 11, 12}) &&
+                testSparkMax(new int[]{IDConstants.leftMasterID,
+                                       IDConstants.leftSlaveID,
+                                       IDConstants.rightMasterID,
+                                       IDConstants.rightSlaveID,
+                                       IDConstants.feederID}) &&
                 testPDP() &&
-                testPigeon() &&
-                testPCM();
+                testPigeon(); // &&
+//                testPCM();
 
         if (b) {
             System.out.println("All CAN Devices Online");
@@ -82,12 +86,14 @@ public class CANTest {
     }
 
     /**
+     * @deprecated DO NOT USE
      * Helper method to test PCM
      *
      * @return Returns whether the PCM is online
      */
     private static boolean testPCM() {
         DoubleSolenoid solenoid = new DoubleSolenoid(IDConstants.pcmID, IDConstants.intakeRaiseForwardChannel, IDConstants.intakeRaiseReverseChannel);
+        solenoid.getAll();
         if (Objects.equals(solenoid.get().toString(), "kOff")) {
             System.out.println("PCM Offline");
             return false;
