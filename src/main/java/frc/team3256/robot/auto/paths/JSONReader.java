@@ -2,6 +2,7 @@ package frc.team3256.robot.auto.paths;
 
 import java.util.Iterator;
 import java.io.FileReader;
+import java.util.List;
 import java.util.Map;
 import org.json.simple.*;
 import org.json.simple.parser.*;
@@ -39,12 +40,15 @@ public class JSONReader {
         //Iterator itr = ((Map) translation.iterator()).entrySet().iterator();
         Object x = translation.get("x");
         Object y = translation.get("y");
+        //new ArrayList<Object[]> Coords = new ArrayList<Object[]>();
+        List<Object[]> coords = new ArrayList<Object[]>();
+        Object[] coords1 = {x, y};
+        coords.add(coords1);
+
         //int counter = 0;
 
         //float x = 0.0f;
         //float y = 0.0f;
-
-
         //ArrayList<float[]> coordinates = new ArrayList<float[]>();
         //float[] coordinate = {0.0f, 0.0f};
         /*
@@ -63,6 +67,6 @@ public class JSONReader {
 
             coordinates.add(coordinate);*/
 
-        //return coordinates;
+        return (ArrayList<Object[]>) coords; //changed
     }
 }

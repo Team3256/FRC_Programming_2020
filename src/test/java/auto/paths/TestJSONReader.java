@@ -39,7 +39,7 @@ public class TestJSONReader {
         try {
             JSONObject translation = (JSONObject) ((JSONObject) new JSONParser().parse(sampleText)).get("translation");
 
-            List<float[]> translatedCoords = (new JSONReader()).ParseJSONFile(translation);
+            List<float[]> translatedCoords = (new JSONReader()).ParseJSONFile(translation); //change this
             result = translatedCoords.toString();
         } catch (Exception e) {
             result = e.toString();
