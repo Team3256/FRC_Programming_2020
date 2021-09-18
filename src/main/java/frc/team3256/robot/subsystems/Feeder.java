@@ -46,7 +46,7 @@ public class Feeder extends SubsystemBase {
     private FeederControlState mCurrentState = FeederControlState.IDLE;
     private WantedState mWantedState = WantedState.WANTS_TO_IDLE;
     private WantedState mPrevWantedState = WantedState.WANTS_TO_IDLE;
-    private PIDController feederPIDController;
+    private static PIDController feederPIDController;
     private double positionSetpoint = FeederConstants.position;
 
     boolean mStateChanged = false;
@@ -116,6 +116,10 @@ public class Feeder extends SubsystemBase {
         CANEncoder encoder = mFeeder.getEncoder();
         double output = feederPIDController.calculate(getPosition(encoder), positionSetpoint);
         mFeeder.set(output);
+    }
+
+    public static boolean atSetpoint(){
+        return feederPIDController.atSetpoint();
     }
     private FeederControlState handleRunForward() {
         mFeeder.set(0.6);

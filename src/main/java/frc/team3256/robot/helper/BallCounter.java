@@ -15,6 +15,8 @@ public class BallCounter implements Loop {
     private boolean flywheelBlocked = false;
     private boolean flywheelPrevBlocked = false;
     private boolean shouldIndex = false;
+    private boolean shouldPID = false;
+
 
     public static BallCounter getInstance() {return instance == null ? instance = new BallCounter() : instance; }
 
@@ -31,18 +33,25 @@ public class BallCounter implements Loop {
     public void update(double timestamp) {
         feederBlocked = !irSensors.isFeederIRIntact();
         flywheelBlocked = !irSensors.isFlywheelIRIntact();
-        shouldIndex = false;
 
 
         //TODO: Dylan - Do logic for choosing PID /  Power Only
 
         if (feederBlocked) {
-            Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_PID_POSITION);
-            shouldIndex = true;
-        } else {
-            Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
-            shouldIndex = false;
+            Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
+            shouldPID = true;
         }
+        else if(!feederBlocked && shouldPID){
+            Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_PID_POSITION);
+            if (Feeder.atSetpoint()){
+                shouldPID = false;
+            }
+        }
+        else {
+            Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
+            shouldPID = false;
+        }
+
 
         //EXAMPLES -------------------------------|
 
