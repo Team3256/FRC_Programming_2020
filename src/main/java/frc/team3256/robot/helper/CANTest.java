@@ -14,16 +14,24 @@ import java.util.Objects;
  * A Class to test if CAN devices are online
  */
 public class CANTest {
+    private static final int[] SparkMaxIDs = new int[]{IDConstants.leftMasterID,
+            IDConstants.leftSlaveID,
+            IDConstants.rightMasterID,
+            IDConstants.rightSlaveID,
+            IDConstants.feederID};
+
+    private static final int[] TalonFXIDs = new int[]{IDConstants.leftMasterID,
+            IDConstants.intakeID,
+            IDConstants.centerMechID,
+            IDConstants.leftFlywheelID,
+            IDConstants.rightFlywheelID};
+
     /**
      * Main method to test can devices.
      */
     public static void test() {
-        boolean b = testTalonFX(new int[]{5, 6, 11, 12}) &&
-                testSparkMax(new int[]{IDConstants.leftMasterID,
-                                       IDConstants.leftSlaveID,
-                                       IDConstants.rightMasterID,
-                                       IDConstants.rightSlaveID,
-                                       IDConstants.feederID}) &&
+        boolean b = testTalonFX(TalonFXIDs) &&
+                testSparkMax(SparkMaxIDs) &&
                 testPDP() &&
                 testPigeon(); // &&
 //                testPCM();
