@@ -20,7 +20,7 @@ public class JSONReader {
         } catch (Exception e) {
             System.out.println(e);
             return;
-        }
+        //}
 
         translation = (JSONArray) ((JSONObject) obj).get("translation"); // array of points
     }
@@ -35,7 +35,7 @@ public class JSONReader {
         return translation;
     }
 
-    public ArrayList<float[]> ParseJSONFile(JSONObject translation) { //change from here
+    public List<Object[]> coordinates = new ArrayList<Object[]> { //change from here
         //Iterator itr = ((Map) translation.iterator()).entrySet().iterator();
         Object x = translation.get("x");
         Object y = translation.get("y");
@@ -63,6 +63,6 @@ public class JSONReader {
 
             coordinates.add(coordinate);*/
 
-        return coordinates;
+        //return coordinates;
     }
 }
