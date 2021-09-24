@@ -5,7 +5,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Test;
-
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,20 @@ public class TestJSONReader {
                 "}";
 
         System.out.println(sampleText);
-        String result = "";
+        JSONParser obj = new JSONParser();
+        try {
+            JSONObject data = (JSONObject) obj.parse(sampleText);
+            JSONObject translation = (JSONObject) data.get("translation");
+            Double y = (Double) translation.get("y");
+            Double x = (Double) translation.get("x");
+            System.out.println(x);
+            System.out.println(y);
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+
+        /*String result = "";
         List<float[]> coordinates = new ArrayList<float[]>();
         float[] pair = {123.30239583340617f, 44.4397520790277f};
         coordinates.add(pair);
@@ -39,13 +51,16 @@ public class TestJSONReader {
         try {
             JSONObject translation = (JSONObject) ((JSONObject) new JSONParser().parse(sampleText)).get("translation");
 
-            List<float[]> translatedCoords = (new JSONReader()).ParseJSONFile(translation); //change this
+            ArrayList<Object[]> translatedCoords = (new JSONReader()).ParseJSONFile(translation); //change this
             result = translatedCoords.toString();
         } catch (Exception e) {
             result = e.toString();
         }
 
         assertEquals(translated, result);
+    }
+
+         */
     }
 
 }
