@@ -1,49 +1,28 @@
 package frc.team3256.robot.helper;
+
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.SparkMax;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import frc.team3256.robot.constants.IDConstants;
-
-import java.util.Objects;
 
 
 /**
  * A Class to test if CAN devices are online
  */
 public class CANTest {
-    private static final int[] SparkMaxIDs;
-    static {
-        SparkMaxIDs = new int[]{IDConstants.leftMasterID,
-            IDConstants.leftSlaveID,
-            IDConstants.rightMasterID,
-            IDConstants.rightSlaveID,
-            IDConstants.feederID};
-    }
-
-    private static final int[] TalonFXIDs;
-    static {
-        TalonFXIDs = new int[]{IDConstants.leftMasterID,
-                IDConstants.intakeID,
-                IDConstants.centerMechID,
-                IDConstants.leftFlywheelID,
-                IDConstants.rightFlywheelID};
-    }
 
     /**
-     * Main method to test can devices.
+     * Main method to test all CAN devices except PCM.
      */
     public static void test() {
-        boolean b = testTalonFX(TalonFXIDs) &&
-                testSparkMax(SparkMaxIDs) &&
+        boolean noErrors = testTalonFX(CANConstants.SparkMaxIDs) &&
+                testSparkMax(CANConstants.TalonFXIDs) &&
                 testPDP() &&
-                testPigeon(); // &&
-//                testPCM();
+                testPigeon();
 
-        if (b) {
+        if (noErrors) {
             System.out.println("All CAN Devices Online");
         } else {
             System.out.println("CAN Errors Exist");
@@ -91,26 +70,10 @@ public class CANTest {
      * @return Returns whether the Pigeon is online
      */
     private static boolean testPigeon() {
-        PigeonIMU pigeon = new PigeonIMU(13);
+        PigeonIMU pigeon = new PigeonIMU(IDConstants.pigeonID);
         double temp = pigeon.getTemp();
         if (temp == 0) {
             System.out.println("Pigeon is Offline");
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * @deprecated DO NOT USE
-     * Helper method to test PCM
-     *
-     * @return Returns whether the PCM is online
-     */
-    private static boolean testPCM() {
-        DoubleSolenoid solenoid = new DoubleSolenoid(IDConstants.pcmID, IDConstants.intakeRaiseForwardChannel, IDConstants.intakeRaiseReverseChannel);
-        solenoid.getAll();
-        if (Objects.equals(solenoid.get().toString(), "kOff")) {
-            System.out.println("PCM Offline");
             return false;
         }
         return true;
