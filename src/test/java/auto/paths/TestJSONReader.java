@@ -38,7 +38,7 @@ public class TestJSONReader {
             Double x = (Double) translation.get("x");
             System.out.println(x);
             System.out.println(y);
-            compareWith += Double.toString(x) + "\n" + Double.toString(y);
+            compareWith += Double.toString(x) + "\n" + Double.toString(y) + "\n";
         }
         catch (Exception e) {
             System.out.println(e);
