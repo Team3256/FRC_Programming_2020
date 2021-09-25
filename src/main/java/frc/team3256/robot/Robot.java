@@ -9,7 +9,6 @@ package frc.team3256.robot;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -17,10 +16,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.auto.modes.*;
 import frc.team3256.robot.hardware.AirCompressor;
 import frc.team3256.robot.helper.BallCounter;
-import frc.team3256.robot.helper.ShootingKinematics;
-import frc.team3256.robot.helper.CANTest;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.hardware.Limelight;
+import frc.team3256.robot.helper.CANTest;
 import frc.team3256.robot.log.FalconAutoLogger;
 import frc.team3256.robot.log.Logger;
 import frc.team3256.robot.log.LoggerUpdateLooper;
@@ -222,7 +220,6 @@ public class Robot extends TimedRobot {
     drivetrain.resetGyro();
     drivetrain.resetEncoders();
     drivetrain.setCoastMode();
-
     CANTest.test();
   }
 
@@ -246,5 +243,4 @@ public class Robot extends TimedRobot {
       Logger.flush();
     }
   }
-
 }

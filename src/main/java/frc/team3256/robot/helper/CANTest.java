@@ -18,8 +18,8 @@ public class CANTest {
      * Main method to test all CAN devices except PCM.
      */
     public static void test() {
-        boolean noErrors = testTalonFX(CANConstants.SparkMaxIDs) &&
-                testSparkMax(CANConstants.TalonFXIDs) &&
+        boolean noErrors = testTalonFX(CANConstants.TalonFXIDs) &&
+                testSparkMax(CANConstants.SparkMaxIDs) &&
                 testPDP() &&
                 testPigeon();
 

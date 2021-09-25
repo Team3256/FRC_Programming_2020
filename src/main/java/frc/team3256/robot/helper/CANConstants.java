@@ -14,7 +14,7 @@ public class CANConstants {
 
     public static final int[] TalonFXIDs;
     static {
-        TalonFXIDs = new int[]{IDConstants.leftMasterID,
+        TalonFXIDs = new int[]{
                 IDConstants.intakeID,
                 IDConstants.centerMechID,
                 IDConstants.leftFlywheelID,
