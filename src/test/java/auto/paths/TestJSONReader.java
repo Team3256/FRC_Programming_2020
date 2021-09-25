@@ -9,11 +9,10 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import static org.junit.Assert.assertEquals;
 
 public class TestJSONReader {
-    @Test
+    /*@Test
     public void GettingAllTranslationsFromParser() {
         String sampleText = "{\n" +
                 "\"acceleration\": 10.0,\n" +
@@ -62,7 +61,8 @@ public class TestJSONReader {
             result = e.toString();
         }*/
 
-        assertEquals(compareWith, coords);
+        //assertEquals(compareWith, coords);
+        // pass in JSON array, create a vector of 2 sample coords
+    //}*/
 
-    }
 }
