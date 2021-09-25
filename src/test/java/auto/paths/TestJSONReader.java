@@ -47,6 +47,16 @@ public class TestJSONReader {
         float[] pair = {123.30239583340617f, 44.4397520790277f}; // test values
         coordinates.add(pair); // add into sample
 
+        for (int i = 0; i < coordinates.size(); i++) {
+            try { // try and create final product
+                JSONObject translation = (JSONObject) ((JSONObject) new JSONParser().parse(sampleText)).get("translation");
+
+                ArrayList<Object[]> translatedCoords = (new JSONReader()).ParseJSONFile(translation); //change this
+                result = translatedCoords.toString();
+            } catch (Exception e) { // take error, doesn't crash program
+                result = e.toString();
+            }
+        }
 
         /*String translated = coordinates.stream().map(Object::toString).collect(Collectors.joining(", ")); // sample string, return this
         try { // try and create final product
