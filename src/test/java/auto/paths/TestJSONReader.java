@@ -42,7 +42,7 @@ public class TestJSONReader {
             System.out.println(e);
         }
 
-        /*String result = "";
+        String result = "";
         List<float[]> coordinates = new ArrayList<float[]>();
         float[] pair = {123.30239583340617f, 44.4397520790277f};
         coordinates.add(pair);
@@ -58,9 +58,7 @@ public class TestJSONReader {
         }
 
         assertEquals(translated, result);
-    }
 
-         */
     }
 
 }
