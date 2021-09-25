@@ -6,12 +6,9 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.team3256.robot.constants.FeederConstants;
-import com.revrobotics.ControlType;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
 import frc.team3256.warriorlib.hardware.TalonSRXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
-
-import javax.naming.ldap.Control;
 
 import static frc.team3256.robot.constants.IDConstants.feederID;
 import static frc.team3256.robot.constants.IDConstants.turretBarID;
@@ -111,6 +108,15 @@ public class Feeder extends SubsystemBase {
             mStateChanged = false;
         }
     }
+
+    public boolean isRunIndex(){
+        return mCurrentState == FeederControlState.RUN_INDEX;
+    };
+
+    public boolean isPidPositioning(){
+        return mCurrentState == FeederControlState.PID_POSITIONING;
+    };
+
 
     public void setPIDPositioning(double positionSetpoint){
         CANEncoder encoder = mFeeder.getEncoder();

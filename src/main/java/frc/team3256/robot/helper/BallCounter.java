@@ -38,11 +38,15 @@ public class BallCounter implements Loop {
         //TODO: Dylan - Do logic for choosing PID /  Power Only
 
         if (feederBlocked) {
-            Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
-            shouldPID = true;
+            if(!Feeder.getInstance().isRunIndex()){
+                Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
+                shouldPID = true;
+            }
         }
-        else if(!feederBlocked && shouldPID){
-            Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_PID_POSITION);
+        else if(shouldPID){
+            if(!Feeder.getInstance().isPidPositioning()){
+                Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_PID_POSITION);
+            }
             if (Feeder.atSetpoint()){
                 shouldPID = false;
             }
