@@ -1,12 +1,11 @@
 package frc.team3256.robot.auto.paths;
 
-import java.util.Iterator;
+import java.util.*;
 import java.io.FileReader;
-import java.util.List;
-import java.util.Map;
+
+import org.ejml.dense.block.VectorOps_DDRB;
 import org.json.simple.*;
 import org.json.simple.parser.*;
-import java.util.ArrayList;
 
 public class JSONReader {
     private String file; // file to read from
@@ -36,14 +35,23 @@ public class JSONReader {
         return translation;
     }
 
-    public String ParseJSONFile(JSONObject translation) { //change from here
-        String translatedText = "";
-        JSONObject translationText = (JSONObject) translation.get("translation");
-        Double y = (Double) translationText.get("y");
-        Double x = (Double) translationText.get("x");
+    public ArrayList<Vector<Double>> ParseJSONFile(JSONArray translation) { //change from here
+        int size = translation.size();
+        ArrayList<Vector<Double>> coordinates = new ArrayList<Vector<Double>>();
 
-        translatedText += Double.toString(x) + "\n" + Double.toString(y) + "\n";
+        for (int i = 0; i < size; i++) {
+            JSONObject currentTranslation = (JSONObject) translation.get(i);
+            JSONObject translationText = (JSONObject) currentTranslation.get("translation");
+            Double y = (Double) translationText.get("y");
+            Double x = (Double) translationText.get("x");
 
-        return translatedText;
+            Vector<Double> currentCoord = new Vector<Double>();
+            currentCoord.add(0, x);
+            currentCoord.add(1, y);
+
+            coordinates.add(currentCoord);
+        }
+
+        return coordinates;
     }
 }
