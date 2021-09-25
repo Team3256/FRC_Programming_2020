@@ -47,7 +47,7 @@ public class BallCounter implements Loop {
             if(!Feeder.getInstance().isPidPositioning()){
                 Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_PID_POSITION);
             }
-            if (Feeder.atSetpoint()){
+            if (Feeder.getInstance().atSetpoint()){
                 shouldPID = false;
             }
         }

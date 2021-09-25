@@ -130,7 +130,7 @@ public class Feeder extends SubsystemBase {
 
     }
 
-    public static boolean atSetpoint(){
+    public boolean atSetpoint(){
         feederPIDController.setTolerance(FeederConstants.positionTolerance, FeederConstants.velocityTolerance);
         return feederPIDController.atSetpoint();
     }
