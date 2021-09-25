@@ -33,12 +33,7 @@ public class TestJSONReader {
         JSONParser obj = new JSONParser();
         try {
             JSONObject data = (JSONObject) obj.parse(sampleText);
-            JSONObject translation = (JSONObject) data.get("translation");
-            Double y = (Double) translation.get("y");
-            Double x = (Double) translation.get("x");
-            System.out.println(x);
-            System.out.println(y);
-            compareWith += Double.toString(x) + "\n" + Double.toString(y) + "\n";
+            compareWith = (new JSONReader()).ParseJSONFile(data);
         }
         catch (Exception e) {
             System.out.println(e);

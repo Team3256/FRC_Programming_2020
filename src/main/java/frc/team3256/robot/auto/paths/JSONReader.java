@@ -36,37 +36,14 @@ public class JSONReader {
         return translation;
     }
 
-    public ArrayList<Object[]> ParseJSONFile(JSONObject translation) { //change from here
-        //Iterator itr = ((Map) translation.iterator()).entrySet().iterator();
-        Object x = translation.get("x");
-        Object y = translation.get("y");
-        //new ArrayList<Object[]> Coords = new ArrayList<Object[]>();
-        List<Object[]> coords = new ArrayList<Object[]>();
-        Object[] coords1 = {x, y};
-        coords.add(coords1);
+    public String ParseJSONFile(JSONObject translation) { //change from here
+        String translatedText = "";
+        JSONObject translationText = (JSONObject) translation.get("translation");
+        Double y = (Double) translationText.get("y");
+        Double x = (Double) translationText.get("x");
 
-        //int counter = 0;
+        translatedText += Double.toString(x) + "\n" + Double.toString(y) + "\n";
 
-        //float x = 0.0f;
-        //float y = 0.0f;
-        //ArrayList<float[]> coordinates = new ArrayList<float[]>();
-        //float[] coordinate = {0.0f, 0.0f};
-        /*
-        while (itr.hasNext()) {
-            Map.Entry pair = (Map.Entry) itr.next();
-            if (counter == 0) {
-                x = (float) pair.getValue(); // current x-value
-            } else if (counter == 1) {
-                y = (float) pair.getValue(); // current y-value
-            }
-
-            counter++;
-
-            coordinate[0] = x;
-            coordinate[1] = y;
-
-            coordinates.add(coordinate);*/
-
-        return (ArrayList<Object[]>) coords; //changed
+        return translatedText;
     }
 }
