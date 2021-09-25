@@ -28,7 +28,8 @@ public class TestJSONReader {
                 "}\n" +
                 "}";
 
-        System.out.println(sampleText);
+        //System.out.println(sampleText);
+        String compareWith = "";
         JSONParser obj = new JSONParser();
         try {
             JSONObject data = (JSONObject) obj.parse(sampleText);
@@ -37,27 +38,24 @@ public class TestJSONReader {
             Double x = (Double) translation.get("x");
             System.out.println(x);
             System.out.println(y);
+            compareWith += Double.toString(x) + "\n" + Double.toString(y);
         }
         catch (Exception e) {
             System.out.println(e);
         }
 
-        String result = "";
-        List<float[]> coordinates = new ArrayList<float[]>();
-        float[] pair = {123.30239583340617f, 44.4397520790277f}; // test values
+        List<double[]> coordinates = new ArrayList<double[]>();
+        double[] pair = {123.30239583340617, 44.4397520790277}; // test values
         coordinates.add(pair); // add into sample
 
+        String coords = "";
         for (int i = 0; i < coordinates.size(); i++) {
-            try { // try and create final product
-                JSONObject translation = (JSONObject) ((JSONObject) new JSONParser().parse(sampleText)).get("translation");
-
-                ArrayList<Object[]> translatedCoords = (new JSONReader()).ParseJSONFile(translation); //change this
-                result = translatedCoords.toString();
-            } catch (Exception e) { // take error, doesn't crash program
-                result = e.toString();
+            for (int j = 0; j < coordinates.get(i).length; j++) {
+                coords += coordinates.get(i)[j];
+                coords += "\n";
             }
         }
-
+        System.out.println(coords);
         /*String translated = coordinates.stream().map(Object::toString).collect(Collectors.joining(", ")); // sample string, return this
         try { // try and create final product
             JSONObject translation = (JSONObject) ((JSONObject) new JSONParser().parse(sampleText)).get("translation");
@@ -68,7 +66,7 @@ public class TestJSONReader {
             result = e.toString();
         }*/
 
-        //assertEquals(translated, result);
+        assertEquals(compareWith, coords);
 
     }
 
