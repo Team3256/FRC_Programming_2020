@@ -41,7 +41,8 @@ public class JSONReader {
 
         for (int i = 0; i < size; i++) {
             JSONObject currentTranslation = (JSONObject) translation.get(i);
-            JSONObject translationText = (JSONObject) currentTranslation.get("translation");
+            JSONObject poseText = (JSONObject) currentTranslation.get("pose");
+            JSONObject translationText = (JSONObject) poseText.get("translation");
             Double y = (Double) translationText.get("y");
             Double x = (Double) translationText.get("x");
 

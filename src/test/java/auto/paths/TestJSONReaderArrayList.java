@@ -52,13 +52,11 @@ public class TestJSONReaderArrayList {
         JSONArray sampleArray = new JSONArray();
         JSONParser obj = new JSONParser();
         try {
-            JSONObject data = (JSONObject) obj.parse(sampleText);
-            sampleArray.add(data);
+            sampleArray = (JSONArray) obj.parse(sampleText);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        JSONReader reader = new JSONReader();
-        ArrayList<Vector<Double>> inputList = reader.ParseJSONFile(sampleArray);
+        ArrayList<Vector<Double>> inputList = (new JSONReader()).ParseJSONFile(sampleArray);
 
         ArrayList<Vector<Double>> compareWith = new ArrayList<Vector<Double>>();
         Vector<Double> coord1 = new Vector<Double>();
