@@ -51,6 +51,7 @@ public class TestJSONReader {
             }
         }
         System.out.println(coords);
+
         /*String translated = coordinates.stream().map(Object::toString).collect(Collectors.joining(", ")); // sample string, return this
         try { // try and create final product
             JSONObject translation = (JSONObject) ((JSONObject) new JSONParser().parse(sampleText)).get("translation");
@@ -64,5 +65,4 @@ public class TestJSONReader {
         assertEquals(compareWith, coords);
 
     }
-
 }
