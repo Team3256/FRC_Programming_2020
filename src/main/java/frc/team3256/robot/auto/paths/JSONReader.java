@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.*;
 import java.io.FileReader;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import org.json.simple.*;
 import org.json.simple.parser.*;
@@ -15,14 +16,14 @@ public class JSONReader {
       * actual function that will be used in real purposes, NOT for testing
      */
     public static ArrayList<Vector<Double>> ParseJSONFile(String file) {
-         JSONArray translation = new JSONArray();
+        JSONArray translation = new JSONArray();
 
-        file = new File(Filesystem.getDeployDirectory(),file).getAbsolutePath();;
+        file = new File(Filesystem.getDeployDirectory(),file).getAbsolutePath();
 
         try {
             translation = (JSONArray) (new JSONParser()).parse(new FileReader(file));
         } catch (Exception e) {
-            System.out.println(e);
+            DriverStation.reportError(e.getLocalizedMessage(), true);
             return new ArrayList<Vector<Double>>();
         }
 
@@ -34,7 +35,7 @@ public class JSONReader {
       * @return ArrayList<Vector<Double>> ArrayList of Double Vectors containing x,y coordinates of each market point in JSON file in JSONArray parameter
       * testing function nothing changed from usable one except removal of creation of JSONArray
      */
-    public static ArrayList<Vector<Double>> ParseJSONFileTester(JSONArray translation) { //change from here
+    public static ArrayList<Vector<Double>> ParseJSONFileTester(JSONArray translation) {
         return GetCoordinateArray(translation);
     }
 
