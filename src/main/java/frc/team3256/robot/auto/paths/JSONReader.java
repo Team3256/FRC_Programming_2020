@@ -25,24 +25,7 @@ public class JSONReader {
             return new ArrayList<Vector<Double>>();
         }
 
-        int size = translation.size();
-        ArrayList<Vector<Double>> coordinates = new ArrayList<Vector<Double>>();
-
-        for (int i = 0; i < size; i++) {
-            JSONObject currentTranslation = (JSONObject) translation.get(i);
-            JSONObject poseText = (JSONObject) currentTranslation.get("pose");
-            JSONObject translationText = (JSONObject) poseText.get("translation");
-            Double y = (Double) translationText.get("y");
-            Double x = (Double) translationText.get("x");
-
-            Vector<Double> currentCoord = new Vector<Double>();
-            currentCoord.add(0, x);
-            currentCoord.add(1, y);
-
-            coordinates.add(currentCoord);
-        }
-
-        return coordinates;
+        return GetCoordinateArray(translation);
     }
 
     /**
@@ -51,6 +34,14 @@ public class JSONReader {
       * testing function nothing changed from usable one except removal of creation of JSONArray
      */
     public static ArrayList<Vector<Double>> ParseJSONFileTester(JSONArray translation) { //change from here
+        return GetCoordinateArray(translation);
+    }
+
+    /**
+     * @param translation JSONArray translation to get the x and y coordinates from the JSON file
+     * @return ArrayList<Vector<Double>> ArrayList of coordinates
+     */
+    private static ArrayList<Vector<Double>> GetCoordinateArray(JSONArray translation) {
         int size = translation.size();
         ArrayList<Vector<Double>> coordinates = new ArrayList<Vector<Double>>();
 
