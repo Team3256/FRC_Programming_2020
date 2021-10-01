@@ -3,14 +3,14 @@ package frc.team3256.robot.auto.paths;
 import java.util.*;
 import java.io.FileReader;
 
-import org.ejml.dense.block.VectorOps_DDRB;
+import edu.wpi.first.wpilibj.Filesystem;
 import org.json.simple.*;
 import org.json.simple.parser.*;
 
 public class JSONReader {
-    private String file; // file to read from
-    private Object obj; // JSONParser to parse json 'file'
-    private JSONArray translation;
+    private static String file; // file to read from
+    private static Object obj; // JSONParser to parse json 'file'
+    private static JSONArray translation;
 
     /**
       * Overload constructor with parameter for non-testing, real-time applications
@@ -19,7 +19,7 @@ public class JSONReader {
     public JSONReader(String file) {
         translation = new JSONArray();
 
-        this.file = file;
+        this.file = (Filesystem.getDeployDirectory()).toString() + file;
 
         try {
             translation = (JSONArray) (new JSONParser()).parse(new FileReader(file));
@@ -40,7 +40,7 @@ public class JSONReader {
     /**
       * @return JSONArray returns the translation for accessing to plug into ParseJSONFile method
     */
-    public JSONArray getTranslation() {
+    public static JSONArray getTranslation() {
         return translation;
     }
 
@@ -48,7 +48,7 @@ public class JSONReader {
       * @param translation JSONArray containing JSON text to be parsed*
       * @return ArrayList<Vector<Double>> ArrayList of Double Vectors containing x,y coordinates of each market point in JSON file in JSONArray parameter
      */
-    public ArrayList<Vector<Double>> ParseJSONFile(JSONArray translation) { //change from here
+    public static ArrayList<Vector<Double>> ParseJSONFile(JSONArray translation) { //change from here
         int size = translation.size();
         ArrayList<Vector<Double>> coordinates = new ArrayList<Vector<Double>>();
 
