@@ -13,7 +13,7 @@ public class JSONReader {
       * @return ArrayList<Vector<Double>> ArrayList of Double Vectors containing x,y coordinates of each market point in JSON file in JSONArray parameter
       * actual function that will be used in real purposes, NOT for testing
      */
-    public static ArrayList<Vector<Double>> ParseJSONFile(String file) { //change from here
+    public static ArrayList<Vector<Double>> ParseJSONFile(String file) {
          JSONArray translation = new JSONArray();
 
         file = (Filesystem.getDeployDirectory()).toString() + file;
