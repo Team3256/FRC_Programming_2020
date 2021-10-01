@@ -56,7 +56,7 @@ public class TestJSONReaderArrayList {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        ArrayList<Vector<Double>> inputList = JSONReader.ParseJSONFile(sampleArray);
+        ArrayList<Vector<Double>> inputList = JSONReader.ParseJSONFileTester(sampleArray);
 
         ArrayList<Vector<Double>> compareWith = new ArrayList<Vector<Double>>();
         Vector<Double> coord1 = new Vector<Double>();
