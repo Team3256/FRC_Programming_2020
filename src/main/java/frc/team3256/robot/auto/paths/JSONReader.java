@@ -1,5 +1,6 @@
 package frc.team3256.robot.auto.paths;
 
+import java.io.File;
 import java.util.*;
 import java.io.FileReader;
 
@@ -16,7 +17,7 @@ public class JSONReader {
     public static ArrayList<Vector<Double>> ParseJSONFile(String file) { //change from here
          JSONArray translation = new JSONArray();
 
-        file = (Filesystem.getDeployDirectory()).toString() + file;
+        file = new File(Filesystem.getDeployDirectory(),file).getAbsolutePath();;
 
         try {
             translation = (JSONArray) (new JSONParser()).parse(new FileReader(file));
