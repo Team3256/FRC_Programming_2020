@@ -12,29 +12,42 @@ public class JSONReader {
     private Object obj; // JSONParser to parse json 'file'
     private JSONArray translation;
 
+    /**
+      * Overload constructor with parameter for non-testing, real-time applications
+      * @param file String file name location to read from to find array of points
+     */
     public JSONReader(String file) {
+        translation = new JSONArray();
+
         this.file = file;
 
         try {
-            obj = new JSONParser().parse(new FileReader(file));
+            translation = (JSONArray) (new JSONParser()).parse(new FileReader(file));
         } catch (Exception e) {
             System.out.println(e);
-            return;
         }
-
-        translation = (JSONArray) ((JSONObject) obj).get("translation"); // array of points
     }
 
+    /**
+      * Default constructor generation for testing purposes only
+    */
     public JSONReader() {
-        this.file = "";
+        file = "";
         translation = null;
         obj = null;
     }
 
+    /**
+      * @return JSONArray returns the translation for accessing to plug into ParseJSONFile method
+    */
     public JSONArray getTranslation() {
         return translation;
     }
 
+    /**
+      * @param translation JSONArray containing JSON text to be parsed*
+      * @return ArrayList<Vector<Double>> ArrayList of Double Vectors containing x,y coordinates of each market point in JSON file in JSONArray parameter
+     */
     public ArrayList<Vector<Double>> ParseJSONFile(JSONArray translation) { //change from here
         int size = translation.size();
         ArrayList<Vector<Double>> coordinates = new ArrayList<Vector<Double>>();
