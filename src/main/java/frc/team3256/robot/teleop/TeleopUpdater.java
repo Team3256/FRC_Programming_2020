@@ -117,7 +117,7 @@ public class TeleopUpdater {
             feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
         } else {
             overrideFeeder = false;
-            feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
+//            feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
             this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
         }
 
@@ -130,7 +130,7 @@ public class TeleopUpdater {
 //                this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
             }
             else {
-                feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
+//                feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
             }
         }
 

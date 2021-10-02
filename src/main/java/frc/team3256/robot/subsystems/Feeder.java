@@ -62,6 +62,7 @@ public class Feeder extends SubsystemBase {
         mFeeder.burnFlash();
 
         feederPIDController = new PIDController(FeederConstants.kP,FeederConstants.kI,FeederConstants.kD);
+        feederPIDController.setTolerance(FeederConstants.positionTolerance);
     }
 
     public void setWantedState(Feeder.WantedState wantedState) { this.mWantedState = wantedState; }
@@ -117,21 +118,37 @@ public class Feeder extends SubsystemBase {
         return mCurrentState == FeederControlState.PID_POSITIONING;
     };
 
+    public boolean isIdle(){
+        return mCurrentState == FeederControlState.IDLE;
+    };
+
+    public void zeroFeederEncoder() {
+        System.out.println("ZEROING ENCODER");
+        mFeeder.getEncoder().setPosition(0);
+    }
 
     public void setPIDPositioning(double positionSetpoint){
+        System.out.println("PID: " + mFeeder.getEncoder().getPosition());
         CANEncoder encoder = mFeeder.getEncoder();
+        feederPIDController.setSetpoint(positionSetpoint);
 
         if(atSetpoint()){
-            encoder.setPosition(0);
+            System.out.println("at setpoint");
+            zeroFeederEncoder();
+            feederPIDController.reset();
+            Feeder.getInstance().setWantedState(WantedState.WANTS_TO_IDLE);
         } else {
             double output = feederPIDController.calculate(getPosition(encoder), positionSetpoint);
+            System.out.println("Position Position Error: " + feederPIDController.getPositionError());
+            System.out.println("Output PID: " + output);
+            System.out.println("At Stint: " + feederPIDController.atSetpoint());
             mFeeder.set(output);
         }
 
     }
 
-    public boolean atSetpoint(){
-        feederPIDController.setTolerance(FeederConstants.positionTolerance, FeederConstants.velocityTolerance);
+    public boolean atSetpoint() {
+//        System.out.println("At Setpoint: " );
         return feederPIDController.atSetpoint();
     }
     private FeederControlState handleRunForward() {
@@ -176,6 +193,7 @@ public class Feeder extends SubsystemBase {
     private FeederControlState handleIndex() {
         mFeeder.set(1); //0.3
         mBar.set(0.5);
+        System.out.println("Indexing: " + mFeeder.getEncoder().getPosition());
         return defaultStateTransfer();
     }
 
@@ -186,6 +204,7 @@ public class Feeder extends SubsystemBase {
     }
 
     private FeederControlState handleIdle() {
+        System.out.println("IDLING");
 
         mFeeder.stopMotor();
         mBar.stopMotor();

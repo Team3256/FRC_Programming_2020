@@ -1,5 +1,7 @@
 package frc.team3256.robot.helper;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import frc.team3256.robot.Robot;
 import frc.team3256.robot.hardware.IRSensors;
 import frc.team3256.robot.subsystems.Feeder;
 import frc.team3256.robot.subsystems.Flywheel;
@@ -33,7 +35,8 @@ public class BallCounter implements Loop {
     public void update(double timestamp) {
         feederBlocked = !irSensors.isFeederIRIntact();
         flywheelBlocked = !irSensors.isFlywheelIRIntact();
-
+        //if (!DriverStation.getInstance().isDisabled())
+        //    System.out.println("Feeder blocked: " + feederBlocked);
 
         //TODO: Dylan - Do logic for choosing PID /  Power Only
 
@@ -44,18 +47,18 @@ public class BallCounter implements Loop {
             }
         }
         else if(shouldPID){
+
             if(!Feeder.getInstance().isPidPositioning()){
+                Feeder.getInstance().zeroFeederEncoder();
                 Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_PID_POSITION);
-            }
-            if (Feeder.getInstance().atSetpoint()){
+                System.out.println("PIDING");
                 shouldPID = false;
             }
-        }
-        else {
+        } else if (Feeder.getInstance().atSetpoint()){
+            System.out.println("at setpoint");
             Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
             shouldPID = false;
         }
-
 
         //EXAMPLES -------------------------------|
 
