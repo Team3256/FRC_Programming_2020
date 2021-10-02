@@ -1,6 +1,7 @@
 package frc.team3256.robot.auto.paths;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.io.FileReader;
 
@@ -70,19 +71,27 @@ public class JSONReader {
       * Gets rid of coordinates that are within a certain distance of each other
      */
     private static ArrayList<Vector<Double>> TrimCoordinates(ArrayList<Vector<Double>> coordinates) {
-        double constantSpace = 0.5;
-        for (int i = 0; i < coordinates.size() - 1; i++) {
-            Vector<Double> firstCoord = coordinates.get(i);
-            for (int j = i+1; j < coordinates.size(); j++) {
-                Vector<Double> secondCoord = coordinates.get(j);
+        double CONSTANT_SPACE = 0.5;
 
-                if (Math.abs(secondCoord.get(0) - firstCoord.get(0)) < constantSpace && Math.abs(secondCoord.get(1) - firstCoord.get(1)) < constantSpace) {
-                    coordinates.remove(j);
-                    j--;
+        Vector<Double> firstCoord;
+        Vector<Double> secondCoord;
+
+        ArrayList<Vector<Double>> trimmed = new ArrayList<Vector<Double>>();
+        for (int i = 0; i < coordinates.size() - 1; i++) {
+            firstCoord = coordinates.get(i);
+            trimmed.add(firstCoord);
+
+            for (int j = i+1; j < coordinates.size(); j++) {
+                secondCoord = coordinates.get(j);
+                if (!(Math.abs(secondCoord.get(0) - firstCoord.get(0)) < CONSTANT_SPACE && Math.abs(secondCoord.get(1) - firstCoord.get(1)) < CONSTANT_SPACE)) {
+                    if (j == coordinates.size()) {
+                        trimmed.add(secondCoord);
+                    }
+                    break;
                 }
             }
         }
 
-        return coordinates;
+        return trimmed;
     }
 }
