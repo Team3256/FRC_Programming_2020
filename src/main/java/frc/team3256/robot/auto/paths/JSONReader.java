@@ -61,6 +61,28 @@ public class JSONReader {
             coordinates.add(currentCoord);
         }
 
+        return TrimCoordinates(coordinates);
+    }
+
+    /**
+     * @param coordinates trim by every constantSpace
+     * @return ArrayList<Vector<Double>> trimmed coordinates
+     * Gets rid of coordinates that are within a certain distance of each other
+     */
+    private static ArrayList<Vector<Double>> TrimCoordinates(ArrayList<Vector<Double>> coordinates) {
+        double constantSpace = 0.5;
+        for (int i = 0; i < coordinates.size() - 1; i++) {
+            Vector<Double> firstCoord = coordinates.get(i);
+            for (int j = i+1; j < coordinates.size(); j++) {
+                Vector<Double> secondCoord = coordinates.get(j);
+
+                if (Math.abs(secondCoord.get(0) - firstCoord.get(0)) < constantSpace && Math.abs(secondCoord.get(1) - firstCoord.get(1)) < constantSpace) {
+                    coordinates.remove(j);
+                    j--;
+                }
+            }
+        }
+
         return coordinates;
     }
 }
