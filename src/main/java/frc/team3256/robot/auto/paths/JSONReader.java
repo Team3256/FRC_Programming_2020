@@ -76,8 +76,11 @@ public class JSONReader {
         Vector<Double> firstCoord;
         Vector<Double> secondCoord;
 
+        int nextI = 0;
+
         ArrayList<Vector<Double>> trimmed = new ArrayList<Vector<Double>>();
         for (int i = 0; i < coordinates.size() - 1; i++) {
+            i = nextI;
             firstCoord = coordinates.get(i);
             trimmed.add(firstCoord);
 
@@ -87,6 +90,7 @@ public class JSONReader {
                     if (j == coordinates.size()) {
                         trimmed.add(secondCoord);
                     }
+                    nextI = j;
                     break;
                 }
             }
