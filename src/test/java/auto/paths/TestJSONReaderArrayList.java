@@ -60,14 +60,10 @@ public class TestJSONReaderArrayList {
 
         ArrayList<Vector<Double>> compareWith = new ArrayList<Vector<Double>>();
         Vector<Double> coord1 = new Vector<Double>();
-        Vector<Double> coord2 = new Vector<Double>();
         coord1.add(0, 123.30239583340617);
         coord1.add(1, 44.4397520790277);
-        coord2.add(0, 123.40866955812137);
-        coord2.add(1, 44.414633820785355);
 
         compareWith.add(coord1);
-        compareWith.add(coord2);
 
         assertEquals(compareWith, inputList);
     }

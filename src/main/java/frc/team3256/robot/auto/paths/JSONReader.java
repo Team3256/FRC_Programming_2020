@@ -65,9 +65,9 @@ public class JSONReader {
     }
 
     /**
-     * @param coordinates trim by every constantSpace
-     * @return ArrayList<Vector<Double>> trimmed coordinates
-     * Gets rid of coordinates that are within a certain distance of each other
+      * @param coordinates trim by every constantSpace
+      * @return ArrayList<Vector<Double>> trimmed coordinates
+      * Gets rid of coordinates that are within a certain distance of each other
      */
     private static ArrayList<Vector<Double>> TrimCoordinates(ArrayList<Vector<Double>> coordinates) {
         double constantSpace = 0.5;
