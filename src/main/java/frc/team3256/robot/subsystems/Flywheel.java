@@ -97,7 +97,8 @@ public class Flywheel extends SubsystemBase {
     }
 
     private FlywheelState handleIdle() { //Stops all flywheel motors
-        stopFlywheel();
+        //put back later
+        //        stopFlywheel();
         return defaultStateTransfer();
     }
 

@@ -1,6 +1,7 @@
 package frc.team3256.robot.helper;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.Robot;
 import frc.team3256.robot.hardware.IRSensors;
 import frc.team3256.robot.subsystems.Feeder;
@@ -39,26 +40,26 @@ public class BallCounter implements Loop {
         //    System.out.println("Feeder blocked: " + feederBlocked);
 
         //TODO: Dylan - Do logic for choosing PID /  Power Only
-
+        SmartDashboard.putBoolean("SHOULD PID", shouldPID);
         if (feederBlocked) {
             if(!Feeder.getInstance().isRunIndex()){
                 Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
-                shouldPID = true;
             }
+            shouldPID = true;
         }
         else if(shouldPID){
-
             if(!Feeder.getInstance().isPidPositioning()){
                 Feeder.getInstance().zeroFeederEncoder();
                 Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_PID_POSITION);
-                System.out.println("PIDING");
+                System.out.println("PIDing");
                 shouldPID = false;
             }
-        } else if (Feeder.getInstance().atSetpoint()){
-            System.out.println("at setpoint");
-            Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
-            shouldPID = false;
         }
+//        else if (Feeder.getInstance().atSetpoint()){
+//            System.out.println("at setpoint");
+//            Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
+//            shouldPID = false;
+//        }
 
         //EXAMPLES -------------------------------|
 

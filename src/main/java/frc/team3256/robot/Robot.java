@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
 
   private TeleopUpdater teleopUpdater;
   private DriveTrain drivetrain = DriveTrain.getInstance();
-  private Intake intake = Intake.getInstance();
+//  private Intake intake = Intake.getInstance();
   private Limelight limelight = Limelight.getInstance();
   private Flywheel flywheel = Flywheel.getInstance();
   private Feeder feeder = Feeder.getInstance();
@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
 
     enabledLooper = new Looper(1 / 200D);
     //TODO: NEED TO ADD BACK IN INTAKE
-    enabledLooper.addLoops(hood, feeder, ballCounter, turret, intake); //intake
+    enabledLooper.addLoops(hood, feeder, ballCounter, turret); //intake
 
     flywheelLooper = new Looper(1/500D);
     flywheelLooper.addLoops(flywheel);
@@ -218,6 +218,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Target Distance", limelight.getDistanceToInner());
     SmartDashboard.putBoolean("Correct Auto Align", turret.atAngleSetpoint() && hood.atHoodSetpoint() && flywheel.atSetpointVelocity());
 
+    Feeder.getInstance().outputToDashboard();
     //TODO: COMMENTED OUT TO INCREASE LATENCY, COMMENT BACK IN FOR DEBUG
 //    SmartDashboard.putNumber("distance to outer", limelight.getDistanceToTarget());
     //SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);

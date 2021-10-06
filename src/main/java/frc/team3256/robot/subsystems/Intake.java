@@ -74,6 +74,8 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void update(double timestamp) {
+        return; // TAKE OUT LATER
+        /*
         if (mPrevWantedState != mWantedState) {
             mWantedStateChanged = true;
             mPrevWantedState = mWantedState;
@@ -111,6 +113,8 @@ public class Intake extends SubsystemBase {
             mStateChanged = false;
         }
         this.outputToDashboard();
+
+         */
     }
 
     //TODO: EVERYTHING 100 TEST

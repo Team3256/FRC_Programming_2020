@@ -106,14 +106,14 @@ public class TeleopUpdater {
         } else if (intakePressed) {
             if (ballCounter.getCount() == 4) {
                 feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
-               intake.setWantedState(Intake.WantedState.WANTS_TO_INDEX_LAST_BALL);
+                intake.setWantedState(Intake.WantedState.WANTS_TO_INDEX_LAST_BALL);
             }
             else {
                 this.intake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
             }
         } else if (exhaust) {
             overrideFeeder = true;
-           this.intake.setWantedState(Intake.WantedState.WANTS_TO_EXHAUST);
+            this.intake.setWantedState(Intake.WantedState.WANTS_TO_EXHAUST);
             feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
         } else {
             overrideFeeder = false;
@@ -205,9 +205,9 @@ public class TeleopUpdater {
                 flywheel.setVelocitySetpoint(4800); //4800
             } else if (limelight.getDistanceToInner() > 160) {
                 flywheel.setVelocitySetpoint(4300); //6000
-        } //280 220
-        else
-            flywheel.setVelocitySetpoint(ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
+            } //280 220
+            else
+                flywheel.setVelocitySetpoint(ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
             SmartDashboard.putNumber("flywheel vel",flywheel.getVelocity());
             SmartDashboard.putNumber("target vel",ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
 //            flywheel.setVelocitySetpoint(4000);
@@ -223,7 +223,7 @@ public class TeleopUpdater {
         }
 
         if(intakeToggle && !prevIntakeToggle) {
-           this.intake.setIntakeTogglingState(!intakeUp);
+            this.intake.setIntakeTogglingState(!intakeUp);
             this.intake.setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
             intakeUp = !intakeUp;
         }

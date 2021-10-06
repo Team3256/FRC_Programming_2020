@@ -1,21 +1,27 @@
 package frc.team3256.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.constants.FeederConstants;
+import frc.team3256.robot.constants.IDConstants;
+import frc.team3256.robot.operations.SparkUtil;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
+import frc.team3256.warriorlib.hardware.TalonFXUtil;
 import frc.team3256.warriorlib.hardware.TalonSRXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
 
-import static frc.team3256.robot.constants.IDConstants.feederID;
-import static frc.team3256.robot.constants.IDConstants.turretBarID;
+import static frc.team3256.robot.constants.IDConstants.*;
+import static frc.team3256.robot.constants.IDConstants.rightFlywheelID;
 
 public class Feeder extends SubsystemBase {
 
     private CANSparkMax mFeeder;
+    private WPI_TalonSRX mCenterMech;
     private WPI_TalonSRX mBar;
 
     private enum FeederControlState {
@@ -45,6 +51,8 @@ public class Feeder extends SubsystemBase {
     private WantedState mPrevWantedState = WantedState.WANTS_TO_IDLE;
     private static PIDController feederPIDController;
 
+    private WPI_TalonFX mLeftFlywheel, mRightFlywheel;
+
 
     boolean mStateChanged = false;
     boolean mWantedStateChanged = false;
@@ -53,8 +61,22 @@ public class Feeder extends SubsystemBase {
     public static Feeder getInstance() { return instance == null ? instance = new Feeder() : instance; }
 
     private Feeder() {
+        mCenterMech = TalonSRXUtil.generateGenericTalon(IDConstants.centerMechID);
+        mCenterMech.enableCurrentLimit(true);
+        mCenterMech.configContinuousCurrentLimit(30);
+        mCenterMech.set(0);
+
+
+        mLeftFlywheel = TalonFXUtil.generateGenericTalon(leftFlywheelID); //TBD
+        mRightFlywheel = TalonFXUtil.generateGenericTalon(rightFlywheelID);
+//        flywheelPIDController = new PIDController(0.0006,0.00000065,0.000073); //0.000063
+        TalonFXUtil.setCoastMode(mLeftFlywheel, mRightFlywheel);
+        mLeftFlywheel.setInverted(true);
+        mRightFlywheel.setInverted(false);
+
         mFeeder = SparkMAXUtil.generateGenericSparkMAX(feederID, CANSparkMaxLowLevel.MotorType.kBrushless);
         mFeeder.setInverted(true);
+        SparkUtil.setWheelDiameter(FeederConstants.kWheelDiameter);
         SparkMAXUtil.setBrakeMode(mFeeder);
         mBar = TalonSRXUtil.generateGenericTalon(turretBarID);
         mFeeder.setSmartCurrentLimit(30);
@@ -63,6 +85,8 @@ public class Feeder extends SubsystemBase {
 
         feederPIDController = new PIDController(FeederConstants.kP,FeederConstants.kI,FeederConstants.kD);
         feederPIDController.setTolerance(FeederConstants.positionTolerance);
+
+        SmartDashboard.putData(feederPIDController);
     }
 
     public void setWantedState(Feeder.WantedState wantedState) { this.mWantedState = wantedState; }
@@ -108,6 +132,9 @@ public class Feeder extends SubsystemBase {
         } else {
             mStateChanged = false;
         }
+//        mCenterMech.set(-0.5);
+//        mRightFlywheel.set(0.3);
+//        mLeftFlywheel.set(0.3);
     }
 
     public boolean isRunIndex(){
@@ -131,15 +158,13 @@ public class Feeder extends SubsystemBase {
         System.out.println("PID: " + mFeeder.getEncoder().getPosition());
         CANEncoder encoder = mFeeder.getEncoder();
         feederPIDController.setSetpoint(positionSetpoint);
+        double output = feederPIDController.calculate(getPosition(encoder));
 
         if(atSetpoint()){
-            System.out.println("at setpoint");
             zeroFeederEncoder();
-            feederPIDController.reset();
             Feeder.getInstance().setWantedState(WantedState.WANTS_TO_IDLE);
         } else {
-            double output = feederPIDController.calculate(getPosition(encoder), positionSetpoint);
-            System.out.println("Position Position Error: " + feederPIDController.getPositionError());
+            System.out.println("Position Position Error: " + feederPIDController.getSetpoint());
             System.out.println("Output PID: " + output);
             System.out.println("At Stint: " + feederPIDController.atSetpoint());
             mFeeder.set(output);
@@ -152,18 +177,22 @@ public class Feeder extends SubsystemBase {
         return feederPIDController.atSetpoint();
     }
     private FeederControlState handleRunForward() {
+        SmartDashboard.putString("State", "FORWARD");
         mFeeder.set(0.6);
         mBar.set(-0.5);
         return defaultStateTransfer();
     }
 
     private FeederControlState handleRunBackward() {
+        //TODO: Put PID Control Here, this runs 50hz when PID posiFeederConstants.kSpaceBetweenPowerCellstioning state is on
+        SmartDashboard.putString("State", "BACKWARD");
         mFeeder.set(-0.6);
         mBar.set(-0.5);
         return defaultStateTransfer();
     }
     private FeederControlState handlePIDPositioning(){
-        //TODO: Put PID Control Here, this runs 50hz when PID positioning state is on
+        //TODO: Put PID Control Here, this runs 50hz when PID posiFeederConstants.kSpaceBetweenPowerCellstioning state is on
+        SmartDashboard.putString("State", "PID");
         setPIDPositioning(FeederConstants.kSpaceBetweenPowerCells);
         return defaultStateTransfer();
     }
@@ -191,9 +220,9 @@ public class Feeder extends SubsystemBase {
     //TODO: EVERYTHING 100 TEST
     //TODO: Dylan - This probably needs to be in constants file, actually all of this stuff does
     private FeederControlState handleIndex() {
-        mFeeder.set(1); //0.3
-        mBar.set(0.5);
-        System.out.println("Indexing: " + mFeeder.getEncoder().getPosition());
+        mFeeder.set(0.75); //0.3
+        mBar.set(0.3);
+        SmartDashboard.putString("State", "INDEXING");
         return defaultStateTransfer();
     }
 
@@ -204,8 +233,7 @@ public class Feeder extends SubsystemBase {
     }
 
     private FeederControlState handleIdle() {
-        System.out.println("IDLING");
-
+        SmartDashboard.putString("State", "IDLING");
         mFeeder.stopMotor();
         mBar.stopMotor();
         return defaultStateTransfer();
@@ -238,7 +266,11 @@ public class Feeder extends SubsystemBase {
     }
 
     @Override
-    public void outputToDashboard() { }
+    public void outputToDashboard() {
+        SmartDashboard.putNumber("PID Error", feederPIDController.getPositionError());
+        SmartDashboard.putNumber("Feeder Position", SparkUtil.encoderUnitsToPosition(mFeeder.getEncoder().getPosition(), FeederConstants.kgearRatio));
+        SmartDashboard.putNumber("At Setpoint",atSetpoint() ? 1 : 0);
+    }
 
     @Override
     public void zeroSensors() { }
