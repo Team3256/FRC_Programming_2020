@@ -255,11 +255,11 @@ public class TestJSONReaderArrayList {
         coord3.add(1, 45.3397520790277);
         compareWith.add(coord3);
 
-        // modify here
         coord4.add(0, 123.54239583340617);
         coord4.add(1, 44.4397520790277);
         compareWith.add(coord4);
 
+        // modify here
         coord5.add(0, 125.40866955812137);
         coord5.add(1, 44.414633820785355);
         compareWith.add(coord5);
