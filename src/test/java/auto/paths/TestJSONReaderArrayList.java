@@ -260,20 +260,20 @@ public class TestJSONReaderArrayList {
         compareWith.add(coord4);
 
         // modify here
-        coord5.add(0, 125.40866955812137);
-        coord5.add(1, 44.414633820785355);
+        coord5.add(0, 123.40866955812137);
+        coord5.add(1, 44.994633820785355);
         compareWith.add(coord5);
 
-        coord6.add(0, 125.40866955812137);
-        coord6.add(1, 44.414633820785355);
+        coord6.add(0, 123.11230239583340617);
+        coord6.add(1, 44.4927520790277);
         compareWith.add(coord6);
 
-        coord7.add(0, 125.40866955812137);
-        coord7.add(1, 44.414633820785355);
+        coord7.add(0, 139.40866955812137);
+        coord7.add(1, 45.414633820785355);
         compareWith.add(coord7);
 
-        coord8.add(0, 125.40866955812137);
-        coord8.add(1, 44.414633820785355);
+        coord8.add(0, 123.90866955812137);
+        coord8.add(1, 44.914633820785355);
         compareWith.add(coord8);
 
         assertEquals(compareWith, inputList);
