@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import org.json.simple.*;
 import org.json.simple.parser.*;
+import static frc.team3256.robot.constants.AutoConstants.*;
 
 public class JSONReader {
     /**
@@ -71,8 +72,6 @@ public class JSONReader {
       * Gets rid of coordinates that are within a certain distance of each other
      */
     private static ArrayList<Vector<Double>> TrimCoordinates(ArrayList<Vector<Double>> coordinates) {
-        double CONSTANT_SPACE = 0.5;
-
         Vector<Double> firstCoord;
         Vector<Double> secondCoord;
 
@@ -86,7 +85,7 @@ public class JSONReader {
 
             for (int j = i+1; j < coordinates.size(); j++) {
                 secondCoord = coordinates.get(j);
-                if (!(Math.abs(secondCoord.get(0) - firstCoord.get(0)) < CONSTANT_SPACE && Math.abs(secondCoord.get(1) - firstCoord.get(1)) < CONSTANT_SPACE)) {
+                if (!(Math.abs(secondCoord.get(0) - firstCoord.get(0)) < MIN_SPACE_BETWEEN_POINTS && Math.abs(secondCoord.get(1) - firstCoord.get(1)) < MIN_SPACE_BETWEEN_POINTS)) {
                     if (j == coordinates.size()) {
                         trimmed.add(secondCoord);
                     }
