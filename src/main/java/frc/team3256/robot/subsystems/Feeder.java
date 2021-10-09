@@ -132,22 +132,22 @@ public class Feeder extends SubsystemBase {
         } else {
             mStateChanged = false;
         }
-//        mCenterMech.set(-0.5);
-//        mRightFlywheel.set(0.3);
-//        mLeftFlywheel.set(0.3);
+        mCenterMech.set(-0.5);
+        mRightFlywheel.set(0.3);
+        mLeftFlywheel.set(0.3);
     }
 
     public boolean isRunIndex(){
         return mCurrentState == FeederControlState.RUN_INDEX;
-    };
+    }
 
     public boolean isPidPositioning(){
         return mCurrentState == FeederControlState.PID_POSITIONING;
-    };
+    }
 
     public boolean isIdle(){
         return mCurrentState == FeederControlState.IDLE;
-    };
+    }
 
     public void zeroFeederEncoder() {
         System.out.println("ZEROING ENCODER");
@@ -158,7 +158,9 @@ public class Feeder extends SubsystemBase {
         System.out.println("PID: " + mFeeder.getEncoder().getPosition());
         CANEncoder encoder = mFeeder.getEncoder();
         feederPIDController.setSetpoint(positionSetpoint);
+        SmartDashboard.putNumber("encoder position", getPosition(encoder));
         double output = feederPIDController.calculate(getPosition(encoder));
+
 
         if(atSetpoint()){
             zeroFeederEncoder();
@@ -178,7 +180,7 @@ public class Feeder extends SubsystemBase {
     }
     private FeederControlState handleRunForward() {
         SmartDashboard.putString("State", "FORWARD");
-        mFeeder.set(0.6);
+        mFeeder.set(1.0);
         mBar.set(-0.5);
         return defaultStateTransfer();
     }
@@ -186,13 +188,14 @@ public class Feeder extends SubsystemBase {
     private FeederControlState handleRunBackward() {
         //TODO: Put PID Control Here, this runs 50hz when PID posiFeederConstants.kSpaceBetweenPowerCellstioning state is on
         SmartDashboard.putString("State", "BACKWARD");
-        mFeeder.set(-0.6);
+        mFeeder.set(-1.0); //0.6
         mBar.set(-0.5);
         return defaultStateTransfer();
     }
     private FeederControlState handlePIDPositioning(){
         //TODO: Put PID Control Here, this runs 50hz when PID posiFeederConstants.kSpaceBetweenPowerCellstioning state is on
         SmartDashboard.putString("State", "PID");
+//        mBar.set(-0.5);
         setPIDPositioning(FeederConstants.kSpaceBetweenPowerCells);
         return defaultStateTransfer();
     }
@@ -221,7 +224,7 @@ public class Feeder extends SubsystemBase {
     //TODO: Dylan - This probably needs to be in constants file, actually all of this stuff does
     private FeederControlState handleIndex() {
         mFeeder.set(0.75); //0.3
-        mBar.set(0.3);
+//        mBar.set(-0.5);
         SmartDashboard.putString("State", "INDEXING");
         return defaultStateTransfer();
     }
@@ -268,7 +271,7 @@ public class Feeder extends SubsystemBase {
     @Override
     public void outputToDashboard() {
         SmartDashboard.putNumber("PID Error", feederPIDController.getPositionError());
-        SmartDashboard.putNumber("Feeder Position", SparkUtil.encoderUnitsToPosition(mFeeder.getEncoder().getPosition(), FeederConstants.kgearRatio));
+        SmartDashboard.putNumber("Feeder Position", SparkUtil.encoderUnitsToPosition(mFeeder.getEncoder().getPosition(), FeederConstants.kGearRatio));
         SmartDashboard.putNumber("At Setpoint",atSetpoint() ? 1 : 0);
     }
 

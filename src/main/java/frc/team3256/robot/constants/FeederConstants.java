@@ -4,12 +4,12 @@ import frc.team3256.robot.operations.SparkUtil;
 
 
 public class FeederConstants {
-    public static final double kWheelDiameter = 5;
-    public static final double kInchesBetweenPowerCells = 10;
-    public static final int kgearRatio = 5/1;
-    public static final double kSpaceBetweenPowerCells = SparkUtil.positionToEncoderUnits(kInchesBetweenPowerCells, kgearRatio);
-    public static final double kP = 0.00129;
-    public static final double kI = 0;
-    public static final double kD = 0.0000637;
-    public static final double positionTolerance = 0.005;
+    public static final double kWheelDiameter = 1;
+    public static final double kInchesBetweenPowerCells = 5; // 2.5 for 4 ball, 5 for 3 ball
+    public static final int kGearRatio = 5;
+    public static final double kSpaceBetweenPowerCells = SparkUtil.positionToEncoderUnits(kInchesBetweenPowerCells, kGearRatio);
+    public static final double kP = 0.18;
+    public static final double kI = 0.00001;
+    public static final double kD = 0.0100000000;
+    public static final double positionTolerance = 0.15;
 }
