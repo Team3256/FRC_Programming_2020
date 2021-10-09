@@ -5,7 +5,7 @@ import frc.team3256.robot.operations.SparkUtil;
 
 public class FeederConstants {
     public static final double kWheelDiameter = 1;
-    public static final double kInchesBetweenPowerCells = 5; // 2.5 for 4 ball, 5 for 3 ball
+    public static final double kInchesBetweenPowerCells = 5; // 2.5 for 4 ball, 5 for 3 ball feeder
     public static final int kGearRatio = 5;
     public static final double kSpaceBetweenPowerCells = SparkUtil.positionToEncoderUnits(kInchesBetweenPowerCells, kGearRatio);
     public static final double kP = 0.18;
