@@ -86,9 +86,6 @@ public class JSONReader {
             for (int j = i+1; j < coordinates.size(); j++) {
                 secondCoord = coordinates.get(j);
                 if (!(Math.abs(secondCoord.get(0) - firstCoord.get(0)) < MIN_SPACE_BETWEEN_POINTS && Math.abs(secondCoord.get(1) - firstCoord.get(1)) < MIN_SPACE_BETWEEN_POINTS)) {
-                    if (j == coordinates.size()) {
-                        trimmed.add(secondCoord);
-                    }
                     nextI = j;
                     break;
                 }
