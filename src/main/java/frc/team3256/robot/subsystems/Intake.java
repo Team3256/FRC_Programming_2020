@@ -164,6 +164,10 @@ public class Intake extends SubsystemBase {
         return defaultStateTransfer();
     }
 
+    public boolean isUnjamming(){
+        return mCurrentState == IntakeState.UNJAMMING;
+    }
+
 
     private void setRaise(boolean raise) {
         mRaiseMech.set(raise ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);

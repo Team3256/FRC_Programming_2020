@@ -60,7 +60,7 @@ public class XboxControllerConfig implements ControlsInterface {
  * B Button
  * X Button
  * Y Button - Feeder Shoot (Forward)
- * D-Pad Up
+ * D-Pad Up - Feeder Manual Forward
  * D-Pad Down - Feeder Manual Backward
  * D-Pad Right
  * D-Pad Left
