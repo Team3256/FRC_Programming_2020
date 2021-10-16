@@ -36,11 +36,14 @@ public class BallCounter implements Loop {
     public void update(double timestamp) {
         feederBlocked = !irSensors.isFeederIRIntact();
         flywheelBlocked = !irSensors.isFlywheelIRIntact();
+        SmartDashboard.putBoolean("Feeder Blocked", feederBlocked);
+        //TODO: if unjam then ignore everything
         //if (!DriverStation.getInstance().isDisabled())
         //    System.out.println("Feeder blocked: " + feederBlocked);
 
         //TODO: Dylan - Do logic for choosing PID /  Power Only
         SmartDashboard.putBoolean("SHOULD PID", shouldPID);
+
         if (feederBlocked) {
             if(!Feeder.getInstance().isRunIndex()){
                 Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);

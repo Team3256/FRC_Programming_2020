@@ -29,6 +29,9 @@ public interface ControlsInterface {
 
 //--------------Manipulator--------------
 
+    //Rumble when at Setpoint
+    void rumble(boolean rumbleState);
+
     //Hold: Runs intake backwards slowly & feeder forward
     boolean getUnjam();
 

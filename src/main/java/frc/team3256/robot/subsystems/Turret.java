@@ -74,13 +74,14 @@ public class Turret extends SubsystemBase {
         mTurret.setInverted(false);
         atSetpoint = false;
         SparkMAXUtil.setBrakeMode(mTurret);
+        SmartDashboard.putNumber("Turret Speed", 0);
+        SmartDashboard.putString("Turret State", "IDLE");
     }
 
     public void setWantedState(WantedState wantedState) { this.mWantedState = wantedState; }
 
     @Override
     public void update(double timestamp) {
-
         if (mPrevWantedState != mWantedState) {
             mWantedStateChanged = true;
             mPrevWantedState = mWantedState;
@@ -111,6 +112,7 @@ public class Turret extends SubsystemBase {
     }
 
     private TurretState handleManualLeft() {
+        SmartDashboard.putString("Turret State", "Manual LEFT");
 //        if(isSafe()) mTurret.set(0.5);
 //        else mTurret.stopMotor();
         mTurret.set(-0.5);
@@ -118,6 +120,7 @@ public class Turret extends SubsystemBase {
     }
 
     private TurretState handleManualRight() {
+        SmartDashboard.putString("Turret State", "Manual Right");
 //        if(isSafe()) mTurret.set(-0.5);
 //        else mTurret.stopMotor();
         mTurret.set(0.5);
@@ -125,11 +128,14 @@ public class Turret extends SubsystemBase {
     }
 
     private TurretState handleIdle() {
+        SmartDashboard.putString("Turret State", "IDLE");
+        SmartDashboard.putNumber("Turret Speed", 0);
         mTurret.stopMotor();
         return defaultStateTransfer();
     }
 
     private TurretState handleAutoAlign() {
+        SmartDashboard.putString("Turret State", "Auto Align");
         if (Math.abs(angleSetpoint) <= autoAlignTolerance) {
             atSetpoint = true;
             setTurretSpeed(0);
@@ -155,6 +161,7 @@ public class Turret extends SubsystemBase {
     private void setTurretSpeed(double speed) {
 //        if (isSafe()) mTurret.set(speed);
 //        else mTurret.stopMotor();
+        SmartDashboard.putNumber("Turret Speed", speed);
         mTurret.set(-speed);
     }
 

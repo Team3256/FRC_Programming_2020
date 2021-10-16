@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.constants.FlywheelConstants;
 import frc.team3256.warriorlib.hardware.TalonFXUtil;
 import frc.team3256.warriorlib.operations.Util;
@@ -23,6 +24,7 @@ public class Flywheel extends SubsystemBase {
     private PIDController flywheelPIDController;
     private boolean atSetpoint;
     private boolean readyToShoot;
+    private boolean alertDriver;
 
     public enum FlywheelState {
         RUN,
@@ -82,12 +84,15 @@ public class Flywheel extends SubsystemBase {
             mStateChanged = false;
         }
         atSetpoint = getVelocity() < (velocitySetpoint + FlywheelConstants.kAtSetpointTolerance) && getVelocity() > (velocitySetpoint - FlywheelConstants.kAtSetpointTolerance);
+
+//        alertDriver
         this.outputToDashboard();
     }
 
     private FlywheelState handleRun() {
 //        setFlywheelVelocity(velocitySetpoint);
 //        bangBangFlywheel(velocitySetpoint);
+        SmartDashboard.putString("Flywheel State", "RUN");
         setFlywheelVelocityPID(velocitySetpoint);
         return defaultStateTransfer();
     }
@@ -97,8 +102,8 @@ public class Flywheel extends SubsystemBase {
     }
 
     private FlywheelState handleIdle() { //Stops all flywheel motors
-        //put back later
-        //        stopFlywheel();
+        SmartDashboard.putString("Flywheel State", "IDLE");
+        stopFlywheel();
         return defaultStateTransfer();
     }
 

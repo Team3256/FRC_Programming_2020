@@ -1,5 +1,6 @@
 package frc.team3256.robot.teleop.configs;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.team3256.warriorlib.auto.operations.Util;
 
@@ -136,4 +137,15 @@ public class XboxControllerConfig implements ControlsInterface {
     //Manipulator: X Button
     @Override
     public boolean getBallCountReset() { return manipulator.getRawButton(3); }
+
+    @Override
+    public void rumble(boolean rumbleState) {
+        if(rumbleState) {
+            manipulator.setRumble(GenericHID.RumbleType.kLeftRumble, 0.5);
+            manipulator.setRumble(GenericHID.RumbleType.kRightRumble, 0.5);
+        } else {
+            manipulator.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+            manipulator.setRumble(GenericHID.RumbleType.kRightRumble, 0);
+        }
+    }
 }

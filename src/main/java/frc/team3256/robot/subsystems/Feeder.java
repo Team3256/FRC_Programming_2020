@@ -181,7 +181,7 @@ public class Feeder extends SubsystemBase {
         return feederPIDController.atSetpoint();
     }
     private FeederControlState handleRunForward() {
-        SmartDashboard.putString("State", "FORWARD");
+        SmartDashboard.putString("Feeder State", "FORWARD");
         mFeeder.set(1.0);
         mBar.set(-0.5);
         return defaultStateTransfer();
@@ -189,20 +189,29 @@ public class Feeder extends SubsystemBase {
 
     private FeederControlState handleRunBackward() {
         //TODO: Put PID Control Here, this runs 50hz when PID posiFeederConstants.kSpaceBetweenPowerCellstioning state is on
-        SmartDashboard.putString("State", "BACKWARD");
+        SmartDashboard.putString("Feeder State", "BACKWARD");
         mFeeder.set(-1.0); //0.6
         mBar.set(-0.5);
         return defaultStateTransfer();
     }
+
+    public boolean isRunningBackward(){
+        return mCurrentState == FeederControlState.RUN_BACKWARD;
+    }
+
+    public boolean isShooting(){
+        return mCurrentState == FeederControlState.SHOOTING;
+    }
     private FeederControlState handlePIDPositioning(){
         //TODO: Put PID Control Here, this runs 50hz when PID posiFeederConstants.kSpaceBetweenPowerCellstioning state is on
-        SmartDashboard.putString("State", "PID");
+        SmartDashboard.putString("Feeder State", "PID");
 //        mBar.set(-0.5);
         setPIDPositioning(FeederConstants.kSpaceBetweenPowerCells);
         return defaultStateTransfer();
     }
 
     private FeederControlState handleFurtherIndexing() {
+        SmartDashboard.putString("Feeder State", "Further INDEXING");
 
         //TODO: Dylan - What is this delay? Probably remove the delay
 //        mFeeder.getEncoder().setPosition(mFeeder.getEncoder().getPosition() - 100);
@@ -217,6 +226,7 @@ public class Feeder extends SubsystemBase {
     }
 
     private FeederControlState handleAutoShoot() {
+        SmartDashboard.putString("Feeder State", "Auto Shoot");
         mFeeder.set(0.25);
         mBar.set(-0.5);
         return defaultStateTransfer();
@@ -232,13 +242,14 @@ public class Feeder extends SubsystemBase {
     }
 
     private FeederControlState handleShoot() {
+        SmartDashboard.putString("Feeder State", "Shoot");
         mFeeder.set(0.5);
         mBar.set(-0.5);
         return defaultStateTransfer();
     }
 
     private FeederControlState handleIdle() {
-        SmartDashboard.putString("State", "IDLING");
+        SmartDashboard.putString("Feeder State", "IDLING");
         mFeeder.stopMotor();
         mBar.stopMotor();
         return defaultStateTransfer();

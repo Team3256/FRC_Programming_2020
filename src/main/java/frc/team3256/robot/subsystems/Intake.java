@@ -164,6 +164,7 @@ public class Intake extends SubsystemBase {
         return defaultStateTransfer();
     }
 
+
     private void setRaise(boolean raise) {
         mRaiseMech.set(raise ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }

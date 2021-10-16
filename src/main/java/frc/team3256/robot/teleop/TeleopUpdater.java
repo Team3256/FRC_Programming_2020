@@ -117,7 +117,7 @@ public class TeleopUpdater {
             feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
         } else {
             overrideFeeder = false;
-//            feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
+            if (feeder.isRunningBackward()) feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
             this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
         }
 
@@ -200,6 +200,8 @@ public class TeleopUpdater {
 //            limelight.turnOff();
         }
 
+      //  controls.rumble(flywheel.atSetpointVelocity());
+
         if (getRevUp) {
             if (limelight.getDistanceToInner() > 230) { //230
                 flywheel.setVelocitySetpoint(4800); //4800
@@ -221,6 +223,10 @@ public class TeleopUpdater {
             feeder.setWantedState(Feeder.WantedState.WANTS_TO_SHOOT);
             intake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
         }
+        else{
+            if (feeder.isShooting()) feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
+        }
+        //TODO: doesn't idle after shoot ^^^
 
         if(intakeToggle && !prevIntakeToggle) {
             this.intake.setIntakeTogglingState(!intakeUp);
