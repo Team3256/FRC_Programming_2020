@@ -11,6 +11,9 @@ import frc.team3256.warriorlib.loop.Loop;
 
 public class BallCounter implements Loop {
     private static BallCounter instance;
+    private Intake intake = Intake.getInstance();
+    private Feeder feeder = Feeder.getInstance();
+
     private int count = 0;
     private IRSensors irSensors = IRSensors.getInstance();
     private boolean feederBlocked = false;
@@ -41,18 +44,20 @@ public class BallCounter implements Loop {
 
         //TODO: Dylan - Do logic for choosing PID /  Power Only
         SmartDashboard.putBoolean("SHOULD PID", shouldPID);
-        if (feederBlocked) {
-            if(!Feeder.getInstance().isRunIndex()){
-                Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
+        if(!intake.isUnjamming()){
+            if (feederBlocked) {
+                if(!feeder.isRunIndex()){
+                    feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
+                }
+                shouldPID = true;
             }
-            shouldPID = true;
-        }
-        else if(shouldPID){
-            if(!Feeder.getInstance().isPidPositioning()){
-                Feeder.getInstance().zeroFeederEncoder();
-                Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_PID_POSITION);
-                System.out.println("PIDing");
-                shouldPID = false;
+            else if(shouldPID){
+                if(!feeder.isPidPositioning()){
+                    feeder.zeroFeederEncoder();
+                    feeder.setWantedState(Feeder.WantedState.WANTS_TO_PID_POSITION);
+                    System.out.println("PIDing");
+                    shouldPID = false;
+                }
             }
         }
 //        else if (Feeder.getInstance().atSetpoint()){

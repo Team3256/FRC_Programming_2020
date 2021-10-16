@@ -105,6 +105,7 @@ public class TeleopUpdater {
             this.intake.setWantedState(Intake.WantedState.WANTS_TO_UNJAM);
         } else if (intakePressed) {
             if (ballCounter.getCount() == 4) {
+                //change this later
                 feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
                 intake.setWantedState(Intake.WantedState.WANTS_TO_INDEX_LAST_BALL);
             }
