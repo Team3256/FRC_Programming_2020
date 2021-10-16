@@ -93,6 +93,7 @@ public class Feeder extends SubsystemBase {
 
     @Override
     public void update(double timestamp) {
+//        return;
         if (mPrevWantedState != mWantedState) {
             mWantedStateChanged = true;
             mPrevWantedState = mWantedState;
@@ -132,9 +133,10 @@ public class Feeder extends SubsystemBase {
         } else {
             mStateChanged = false;
         }
-        mCenterMech.set(-0.5);
-        mRightFlywheel.set(0.3);
-        mLeftFlywheel.set(0.3);
+//        mCenterMech.set(-0.5);
+//        mRightFlywheel.set(0.3);
+//        mLeftFlywheel.set(0.3);
+
     }
 
     public boolean isRunIndex(){
