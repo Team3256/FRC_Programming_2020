@@ -122,7 +122,7 @@ public class TeleopUpdater {
             this.intake.setWantedState(Intake.WantedState.WANTS_TO_STOP);
         }
 
-        //Feeder Indexing Logic
+     /*   //Feeder Indexing Logic
         if (!overrideFeeder) {
             if (ballCounter.shouldFeed()) {
 
@@ -133,12 +133,14 @@ public class TeleopUpdater {
             else {
 //                feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
             }
-        }
+        }*/
 
         if (feederForward) {
             feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_FORWARD);
         } else if (feederBackward) {
             feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
+        } else {
+            feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
         }
 
         //Turret ---------------------------------------------------------------------------------------
@@ -201,7 +203,7 @@ public class TeleopUpdater {
 //            limelight.turnOff();
         }
 
-      //  controls.rumble(flywheel.atSetpointVelocity());
+        controls.rumble(flywheel.shouldRumble());
 
         if (getRevUp) {
             if (limelight.getDistanceToInner() > 230) { //230

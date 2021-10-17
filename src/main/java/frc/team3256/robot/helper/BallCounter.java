@@ -7,6 +7,8 @@ import frc.team3256.robot.hardware.IRSensors;
 import frc.team3256.robot.subsystems.Feeder;
 import frc.team3256.robot.subsystems.Flywheel;
 import frc.team3256.robot.subsystems.Intake;
+import frc.team3256.robot.teleop.TeleopUpdater;
+import frc.team3256.robot.teleop.configs.XboxControllerConfig;
 import frc.team3256.warriorlib.loop.Loop;
 
 public class BallCounter implements Loop {
@@ -47,7 +49,8 @@ public class BallCounter implements Loop {
         //TODO: Dylan - Do logic for choosing PID /  Power Only
         SmartDashboard.putBoolean("SHOULD PID", shouldPID);
 
-        if(!intake.isUnjamming()){
+        XboxControllerConfig xboxControllerConfig = new XboxControllerConfig();
+        if(!(xboxControllerConfig.getFeederForward() || xboxControllerConfig.getFeederBackward())){
             if (feederBlocked) {
                 if(!feeder.isRunIndex()){
                     feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);

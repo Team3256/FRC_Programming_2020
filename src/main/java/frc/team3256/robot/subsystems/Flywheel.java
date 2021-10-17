@@ -50,7 +50,7 @@ public class Flywheel extends SubsystemBase {
     private Flywheel() {
         mLeftFlywheel = TalonFXUtil.generateGenericTalon(leftFlywheelID); //TBD
         mRightFlywheel = TalonFXUtil.generateGenericTalon(rightFlywheelID);
-        flywheelPIDController = new PIDController(0.0006,0.00000065,0.000073); //0.000063
+        flywheelPIDController = new PIDController(0.0006,0,0.000063); // P: 0.0006 //I: 0.00000065 // D
         TalonFXUtil.setCoastMode(mLeftFlywheel, mRightFlywheel);
         mLeftFlywheel.setInverted(true);
         mRightFlywheel.setInverted(false);
@@ -85,8 +85,17 @@ public class Flywheel extends SubsystemBase {
         }
         atSetpoint = getVelocity() < (velocitySetpoint + FlywheelConstants.kAtSetpointTolerance) && getVelocity() > (velocitySetpoint - FlywheelConstants.kAtSetpointTolerance);
 
-//        alertDriver
         this.outputToDashboard();
+    }
+    public boolean shouldRumble(){
+        if(mCurrentState == FlywheelState.IDLE){
+            return false;
+        }
+        if (flywheelPIDController.getPositionError() / flywheelPIDController.getSetpoint() <= 0.1
+                && flywheelPIDController.getPositionError() / flywheelPIDController.getSetpoint() >= -0.1){
+            return true;
+        }
+        return false;
     }
 
     private FlywheelState handleRun() {
@@ -153,7 +162,9 @@ public class Flywheel extends SubsystemBase {
     }
 
     private double calculateFeedForward(double flywheelRPM) {
-        return flywheelRPM/6521.5;
+        return flywheelRPM/6450 + 0.05;
+
+        // Before Editing / 6521.5
     }
 
     private double rpmToSensorUnits(double rpm) {
