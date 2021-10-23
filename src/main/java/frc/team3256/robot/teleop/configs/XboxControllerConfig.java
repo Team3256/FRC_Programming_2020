@@ -1,6 +1,5 @@
 package frc.team3256.robot.teleop.configs;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.team3256.warriorlib.auto.operations.Util;
 
@@ -40,11 +39,6 @@ public class XboxControllerConfig implements ControlsInterface {
         return driver.getRawButton(1);
     }
 
-    @Override
-    public boolean getToggleReverseDrivetrain() {
-        return driver.getRawButton(3);
-    }
-
 
 //--------------Manipulator--------------
 
@@ -60,7 +54,7 @@ public class XboxControllerConfig implements ControlsInterface {
  * B Button
  * X Button
  * Y Button - Feeder Shoot (Forward)
- * D-Pad Up - Feeder Manual Forward
+ * D-Pad Up
  * D-Pad Down - Feeder Manual Backward
  * D-Pad Right
  * D-Pad Left
@@ -130,22 +124,9 @@ public class XboxControllerConfig implements ControlsInterface {
     @Override
     public boolean getFeederShoot() { return manipulator.getRawButton(4); }
 
-    //Manipulator: B Button
     @Override
     public boolean getOuterGoalAlign() { return manipulator.getRawButton(2); }
 
-    //Manipulator: X Button
     @Override
     public boolean getBallCountReset() { return manipulator.getRawButton(3); }
-
-    @Override
-    public void rumble(boolean rumbleState) {
-        if(rumbleState) {
-            manipulator.setRumble(GenericHID.RumbleType.kLeftRumble, 0.5);
-            manipulator.setRumble(GenericHID.RumbleType.kRightRumble, 0.5);
-        } else {
-            manipulator.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
-            manipulator.setRumble(GenericHID.RumbleType.kRightRumble, 0);
-        }
-    }
 }

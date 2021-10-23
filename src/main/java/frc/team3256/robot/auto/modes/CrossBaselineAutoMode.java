@@ -26,12 +26,12 @@ public class CrossBaselineAutoMode extends AutoModeBase {
         PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
         purePursuitTracker.setRobotTrack(DriveConstants.kRobotTrackWidth);
         purePursuitTracker.setPaths(Paths.getRightShootAutoPath(),  DriveConstants.lookaheadDistance);
-        //BallCounter.getInstance().setCount(3);
-        //Flywheel.getInstance().setReadyToShoot(false);
-        //Turret.getInstance().reset();
-        //Intake.getInstance().setIntakeTogglingState(false);
-        //Intake.getInstance().setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
-        //runAction(new MoveTurretAction(25));
+        BallCounter.getInstance().setCount(3);
+        Flywheel.getInstance().setReadyToShoot(false);
+        Turret.getInstance().reset();
+        Intake.getInstance().setIntakeTogglingState(false);
+        Intake.getInstance().setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
+        runAction(new MoveTurretAction(25));
 
         runAction(new WaitAction(0.5));
         runAction(new ResetPursuitAction());

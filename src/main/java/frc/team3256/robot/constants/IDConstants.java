@@ -18,15 +18,15 @@ public class IDConstants {
     public static final int centerMechID = 6;
 
     //Feeder Constants
-    public static final int feederID =7;
+    public static final int feederID = 7;
     public static final int turretBarID = 8;
 
     //Shooter Constants
     public static final int hoodID = 9;
     public static final int turretID = 10;
-
     public static final int leftFlywheelID = 11;
     public static final int rightFlywheelID = 12;
+
     //Gyro
     public static final int pigeonID = 13;
 
@@ -52,8 +52,8 @@ public class IDConstants {
 
     //DIO Ports:------------------------------------------------------------------------------------------------
     public static final int limitSwitchPort = 1;
-    public static final int feederIRID = 9;
-    public static final int flywheelIRID = 8; //TBD
+    public static final int feederIRID = 6;
+    public static final int flywheelIRID = 3; //TBD
 
     //Analog Ports:---------------------------------------------------------------------------------------------
     public static final int pressureSwitchID = 1;

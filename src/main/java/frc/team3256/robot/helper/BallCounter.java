@@ -1,30 +1,20 @@
 package frc.team3256.robot.helper;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team3256.robot.Robot;
 import frc.team3256.robot.hardware.IRSensors;
 import frc.team3256.robot.subsystems.Feeder;
 import frc.team3256.robot.subsystems.Flywheel;
 import frc.team3256.robot.subsystems.Intake;
-import frc.team3256.robot.teleop.TeleopUpdater;
-import frc.team3256.robot.teleop.configs.XboxControllerConfig;
 import frc.team3256.warriorlib.loop.Loop;
 
 public class BallCounter implements Loop {
     private static BallCounter instance;
-    private Intake intake = Intake.getInstance();
-    private Feeder feeder = Feeder.getInstance();
-
-    private int count = 0;
+    private double count = 0;
     private IRSensors irSensors = IRSensors.getInstance();
     private boolean feederBlocked = false;
     private boolean feederPrevBlocked = false;
     private boolean flywheelBlocked = false;
     private boolean flywheelPrevBlocked = false;
     private boolean shouldIndex = false;
-    private boolean shouldPID = false;
-
 
     public static BallCounter getInstance() {return instance == null ? instance = new BallCounter() : instance; }
 
@@ -32,56 +22,26 @@ public class BallCounter implements Loop {
     public void init(double timestamp) {
     }
 
-
-    /**
-     * Runs at 50hz
-     * @param timestamp Time between runs of this method
-     */
     @Override
     public void update(double timestamp) {
         feederBlocked = !irSensors.isFeederIRIntact();
         flywheelBlocked = !irSensors.isFlywheelIRIntact();
-        SmartDashboard.putBoolean("Feeder Blocked", feederBlocked);
-        //TODO: if unjam then ignore everything
-        //if (!DriverStation.getInstance().isDisabled())
-        //    System.out.println("Feeder blocked: " + feederBlocked);
+        shouldIndex = false;
 
-        //TODO: Dylan - Do logic for choosing PID /  Power Only
-        SmartDashboard.putBoolean("SHOULD PID", shouldPID);
-
-        XboxControllerConfig xboxControllerConfig = new XboxControllerConfig();
-        if(!(xboxControllerConfig.getFeederForward() || xboxControllerConfig.getFeederBackward())){
-            if (feederBlocked) {
-                if(!feeder.isRunIndex()){
-                    feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
-                }
-                shouldPID = true;
+        if (feederBlocked) {
+            if (!feederPrevBlocked && Intake.getInstance().getWantedState() == Intake.WantedState.WANTS_TO_INTAKE ) {
+                count++;
+//                Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_FURTHER_INDEX);
             }
-            else if(shouldPID){
-                if(!feeder.isPidPositioning()){
-                    feeder.zeroFeederEncoder();
-                    feeder.setWantedState(Feeder.WantedState.WANTS_TO_PID_POSITION);
-                    System.out.println("PIDing");
-                    shouldPID = false;
-                }
-            }
+            if (!isFull()) shouldIndex = true;
         }
-//        else if (Feeder.getInstance().atSetpoint()){
-//            System.out.println("at setpoint");
-//            Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
-//            shouldPID = false;
-//        }
 
-        //EXAMPLES -------------------------------|
+        if (flywheelBlocked) {
+            if (!flywheelPrevBlocked && Flywheel.getInstance().getWantedState() == Flywheel.WantedState.WANTS_TO_RUN) count--;
+        }
 
-        //This runs the PID Position method at 50hz
-        //Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_PID_POSITION);
-
-        //This Stops the feeder
-        //Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
-
-        //This runs the Index method at 50 hz, which just runs at a current speed
-        //Feeder.getInstance().setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
+        feederPrevBlocked = feederBlocked;
+        flywheelPrevBlocked = flywheelBlocked;
     }
 
     @Override
@@ -90,10 +50,9 @@ public class BallCounter implements Loop {
 
     public boolean shouldFeed() {
         return shouldIndex;
-//        return false;
     }
 
-    public void setCount(int count) {
+    public void setCount(double count) {
         this.count = count;
     }
 

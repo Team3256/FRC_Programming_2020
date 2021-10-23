@@ -13,7 +13,7 @@ public class PathReader {
     private double startX = 0;
     private double startY = 0;
     private boolean left = true;
-    private double spacing = 6;
+    private double spacing = 4;
 
     public ArrayList<Vector> getPath(String csvFile) {
         int index = 0;
@@ -27,12 +27,13 @@ public class PathReader {
                     String[] pathInfo = line.replace("\"","").split(splitBy);
 
                     if (left) {
-                        x = - Double.parseDouble(pathInfo[4]) - startX; //4
-                        y = Double.parseDouble(pathInfo[3]) - startY; //3
+                        x = - Double.parseDouble(pathInfo[4]) - startX;
+                        y = Double.parseDouble(pathInfo[3]) - startY;
                     } else {
-                        x = Double.parseDouble(pathInfo[4]) - startX; //4
-                        y = - Double.parseDouble(pathInfo[3]) - startY; //3
+                        x = Double.parseDouble(pathInfo[4]) - startX;
+                        y = - Double.parseDouble(pathInfo[3]) - startY;
                     }
+
                     if (index == 1) {
                         startX = x;
                         startY = y;
@@ -56,11 +57,9 @@ public class PathReader {
 
     public static void main(String args[]) {
         PathReader p = new PathReader();
-        int offsetX = -0;
-        int offsetY = 0;
-        ArrayList<Vector> arr = p.getPath("C:\\Users\\dylan\\Downloads\\blue.csv");
+        ArrayList<Vector> arr = p.getPath("/Users/linuszheng/Downloads/Unnamed_2.wpilib.csv");
         for (int i = 0; i < arr.size(); i++) {
-            System.out.println("s.addPoint(new Vector("+ (arr.get(i).x + offsetX) + ", " + (arr.get(i).y + offsetY) +"));");
+            System.out.println(arr.get(i).x + "   " + arr.get(i).y);
         }
     }
 }

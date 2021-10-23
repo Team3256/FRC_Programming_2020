@@ -131,7 +131,6 @@ public class Hood extends SubsystemBase {
             posSetpoint = 0;
         }
         mHood.getPIDController().setReference(posSetpoint, ControlType.kPosition);
-        mHood.setSmartCurrentLimit(1);
         atSetpoint = getHoodEncoder() > posSetpoint - kHoodSetpointTolerance && getHoodEncoder() < posSetpoint + kHoodSetpointTolerance;
         return defaultStateTransfer();
     }

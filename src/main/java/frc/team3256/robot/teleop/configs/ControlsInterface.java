@@ -24,13 +24,8 @@ public interface ControlsInterface {
 
     boolean getDriverShoot();
 
-    boolean getToggleReverseDrivetrain();
-
 
 //--------------Manipulator--------------
-
-    //Rumble when at Setpoint
-    void rumble(boolean rumbleState);
 
     //Hold: Runs intake backwards slowly & feeder forward
     boolean getUnjam();

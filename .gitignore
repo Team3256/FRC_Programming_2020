@@ -222,7 +222,3 @@ gradle-app.setting
 **/build/
 
 # End of https://www.toptal.com/developers/gitignore/api/java,linux,macos,windows,gradle,intellij,intellij+all
-
-# intelliJ modules
-Documents.GitHub.FRC_Programming_2020.main.iml
-Documents.GitHub.FRC_Programming_2020.test.iml
