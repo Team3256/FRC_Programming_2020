@@ -1,5 +1,7 @@
 package frc.team3256.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -7,11 +9,12 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.constants.IDConstants;
 import frc.team3256.warriorlib.hardware.SparkMAXUtil;
+import frc.team3256.warriorlib.hardware.TalonFXUtil;
 import frc.team3256.warriorlib.hardware.TalonSRXUtil;
 import frc.team3256.warriorlib.subsystem.SubsystemBase;
 
 public class Intake extends SubsystemBase {
-    private CANSparkMax mIntake;
+    private WPI_TalonFX mIntake;
     private WPI_TalonSRX mCenterMech;
     private DoubleSolenoid mRaiseMech;
     private boolean intakeRaise;
@@ -52,15 +55,12 @@ public class Intake extends SubsystemBase {
     public static Intake getInstance() { return instance == null ? instance = new Intake() : instance; }
 
     private Intake() {
-        mIntake = SparkMAXUtil.generateGenericSparkMAX(IDConstants.intakeID, CANSparkMaxLowLevel.MotorType.kBrushless);
-        mIntake.burnFlash();
+        mIntake = TalonFXUtil.generateGenericTalon(IDConstants.intakeID);
         mCenterMech = TalonSRXUtil.generateGenericTalon(IDConstants.centerMechID);
         mCenterMech.enableCurrentLimit(true);
         mCenterMech.configContinuousCurrentLimit(30);
 
         mRaiseMech = new DoubleSolenoid(IDConstants.pcmID,IDConstants.intakeRaiseForwardChannel,IDConstants.intakeRaiseReverseChannel);
-
-        mIntake.burnFlash();
 
         mIntake.set(0);
         mCenterMech.set(0);
@@ -74,6 +74,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void update(double timestamp) {
+//        return;
         if (mPrevWantedState != mWantedState) {
             mWantedStateChanged = true;
             mPrevWantedState = mWantedState;
@@ -111,11 +112,12 @@ public class Intake extends SubsystemBase {
             mStateChanged = false;
         }
         this.outputToDashboard();
+
     }
 
     //TODO: EVERYTHING 100 TEST
     public IntakeState handleIntake() {
-        mIntake.set(-0.8); //-0.5 //-0.7
+        mIntake.set(-1); //-0.5 //-0.7
         mCenterMech.set(-.75); //-0.8
         return defaultStateTransfer();
     }
@@ -161,6 +163,11 @@ public class Intake extends SubsystemBase {
         mCenterMech.set(0);
         return defaultStateTransfer();
     }
+
+    public boolean isUnjamming(){
+        return mCurrentState == IntakeState.UNJAMMING;
+    }
+
 
     private void setRaise(boolean raise) {
         mRaiseMech.set(raise ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);

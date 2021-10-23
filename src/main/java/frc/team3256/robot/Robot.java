@@ -9,7 +9,6 @@ package frc.team3256.robot;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -17,12 +16,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.auto.modes.*;
 import frc.team3256.robot.hardware.AirCompressor;
 import frc.team3256.robot.helper.BallCounter;
-import frc.team3256.robot.helper.ShootingKinematics;
 import frc.team3256.robot.auto.paths.Paths;
 import frc.team3256.robot.hardware.Limelight;
-import frc.team3256.robot.log.FalconAutoLogger;
-import frc.team3256.robot.log.Logger;
-import frc.team3256.robot.log.LoggerUpdateLooper;
+import frc.team3256.robot.helper.GalacticSearchPathSelection;
+import frc.team3256.robot.helper.ShootingKinematics;
 import frc.team3256.robot.subsystems.*;
 import frc.team3256.robot.teleop.TeleopUpdater;
 import frc.team3256.warriorlib.auto.AutoModeBase;
@@ -56,6 +53,9 @@ public class Robot extends TimedRobot {
   private PoseEstimator poseEstimator;
   private PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
 
+
+  private GalacticSearchPathSelection g = GalacticSearchPathSelection.getInstance();
+
   private AutoModeExecuter autoModeExecuter;
   private boolean maintainAutoExecution = true;
 
@@ -74,6 +74,8 @@ public class Robot extends TimedRobot {
     teleopUpdater = new TeleopUpdater();
     DriveTrainBase.setDriveTrain(drivetrain);
     autoModeExecuter = new AutoModeExecuter();
+
+    limelight.turnOff();
 
     Paths.initialize();
 
@@ -96,10 +98,20 @@ public class Robot extends TimedRobot {
 
     autoChooser.setDefaultOption("Do Nothing", new DoNothingAutoMode());
 //    autoChooser.addOption("Right 3 Ball Towards Shoot Auto", new RightDriveTowardsShootAutoMode());
-    autoChooser.addOption("Right 3 Ball Away Shoot Auto", new RightDriveShootAutoMode());
-    autoChooser.addOption("Right 6 Ball Shoot Auto", new RightDriveTrenchSixBallAutoMode());
+//    autoChooser.addOption("Right 3 Ball Away Shoot Auto", new RightDriveShootAutoMode());
+//    autoChooser.addOption("Right 6 Ball Shoot Auto", new RightDriveTrenchSixBallAutoMode());
 //    autoChooser.addOption("Right Wall 6 Shoot Auto", new RightDriveTrenchShootWallAutoMode());
-    autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
+//    autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
+    autoChooser.addOption("Cross Baseline", new CrossBaselineAutoMode());
+    autoChooser.addOption("Slalom Path Auto", new SlalomPathAutoMode());
+//    autoChooser.addOption("Galactic Search Red A Path Auto", new GalacticSearchRedAPathAutoMode());
+//    autoChooser.addOption("Galactic Search Red B Path Auto", new GalacticSearchRedBPathAutoMode());
+//    autoChooser.addOption("Galactic Search Blue B Path Auto", new GalacticSearchBlueBPathAutoMode());
+//    autoChooser.addOption("Galactic Search Blue A Path Auto", new GalacticSearchBlueAPathAutoMode());
+    autoChooser.addOption("Galactic Search A Path Auto", new GalacticSearchAPathAuto());
+    autoChooser.addOption("Galactic Search B Path Auto", new GalacticSearchBPathAuto());
+    autoChooser.addOption("Bounce Path", new BouncePathAutoMode());
+    autoChooser.addOption("Barrel Racing Path", new BarrelRacingAutoMode());
     SmartDashboard.putData(autoChooser);
 
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
@@ -110,11 +122,6 @@ public class Robot extends TimedRobot {
     limelight.init();
 
     if(WANTS_TO_LOG) {
-      loggerLooper  = new Looper(1/15D);
-      Logger.startInitialization();
-      FalconAutoLogger.autoLog("Flywheel", "Motor", Flywheel.getInstance().getMotor());
-      Logger.finishInitialization();
-      loggerLooper.addLoops(LoggerUpdateLooper.getInstance());
     }
   }
 
@@ -153,11 +160,18 @@ public class Robot extends TimedRobot {
 //    SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
 //    SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
 
+    SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
+    SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
+    SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
+    SmartDashboard.putNumber("left encoder",drivetrain.getLeftDistance());
+    SmartDashboard.putNumber("right encoder",drivetrain.getRightDistance());
+    SmartDashboard.putBoolean("Should Index", ballCounter.shouldFeed());
+
 //    intake.update(0);
-    feeder.update(0);
-    turret.update(0);
-    hood.update(0);
-    flywheel.update(0);
+//    feeder.update(0);
+//    turret.update(0);
+//    hood.update(0);
+//    flywheel.update(0);
 
     if (!maintainAutoExecution) {
       teleopUpdater.update();
@@ -172,14 +186,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    limelight.turnOn();
     maintainAutoExecution = false;
     enabledLooper.stop();
     purePursuitTracker.reset();
-    limelight.turnOn();
+    //limelight.turnOn();
     airCompressor.turnOnCompressor();
     enabledLooper.start();
     flywheelLooper.start();
-    limelightLooper.start();
+    //limelightLooper.start();
     autoModeExecuter.setFinished(true);
 
     drivetrain.resetGyro();
@@ -188,36 +203,41 @@ public class Robot extends TimedRobot {
     drivetrain.setHighGear(true);
     poseEstimator.reset();
     turret.reset();
-    BallCounter.getInstance().setCount(0);
+    BallCounter.getInstance().setCount(3);
+    hood.setWantedState(Hood.WantedState.WANTS_TO_ZERO_HOOD);
     if(WANTS_TO_LOG) loggerLooper.start();
   }
 
   @Override
   public void teleopPeriodic() {
+    g.isRed(true);
     teleopUpdater.update();
     SmartDashboard.putNumber("Ball counter", BallCounter.getInstance().getCount());
     SmartDashboard.putBoolean("Hood Zeroed", Hood.getInstance().isZeroed());
-    SmartDashboard.putBoolean("Correct Distance", 60 < limelight.getDistanceToInner() && limelight.getDistanceToInner() < 144);
+    //SmartDashboard.putBoolean("Correct Distance", 60 < limelight.getDistanceToInner() && limelight.getDistanceToInner() < 144);
+    SmartDashboard.putNumber("Target Distance", limelight.getDistanceToInner());
     SmartDashboard.putBoolean("Correct Auto Align", turret.atAngleSetpoint() && hood.atHoodSetpoint() && flywheel.atSetpointVelocity());
 
+    Feeder.getInstance().outputToDashboard();
     //TODO: COMMENTED OUT TO INCREASE LATENCY, COMMENT BACK IN FOR DEBUG
 //    SmartDashboard.putNumber("distance to outer", limelight.getDistanceToTarget());
-//    SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
-//    SmartDashboard.putNumber("wanted vel", ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
-//    SmartDashboard.putNumber("TAU", limelight.calculateTau());
+    //SmartDashboard.putNumber("wanted hood degrees", limelight.getAngleToTarget() * 180/Math.PI);
+//   SmartDashboard.putNumber("wanted vel", ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
+    //SmartDashboard.putNumber("TAU", limelight.calculateTau());
 //    SmartDashboard.putNumber("ACTUAL VEL", flywheel.getVelocity());
 //    SmartDashboard.putNumber("wantedEnd", limelight.optimalEndAngle());
 //    private DoubleSolenoid hangerPancakes;
     if(WANTS_TO_LOG){
-      Logger.update();
     }
   }
 
   @Override
   public void testInit() {
+    autoModeExecuter.setFinished(true);
     limelight.turnOn();
     limelightLooper.start();
     poseEstimator.reset();
+    poseEstimatorLooper.start();
     drivetrain.resetGyro();
     drivetrain.resetEncoders();
     drivetrain.setCoastMode();
@@ -228,19 +248,18 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Pose X", poseEstimator.getPose().x);
     SmartDashboard.putNumber("Pose Y", poseEstimator.getPose().y);
     SmartDashboard.putNumber("Gyro Angle", drivetrain.getRotationAngle().degrees());
-    SmartDashboard.putNumber("limelight distance", limelight.getDistanceToTarget());
-    SmartDashboard.putNumber("Theta", limelight.calculateTopTheta());
+    SmartDashboard.putNumber("left encoder",drivetrain.getLeftDistance());
+    SmartDashboard.putNumber("right encoder",drivetrain.getRightDistance());
+    g.isRed(true);
   }
 
   @Override
   public void disabledInit(){
     //TODO: Get rid of coast mode for final
     limelight.turnOff();
-//    drivetrain.setCoastMode();
     airCompressor.turnOffCompressor();
     if(WANTS_TO_LOG) {
       loggerLooper.stop();
-      Logger.flush();
     }
   }
 

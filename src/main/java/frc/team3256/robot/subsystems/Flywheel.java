@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.constants.FlywheelConstants;
 import frc.team3256.warriorlib.hardware.TalonFXUtil;
 import frc.team3256.warriorlib.operations.Util;
@@ -23,6 +24,7 @@ public class Flywheel extends SubsystemBase {
     private PIDController flywheelPIDController;
     private boolean atSetpoint;
     private boolean readyToShoot;
+    private boolean alertDriver;
 
     public enum FlywheelState {
         RUN,
@@ -48,7 +50,7 @@ public class Flywheel extends SubsystemBase {
     private Flywheel() {
         mLeftFlywheel = TalonFXUtil.generateGenericTalon(leftFlywheelID); //TBD
         mRightFlywheel = TalonFXUtil.generateGenericTalon(rightFlywheelID);
-        flywheelPIDController = new PIDController(0.0006,0.00000065,0.000073); //0.000063
+        flywheelPIDController = new PIDController(0.0006,0,0.000063); // P: 0.0006 //I: 0.00000065 // D
         TalonFXUtil.setCoastMode(mLeftFlywheel, mRightFlywheel);
         mLeftFlywheel.setInverted(true);
         mRightFlywheel.setInverted(false);
@@ -82,12 +84,24 @@ public class Flywheel extends SubsystemBase {
             mStateChanged = false;
         }
         atSetpoint = getVelocity() < (velocitySetpoint + FlywheelConstants.kAtSetpointTolerance) && getVelocity() > (velocitySetpoint - FlywheelConstants.kAtSetpointTolerance);
+
         this.outputToDashboard();
+    }
+    public boolean shouldRumble(){
+        if(mCurrentState == FlywheelState.IDLE){
+            return false;
+        }
+        if (flywheelPIDController.getPositionError() / flywheelPIDController.getSetpoint() <= 0.1
+                && flywheelPIDController.getPositionError() / flywheelPIDController.getSetpoint() >= -0.1){
+            return true;
+        }
+        return false;
     }
 
     private FlywheelState handleRun() {
 //        setFlywheelVelocity(velocitySetpoint);
 //        bangBangFlywheel(velocitySetpoint);
+        SmartDashboard.putString("Flywheel State", "RUN");
         setFlywheelVelocityPID(velocitySetpoint);
         return defaultStateTransfer();
     }
@@ -97,6 +111,7 @@ public class Flywheel extends SubsystemBase {
     }
 
     private FlywheelState handleIdle() { //Stops all flywheel motors
+        SmartDashboard.putString("Flywheel State", "IDLE");
         stopFlywheel();
         return defaultStateTransfer();
     }
@@ -132,7 +147,7 @@ public class Flywheel extends SubsystemBase {
         mRightFlywheel.set(output);
     }
 
-    private void setFlywheelVelocityPID(double speed) {
+    public void setFlywheelVelocityPID(double speed) {
         double output = flywheelPIDController.calculate(getVelocity(), speed) + calculateFeedForward(speed);
         mLeftFlywheel.set(ControlMode.PercentOutput, output);
         mRightFlywheel.set(ControlMode.PercentOutput, output);
@@ -147,7 +162,9 @@ public class Flywheel extends SubsystemBase {
     }
 
     private double calculateFeedForward(double flywheelRPM) {
-        return flywheelRPM/6521.5;
+        return flywheelRPM/6450 + 0.05;
+
+        // Before Editing / 6521.5
     }
 
     private double rpmToSensorUnits(double rpm) {
@@ -178,8 +195,8 @@ public class Flywheel extends SubsystemBase {
     public void end(double timestamp) { }
 
     public double getVelocity() {
-        return sensorUnitsToRPM(mLeftFlywheel.getSelectedSensorVelocity());
-    }
+    return sensorUnitsToRPM(mLeftFlywheel.getSelectedSensorVelocity());
+}
 
     public double getSensorVelocity() {
         return mLeftFlywheel.getSelectedSensorVelocity();

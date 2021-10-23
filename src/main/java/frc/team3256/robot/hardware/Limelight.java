@@ -38,7 +38,7 @@ public class Limelight implements Loop {
     private double angleToTarget = 0;
     private double velToTarget = 0;
 
-    private boolean aimAtInner = true;
+    private boolean aimAtInner = false; //was true
     private NetworkTableInstance inst;
 
 
@@ -100,8 +100,10 @@ public class Limelight implements Loop {
             }
         }
 
-        double skewRad = Math.atan2(lowestY - secLowestY, tcornx[lowestIndex] - tcornx[secLowestIndex]);
-        skew = Math.abs(skewRad * (180.0/Math.PI));
+        if(tcornx.length > lowestIndex && tcornx.length > secLowestIndex){
+            double skewRad = Math.atan2(lowestY - secLowestY, tcornx[lowestIndex] - tcornx[secLowestIndex]);
+            skew = Math.abs(skewRad * (180.0/Math.PI));
+        }
         return skew;
     }
 
