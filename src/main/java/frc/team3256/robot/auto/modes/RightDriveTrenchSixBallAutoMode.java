@@ -29,7 +29,7 @@ public class RightDriveTrenchSixBallAutoMode extends AutoModeBase {
         Turret.getInstance().reset();
         Intake.getInstance().setIntakeTogglingState(false);
         Intake.getInstance().setWantedState(Intake.WantedState.WANTS_TO_TOGGLE_INTAKE);
-        runAction(new MoveTurretAction(25));
+//        runAction(new MoveTurretAction(25));
 
         double startTime = Timer.getFPGATimestamp();
         runAction(new ResetPursuitAction());

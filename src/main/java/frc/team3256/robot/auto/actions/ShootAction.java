@@ -47,7 +47,13 @@ public class ShootAction implements Action {
         mFlywheel.setVelocitySetpoint(ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
         mFlywheel.setWantedState(Flywheel.WantedState.WANTS_TO_RUN);
 
-        if (Flywheel.getInstance().getReadyToShoot() && Flywheel.getInstance().atSetpointVelocity()) {
+
+        SmartDashboard.putBoolean("Flywheel Auto Ready: ", mFlywheel.getReadyToShoot() && mFlywheel.atSetpointVelocity());
+        SmartDashboard.putNumber("Flywheel Auto Velocity: ", mFlywheel.getVelocity());
+        SmartDashboard.putNumber("Flywheel target velocity", ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()));
+        SmartDashboard.putNumber("Flywheel velocity difference", ShootingKinematics.outputVelToFlywheelVel(limelight.getVelToTarget()) - mFlywheel.getVelocity());
+
+        if (mFlywheel.getReadyToShoot() && mFlywheel.atSetpointVelocity()){
             mFeeder.setWantedState(Feeder.WantedState.WANTS_TO_AUTO_SHOOT);
             mIntake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
         }

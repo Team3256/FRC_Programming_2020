@@ -30,7 +30,7 @@ public class MoveTurretAction implements Action {
             isFinished = true;
         }
         else {
-            mTurret.setAutoTurretSpeed(-1.0);
+            mTurret.setAutoTurretSpeed(-0.5);
         }
     }
 
