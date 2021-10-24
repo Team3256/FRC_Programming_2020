@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team3256.robot.constants.FeederConstants;
 import frc.team3256.robot.constants.FlywheelConstants;
 import frc.team3256.warriorlib.hardware.TalonFXUtil;
 import frc.team3256.warriorlib.operations.Util;
@@ -50,7 +51,7 @@ public class Flywheel extends SubsystemBase {
     private Flywheel() {
         mLeftFlywheel = TalonFXUtil.generateGenericTalon(leftFlywheelID); //TBD
         mRightFlywheel = TalonFXUtil.generateGenericTalon(rightFlywheelID);
-        flywheelPIDController = new PIDController(0.0006,0,0.000063); // P: 0.0006 //I: 0.00000065 // D
+        flywheelPIDController = new PIDController(FlywheelConstants.kFlywheelP, FlywheelConstants.kFlywheelI,FlywheelConstants.kFlywheelD); // P: 0.0006 //I: 0.00000065 // D
         TalonFXUtil.setCoastMode(mLeftFlywheel, mRightFlywheel);
         mLeftFlywheel.setInverted(true);
         mRightFlywheel.setInverted(false);

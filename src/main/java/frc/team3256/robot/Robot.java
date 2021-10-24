@@ -97,21 +97,21 @@ public class Robot extends TimedRobot {
     limelightLooper.addLoops(limelight);
 
     autoChooser.setDefaultOption("Do Nothing", new DoNothingAutoMode());
-//    autoChooser.addOption("Right 3 Ball Towards Shoot Auto", new RightDriveTowardsShootAutoMode());
-//    autoChooser.addOption("Right 3 Ball Away Shoot Auto", new RightDriveShootAutoMode());
-//    autoChooser.addOption("Right 6 Ball Shoot Auto", new RightDriveTrenchSixBallAutoMode());
-//    autoChooser.addOption("Right Wall 6 Shoot Auto", new RightDriveTrenchShootWallAutoMode());
-//    autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
+    autoChooser.addOption("Right 3 Ball Towards Shoot Auto", new RightDriveTowardsShootAutoMode());
+    autoChooser.addOption("Right 3 Ball Away Shoot Auto", new RightDriveShootAutoMode());
+    autoChooser.addOption("Right 6 Ball Shoot Auto", new RightDriveTrenchSixBallAutoMode());
+    autoChooser.addOption("Right Wall 6 Shoot Auto", new RightDriveTrenchShootWallAutoMode());
+    autoChooser.addOption("Right Trench Ten Ball Shoot Auto", new RightDriveTrenchTenBallAutoMode());
     autoChooser.addOption("Cross Baseline", new CrossBaselineAutoMode());
-    autoChooser.addOption("Slalom Path Auto", new SlalomPathAutoMode());
+//    autoChooser.addOption("Slalom Path Auto", new SlalomPathAutoMode());
 //    autoChooser.addOption("Galactic Search Red A Path Auto", new GalacticSearchRedAPathAutoMode());
 //    autoChooser.addOption("Galactic Search Red B Path Auto", new GalacticSearchRedBPathAutoMode());
 //    autoChooser.addOption("Galactic Search Blue B Path Auto", new GalacticSearchBlueBPathAutoMode());
 //    autoChooser.addOption("Galactic Search Blue A Path Auto", new GalacticSearchBlueAPathAutoMode());
-    autoChooser.addOption("Galactic Search A Path Auto", new GalacticSearchAPathAuto());
-    autoChooser.addOption("Galactic Search B Path Auto", new GalacticSearchBPathAuto());
-    autoChooser.addOption("Bounce Path", new BouncePathAutoMode());
-    autoChooser.addOption("Barrel Racing Path", new BarrelRacingAutoMode());
+//    autoChooser.addOption("Galactic Search A Path Auto", new GalacticSearchAPathAuto());
+//    autoChooser.addOption("Galactic Search B Path Auto", new GalacticSearchBPathAuto());
+//    autoChooser.addOption("Bounce Path", new BouncePathAutoMode());
+//    autoChooser.addOption("Barrel Racing Path", new BarrelRacingAutoMode());
     SmartDashboard.putData(autoChooser);
 
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();

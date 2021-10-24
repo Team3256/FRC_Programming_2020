@@ -211,7 +211,10 @@ public class Limelight implements Loop {
     }
 
     public void calculateKinematics() {   // inches
+
         double distance = aimAtInner ? getDistanceToInner() : getDistanceToTarget();
+
+        SmartDashboard.putNumber("distance to target", distance);
         timeToTarget = Math.sqrt(2/gravAcceleration*(heightDif - Math.tan(wantedEndAngle) * distance));
         angleToTarget = Math.atan((heightDif + .5 * gravAcceleration * timeToTarget * timeToTarget)/distance);
         velToTarget = distance/timeToTarget/Math.cos(angleToTarget);
