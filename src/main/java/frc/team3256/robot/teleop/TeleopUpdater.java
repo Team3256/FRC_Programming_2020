@@ -22,7 +22,7 @@ public class TeleopUpdater {
     private Flywheel flywheel = Flywheel.getInstance();
     private Turret turret = Turret.getInstance();
     private Hood hood = Hood.getInstance();
-    private Hanger hanger = Hanger.getInstance();
+    //private Hanger hanger = Hanger.getInstance();
     private Limelight limelight = Limelight.getInstance();
     private BallCounter ballCounter = BallCounter.getInstance();
 
@@ -50,7 +50,7 @@ public class TeleopUpdater {
         hood.update(0);
         limelight.update(0);
         ballCounter.update(0);
-        hanger.update(0);
+        //hanger.update(0);
         //hangerPancake = new DoubleSolenoid(1, 6);
 
         //Drivetrain

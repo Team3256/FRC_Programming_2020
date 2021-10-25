@@ -38,6 +38,6 @@ public class RightDriveTowardsShootAutoMode extends AutoModeBase {
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new ShootAction())));
         runAction(new WaitAction(0.5));
         Flywheel.getInstance().setReadyToShoot(true);
-        runAction(new ShootAction());
+        runAction(new ShootAction(6));
     }
 }

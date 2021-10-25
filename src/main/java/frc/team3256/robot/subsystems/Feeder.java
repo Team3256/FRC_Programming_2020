@@ -227,7 +227,7 @@ public class Feeder extends SubsystemBase {
 
     private FeederControlState handleAutoShoot() {
         SmartDashboard.putString("Feeder State", "Auto Shoot");
-        mFeeder.set(0.25);
+        mFeeder.set(0.7);
         mBar.set(-0.5);
         return defaultStateTransfer();
     }

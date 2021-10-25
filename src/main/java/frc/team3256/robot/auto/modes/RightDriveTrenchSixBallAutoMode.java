@@ -20,6 +20,8 @@ import java.util.Arrays;
 
 public class RightDriveTrenchSixBallAutoMode extends AutoModeBase {
     @Override
+
+    //89 inches from the wall and 77 inches without the bumper to the left if intake is forward 73 inches from left bumper
     protected void routine() throws AutoModeEndedException {
         PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
         purePursuitTracker.setRobotTrack(DriveConstants.kRobotTrackWidth);
@@ -36,13 +38,13 @@ public class RightDriveTrenchSixBallAutoMode extends AutoModeBase {
         DriveTrain.getInstance().setHighGear(true);
         runAction(new ShootAction());
         Flywheel.getInstance().setReadyToShoot(true);
-        runAction(new ShootAction());
+        runAction(new ShootAction(4));
         Flywheel.getInstance().setReadyToShoot(false);
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(3.0)))); //new FeederIndexAction(3.0)
         runAction(new WaitAction(0.5));
-        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(1), new ShootAction())));
+        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(1), new ShootAction(2))));
         Flywheel.getInstance().setReadyToShoot(true);
-        runAction(new ShootAction());
+        runAction(new ShootAction(5));
         SmartDashboard.putNumber("Total Auto Time: ", Timer.getFPGATimestamp() - startTime);
     }
 }

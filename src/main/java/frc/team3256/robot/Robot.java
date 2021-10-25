@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
   private Feeder feeder = Feeder.getInstance();
   private Hood hood = Hood.getInstance();
   private Turret turret = Turret.getInstance();
-//  private Hanger hanger = Hanger.getInstance();
+  private Hanger hanger = Hanger.getInstance();
   private BallCounter ballCounter = BallCounter.getInstance();
   private AirCompressor airCompressor = AirCompressor.getInstance();
   private PoseEstimator poseEstimator;
@@ -242,6 +242,11 @@ public class Robot extends TimedRobot {
     drivetrain.resetGyro();
     drivetrain.resetEncoders();
     drivetrain.setCoastMode();
+
+    hanger.setWantedState(Hanger.WantedState.WANTS_TO_HANGER_TOGGLE);
+    hanger.update(0);
+
+
   }
 
   @Override
@@ -252,6 +257,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("left encoder",drivetrain.getLeftDistance());
     SmartDashboard.putNumber("right encoder",drivetrain.getRightDistance());
     g.isRed(true);
+
+
+
   }
 
   @Override

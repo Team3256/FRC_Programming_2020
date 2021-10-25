@@ -53,7 +53,7 @@ public class IDConstants {
     //DIO Ports:------------------------------------------------------------------------------------------------
     public static final int limitSwitchPort = 1;
     public static final int feederIRID = 9;
-    public static final int flywheelIRID = 8; //TBD
+    public static final int flywheelIRID = 2; //TBD 2
 
     //Analog Ports:---------------------------------------------------------------------------------------------
     public static final int pressureSwitchID = 1;

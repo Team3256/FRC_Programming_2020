@@ -36,13 +36,13 @@ public class RightDriveTrenchTenBallAutoMode extends AutoModeBase {
         runAction(new WaitAction(0.5));
         runAction(new ResetPursuitAction());
         DriveTrain.getInstance().setHighGear(true);
-        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(3.0), new ShootAction())));
-        runAction(new WaitAction(10.0));
-        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(1), new StartIntakeAction(3.0), new ShootAction())));
+        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(3.0), new ShootAction(3))));
+        runAction(new WaitAction(0.5));
+        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(1), new StartIntakeAction(3.0), new ShootAction(3))));
         runAction(new StopIntakeAction());
         Flywheel.getInstance().setReadyToShoot(true);
-        runAction(new WaitAction(10.0));
-        runAction(new ShootAction());
+        runAction(new WaitAction(0.5));
+        runAction(new ShootAction(5));
         Flywheel.getInstance().setReadyToShoot(false);
         Hood.getInstance().setPosSetpoint(0);
         Hood.getInstance().setWantedState(Hood.WantedState.WANTS_TO_POS);
@@ -51,7 +51,7 @@ public class RightDriveTrenchTenBallAutoMode extends AutoModeBase {
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(3), new StartIntakeAction(3.0), new SeriesAction(Arrays.asList(new HoodZeroAction(1.0), new ShootAction())))));
         runAction(new StopIntakeAction());
         Flywheel.getInstance().setReadyToShoot(true);
-        runAction(new ShootAction());
+        runAction(new ShootAction(5));
         SmartDashboard.putNumber("Total Auto Time: ", Timer.getFPGATimestamp() - startTime);
     }
 }

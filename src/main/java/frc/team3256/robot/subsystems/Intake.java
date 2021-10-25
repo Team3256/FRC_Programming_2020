@@ -121,8 +121,8 @@ public class Intake extends SubsystemBase {
     //TODO: EVERYTHING 100 TEST
     public IntakeState handleIntake() {
         SmartDashboard.putString("Intake State", "Intaking");
-        mIntake.set(-0.8); //-0.5 //-0.7
-        mCenterMech.set(-0.65); //-0.8
+        mIntake.set(-1.0); //-0.5 //-0.7
+        mCenterMech.set(-0.75); //-0.8
         return defaultStateTransfer();
     }
 
