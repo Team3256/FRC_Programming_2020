@@ -29,6 +29,7 @@ public class StartIntakeAction implements Action {
     @Override
     public void update() {
 //        pose = poseEstimator.getPose();
+        intake.update(0);
     }
 
     @Override
@@ -39,7 +40,6 @@ public class StartIntakeAction implements Action {
     @Override
     public void start() {
         startTime = Timer.getFPGATimestamp();
-        intake.update(0);
         intake.setWantedState(Intake.WantedState.WANTS_TO_INTAKE);
     }
 }

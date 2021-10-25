@@ -96,6 +96,7 @@ public class Robot extends TimedRobot {
     limelightLooper = new Looper(1 / 100D);
     limelightLooper.addLoops(limelight);
 
+    //96 inches from the wall
     autoChooser.setDefaultOption("Do Nothing", new DoNothingAutoMode());
     autoChooser.addOption("Right 3 Ball Towards Shoot Auto", new RightDriveTowardsShootAutoMode());
     autoChooser.addOption("Right 3 Ball Away Shoot Auto", new RightDriveShootAutoMode());

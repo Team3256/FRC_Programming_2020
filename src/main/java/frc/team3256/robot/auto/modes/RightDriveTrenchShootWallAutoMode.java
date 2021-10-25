@@ -24,6 +24,7 @@ public class RightDriveTrenchShootWallAutoMode extends AutoModeBase
 {
     @Override
     protected void routine() throws AutoModeEndedException {
+        double kMaxShootTime = 5.0;
         PurePursuitTracker purePursuitTracker = PurePursuitTracker.getInstance();
         purePursuitTracker.setRobotTrack(DriveConstants.kRobotTrackWidth);
         purePursuitTracker.setPaths(Paths.getRightTrenchCollectWallAutoPath(), DriveConstants.lookaheadDistance);
@@ -39,14 +40,17 @@ public class RightDriveTrenchShootWallAutoMode extends AutoModeBase
         DriveTrain.getInstance().setHighGear(true);
         runAction(new ShootAction());
         Flywheel.getInstance().setReadyToShoot(true);
-        runAction(new ShootAction());
+        runAction(new ShootAction(kMaxShootTime));
         Flywheel.getInstance().setReadyToShoot(false);
-        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(3.0), new FeederIndexAction(3.0), new ShootAction())));
-        runAction(new WaitAction(1.0));
+//        System.out.println("finished shooting");
+        runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(0), new StartIntakeAction(3.0), new ShootAction()))); //new FeederIndexAction(3.0)
+//        System.out.println("Finished first path");
+        runAction(new WaitAction(0.5));
         runAction(new ParallelAction(Arrays.asList(new PurePursuitAction(1), new ShootAction())));
-        runAction(new ShootAction());
+//        System.out.println("Finished second path");
+        runAction(new ShootAction(2));
         Flywheel.getInstance().setReadyToShoot(true);
-        runAction(new ShootAction());
+        runAction(new ShootAction(kMaxShootTime));
         SmartDashboard.putNumber("Total Auto Time: ", Timer.getFPGATimestamp() - startTime);
     }
 }

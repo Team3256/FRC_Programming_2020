@@ -1,13 +1,9 @@
 package frc.team3256.robot.helper;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team3256.robot.Robot;
 import frc.team3256.robot.hardware.IRSensors;
 import frc.team3256.robot.subsystems.Feeder;
-import frc.team3256.robot.subsystems.Flywheel;
 import frc.team3256.robot.subsystems.Intake;
-import frc.team3256.robot.teleop.TeleopUpdater;
 import frc.team3256.robot.teleop.configs.XboxControllerConfig;
 import frc.team3256.warriorlib.loop.Loop;
 
@@ -21,9 +17,9 @@ public class BallCounter implements Loop {
     private boolean feederBlocked = false;
     private boolean feederPrevBlocked = false;
     private boolean flywheelBlocked = false;
-    private boolean flywheelPrevBlocked = false;
     private boolean shouldIndex = false;
     private boolean shouldPID = false;
+    private boolean flywheelPrevBlocked = false;
 
 
     public static BallCounter getInstance() {return instance == null ? instance = new BallCounter() : instance; }
@@ -42,17 +38,28 @@ public class BallCounter implements Loop {
         feederBlocked = !irSensors.isFeederIRIntact();
         flywheelBlocked = !irSensors.isFlywheelIRIntact();
         SmartDashboard.putBoolean("Feeder Blocked", feederBlocked);
+        SmartDashboard.putBoolean("Flywheel Blocked", flywheelBlocked);
         //TODO: if unjam then ignore everything
         //if (!DriverStation.getInstance().isDisabled())
         //    System.out.println("Feeder blocked: " + feederBlocked);
 
         //TODO: Dylan - Do logic for choosing PID /  Power Only
         SmartDashboard.putBoolean("SHOULD PID", shouldPID);
+        SmartDashboard.putNumber("Ball counter: ", count);
+
+
+        if(!flywheelBlocked && flywheelPrevBlocked){
+            count--;
+            flywheelPrevBlocked = false;
+        }
+        else{
+            flywheelPrevBlocked = flywheelBlocked;
+        }
 
         XboxControllerConfig xboxControllerConfig = new XboxControllerConfig();
-        if(!(xboxControllerConfig.getFeederForward() || xboxControllerConfig.getFeederBackward())){
+        if(!(xboxControllerConfig.getFeederForward() || xboxControllerConfig.getFeederBackward()) && !feeder.isRunningBackward()){
             if (feederBlocked) {
-                if(!feeder.isRunIndex()){
+                if(!feeder.isRunIndex()) {
                     feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
                 }
                 shouldPID = true;
@@ -64,6 +71,7 @@ public class BallCounter implements Loop {
                     System.out.println("PIDing");
                     shouldPID = false;
                 }
+                count++;
             }
         }
 //        else if (Feeder.getInstance().atSetpoint()){

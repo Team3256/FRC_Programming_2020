@@ -1,5 +1,6 @@
 package frc.team3256.robot.auto.actions;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.robot.hardware.Limelight;
 import frc.team3256.robot.helper.BallCounter;
@@ -20,11 +21,20 @@ public class ShootAction implements Action {
     Flywheel mFlywheel = Flywheel.getInstance();
     Limelight limelight = Limelight.getInstance();
 
+    double timeout = -1;
+    double startTime = 0;
+
     public ShootAction() {
+    }
+    public ShootAction(double timeout) {
+        this.timeout = timeout;
     }
 
     @Override
     public boolean isFinished() {
+        if (Timer.getFPGATimestamp() - startTime > timeout && timeout != -1) {
+            return true;
+        }
         if (Flywheel.getInstance().getReadyToShoot()) {
             return ballCounter.isEmpty();
         }
@@ -68,5 +78,6 @@ public class ShootAction implements Action {
 
     @Override
     public void start() {
+        this.startTime = Timer.getFPGATimestamp();
     }
 }

@@ -55,6 +55,8 @@ public class Intake extends SubsystemBase {
     public static Intake getInstance() { return instance == null ? instance = new Intake() : instance; }
 
     private Intake() {
+
+
         mIntake = TalonFXUtil.generateGenericTalon(IDConstants.intakeID);
         mCenterMech = TalonSRXUtil.generateGenericTalon(IDConstants.centerMechID);
         mCenterMech.enableCurrentLimit(true);
@@ -67,6 +69,7 @@ public class Intake extends SubsystemBase {
 
         mIntake.setInverted(false);
         mCenterMech.setInverted(false);
+        SmartDashboard.putString("Intake State", "STOP");
     }
 
 
@@ -117,30 +120,35 @@ public class Intake extends SubsystemBase {
 
     //TODO: EVERYTHING 100 TEST
     public IntakeState handleIntake() {
-        mIntake.set(-1); //-0.5 //-0.7
-        mCenterMech.set(-.75); //-0.8
+        SmartDashboard.putString("Intake State", "Intaking");
+        mIntake.set(-0.8); //-0.5 //-0.7
+        mCenterMech.set(-0.65); //-0.8
         return defaultStateTransfer();
     }
 
     public IntakeState handleIndexingLastBall() {
+        SmartDashboard.putString("Intake State", "Indexing Last Ball");
         mIntake.set(-0.7);
         mCenterMech.set(0);
         return defaultStateTransfer();
     }
 
     public IntakeState handleAutoBackwardsIntake() {
+        SmartDashboard.putString("Intake State", "Run Backwards");
         mIntake.set(-0.35);
         mCenterMech.set(-0.75);
         return defaultStateTransfer();
     }
 
     private IntakeState handleExhaust() {
+        SmartDashboard.putString("Intake State", "Run Exhaust");
         mIntake.set(0.7); //-0.5
         mCenterMech.set(0.75);
         return defaultStateTransfer();
     }
 
     private IntakeState handleToggling() {
+        SmartDashboard.putString("Intake State", "Toggling: " + (intakeRaise ? "Raised" : "Not Raised"));
         if (intakeRaise) {
             setRaise(true);
             mIntake.set(-0.7);
@@ -153,12 +161,14 @@ public class Intake extends SubsystemBase {
     public void setIntakeTogglingState(boolean raise) { intakeRaise = raise; }
 
     private IntakeState handleUnJam() {
+        SmartDashboard.putString("Intake State", "unjam");
         mIntake.set(-0.3);
         mCenterMech.set(0.75);
         return defaultStateTransfer();
     }
 
     private IntakeState handleStop() {
+        SmartDashboard.putString("Intake State", "STOP");
         mIntake.set(0);
         mCenterMech.set(0);
         return defaultStateTransfer();

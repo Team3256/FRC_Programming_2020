@@ -104,7 +104,7 @@ public class TeleopUpdater {
         if (unjam) {
             this.intake.setWantedState(Intake.WantedState.WANTS_TO_UNJAM);
         } else if (intakePressed) {
-            if (ballCounter.getCount() == 4) {
+            if (ballCounter.getCount() == 4 && false) {
                 //change this later
                 feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
                 intake.setWantedState(Intake.WantedState.WANTS_TO_INDEX_LAST_BALL);
@@ -139,7 +139,7 @@ public class TeleopUpdater {
             feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_FORWARD);
         } else if (feederBackward) {
             feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_BACKWARD);
-        } else {
+        } else if (!feeder.isPidPositioning()) {
             feeder.setWantedState(Feeder.WantedState.WANTS_TO_IDLE);
         }
 
