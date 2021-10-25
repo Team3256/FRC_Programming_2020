@@ -83,6 +83,7 @@ public class Hanger extends SubsystemBase {
         else {
             hangerPancakes.set(DoubleSolenoid.Value.kForward);
         }
+        setHangerPancakesTogglingState(!hangerPancakesToggle);
         return defaultStateTransfer();
     }
 
