@@ -48,7 +48,7 @@ public class BallCounter implements Loop {
         SmartDashboard.putNumber("Ball counter: ", count);
 
 
-        if(flywheelBlocked && !flywheelPrevBlocked){
+        if(!flywheelBlocked && flywheelPrevBlocked){
             count--;
             flywheelPrevBlocked = false;
         }

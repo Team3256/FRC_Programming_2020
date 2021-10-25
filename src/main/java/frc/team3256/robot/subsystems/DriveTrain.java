@@ -4,6 +4,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.*;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.geometry.Twist2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team3256.warriorlib.subsystem.DriveTrainBase;
 import frc.team3256.robot.constants.DriveConstants;
 import frc.team3256.robot.constants.IDConstants;
@@ -112,7 +113,10 @@ public class DriveTrain extends DriveTrainBase implements Loop {
         return new DrivePower(signal.getLeft(), signal.getRight(), false); //quickTurn
     }
 
-    public void setHighGear(boolean highGear) { shifter.set(highGear ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse); }
+    public void setHighGear(boolean highGear) {
+        SmartDashboard.putBoolean("High Gear", highGear);
+        shifter.set(highGear ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+    }
 
     public void setBrakeMode() {
         SparkMAXUtil.setBrakeMode(leftMaster, leftSlave, rightMaster, rightSlave);

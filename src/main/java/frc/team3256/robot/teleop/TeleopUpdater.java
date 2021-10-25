@@ -29,6 +29,7 @@ public class TeleopUpdater {
     private boolean overrideFeeder = false;
     private boolean intakeUp = true;
     private boolean prevIntakeToggle = false;
+    private boolean prevLowGear = false;
     private boolean prevDrivetrainReverseToggle = false;
     private boolean hangerRelease = true;
     private boolean prevHangerPancakesToggle = false;
@@ -54,6 +55,7 @@ public class TeleopUpdater {
         //hangerPancake = new DoubleSolenoid(1, 6);
 
         //Drivetrain
+        boolean lowGear = controls.getLowGear();
         double throttle = controls.getThrottle();
         double turn = controls.getTurn();
         boolean quickTurn = controls.getQuickTurn();
@@ -97,14 +99,23 @@ public class TeleopUpdater {
         // DriveTrain ---------------------------------------------------------------------------------------
         DrivePower drivePower = driveTrain.cheesyishDrive(throttle, turn, quickTurn);
         driveTrain.setPowerOpenLoop(drivePower.getLeft(), drivePower.getRight());
-        driveTrain.setHighGear(!drivePower.getHighGear());
+//        driveTrain.setHighGear(!drivePower.getHighGear());
+
+        if (lowGear != prevLowGear) {
+            driveTrain.setHighGear(!lowGear);
+        }
+//        if (!lowGear) {
+//            driveTrain.setHighGear(!drivePower.getHighGear());
+//        }
+
+        prevLowGear = lowGear;
 
         //TODO: Dylan - This is a mess, we probably want to get rid of any bad logic here
         //Intake Subsystem | Some Feeder interactions
         if (unjam) {
             this.intake.setWantedState(Intake.WantedState.WANTS_TO_UNJAM);
         } else if (intakePressed) {
-            if (ballCounter.getCount() == 4 && false) {
+            if (ballCounter.getCount() == 3) {
                 //change this later
                 feeder.setWantedState(Feeder.WantedState.WANTS_TO_RUN_INDEX);
                 intake.setWantedState(Intake.WantedState.WANTS_TO_INDEX_LAST_BALL);
@@ -238,6 +249,8 @@ public class TeleopUpdater {
         }
 
         prevIntakeToggle = intakeToggle;
+
+
 
 //        if(drivetrainReverseToggle && !prevDrivetrainReverseToggle) {
 //            if (drivetrainReverseToggle) {
